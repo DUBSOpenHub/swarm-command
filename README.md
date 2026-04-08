@@ -389,7 +389,6 @@ This project implements **[Shadow Score Spec](https://github.com/DUBSOpenHub/sha
 
 ---
 
-> **Swarm Command v1.0.0** — Powered by the SwarmSpeed 250 Protocol
-> 16 models · 316 agents · Sub-linear scaling · Consensus-gated · Shadow Score Spec L2
->
-> *"The swarm is smarter than any single model."* 🐝
+🐙 Created with 💜 by [@DUBSOpenHub](https://github.com/DUBSOpenHub) with the [GitHub Copilot CLI](https://docs.github.com/copilot).
+
+Let's build! 🚀✨
