@@ -48,7 +48,7 @@ You ask one AI model and get one perspective. Maybe it's great, maybe it's medio
 - ⚡ **Circuit breaker** — 3-state FSM with 5-level recovery escalation
 - 📉 **Sub-linear scaling** — 5× more agents ≈ 2.2× more wall-clock time (α ≈ 0.45)
 - 📦 **Zero infrastructure** — no servers, no API keys, no build step
-- 💰 **Cost controlled** — $20 hard cap, timeout cascade, canary verification
+- 💰 **Cost controlled** — hard cap, timeout cascade, canary verification ([details](docs/scaling.md))
 
 ---
 
@@ -123,15 +123,108 @@ T+0s     T+2s       T+5s         T+12s       T+45s      T+65s    T+80s   T+90s
 
 ## 📊 Scaling Variants
 
-| Scale | Agents | Commanders | Workers | Reviewers | Wall-Clock | Cost |
-|-------|--------|------------|---------|-----------|------------|------|
-| **SS-50** | ~52 | 3 | 45 | 3 | ~30s | $1.50–$3.50 |
-| **SS-100** | ~89 | 5 | 75 | 8 | ~45s | $3.50–$8.00 |
-| **SS-250** | ~316 | 5 | 250 | 10 | ~65–90s | $8.00–$16.22 |
+| Scale | Agents | Commanders | Workers | Reviewers | Wall-Clock |
+|-------|--------|------------|---------|-----------|------------|
+| **SS-50** | ~52 | 3 | 45 | 3 | ~30s |
+| **SS-100** | ~89 | 5 | 75 | 8 | ~45s |
+| **SS-250** | ~316 | 5 | 250 | 10 | ~65–90s |
 
 > Agent counts include ALL deployed agents across all layers (Nexus + Commanders + Squad Leads + Workers + Reviewers).
 
 Default is **SS-100**. Say `swarm command ss-250` for full deployment or `swarm command ss-50` for quick tasks.
+
+See [docs/scaling.md](docs/scaling.md) for detailed scaling configuration and cost estimates.
+
+---
+
+## 🎯 Use Cases
+
+Curated highlights — see [docs/use-cases.md](docs/use-cases.md) for the full gallery.
+
+### SS-50 — Fast Expert Panels (~30s)
+
+**🔥 Stack Trace Whisperer**
+```
+swarm command ss-50 "Diagnose this error — 3 most likely root causes with fixes: [paste error]"
+```
+> 45 workers split into runtime, dependency, and logic panels. Returns ranked diagnoses with confidence scores in ~30 seconds.
+
+**🔍 "Explain Like I Own It"**
+```
+swarm command ss-50 "I just inherited this codebase. Explain src/core/ — what does each piece do, where are the landmines?"
+```
+> Maps architecture, identifies patterns, hunts for tech debt — your 30-second onboarding brief.
+
+**⚡ Performance Profiler's Shortcut**
+```
+swarm command ss-50 "Find the performance bottlenecks in this file with optimized versions: [paste hot-path file]"
+```
+> Finds O(n²) loops, sequential awaits, and GC pressure points. Returns before/after code with expected improvement.
+
+### SS-100 — Full Swarm, Default Scale (~45s)
+
+**🔐 Zero-Downtime Auth Rewrite**
+```
+swarm command "Migrate our session auth to JWT + refresh tokens across API, web app, DB, and tests"
+```
+> 5 commanders cover architecture, implementation, testing, docs, integration. Returns rollout plan + patches + risk analysis.
+
+**🏗️ Legacy Service Extraction**
+```
+swarm command "Extract the billing module from our monolith into a service with minimal downtime"
+```
+> Maps bounded context, generates anti-corruption layer, creates contract tests, writes 18-phase deployment sequence.
+
+**📱 Offline Sync Feature**
+```
+swarm command "Design offline-first sync for our field app: local cache, conflict resolution, API changes, UX, and tests"
+```
+> Covers data model, UX states, conflict semantics, testing, and integration. Returns sync strategy + conflict policies.
+
+### SS-250 — Maximum Intelligence (~65–90s)
+
+**🛡️ Zero-Day Security Sweep**
+```
+swarm command ss-250 "Full security audit: every file, every dependency, every injection surface — CVSS-scored vulnerability report"
+```
+> 250 workers scan every file (SAST), every dependency (CVE), every secret (entropy), every auth flow (bypass). Returns prioritized findings with auto-remediation PRs.
+
+**⚖️ Compliance Fortress**
+```
+swarm command ss-250 "Audit for GDPR, HIPAA, SOC2, PCI-DSS compliance — every gap, every control, remediation tickets"
+```
+> 4 frameworks × 200+ controls. Each worker owns one control check. Returns board-ready risk summary with remediation tickets.
+
+**🗺️ Living Runbook Generator**
+```
+swarm command ss-250 "Read every service, every pipeline, every config — generate the complete operations manual"
+```
+> Derives documentation from actual code and infra. Produces runbooks with failure modes, recovery procedures, and dependency maps. Accurate by construction.
+
+### 🎨 Creative Uses
+
+**🎭 Red-Team Jury** (SS-250)
+```
+swarm command ss-250 "Here's our public announcement. Find ways it can be misread, exploited, or quoted out of context."
+```
+
+**🌍 Global Cringe Detector** (SS-100)
+```
+swarm command "Generate 30 product name candidates. Screen for pronunciation issues and negative associations across regions."
+```
+
+**🏛️ Boardroom Simulation** (SS-50)
+```
+swarm command ss-50 "Act as CFO, CISO, Head of Sales, Support Lead, and Skeptical Customer. Evaluate this plan. Converge on minimum-regret strategy."
+```
+
+### ❌ When NOT to Swarm
+
+- **"What's the CLI flag for X?"** → Just ask a single agent
+- **Rename one variable** → Manual edit or single agent
+- **Prod is down, seconds matter** → DRI-led runbook, not consensus
+- **Writing a single-voice email** → One agent in a persona
+- **Step-through debugging** → Sequential by nature
 
 ---
 
@@ -197,7 +290,6 @@ depth_guard:
 
 circuit_breaker:
   timeout_cascade: [90, 60, 40, 30]  # seconds per layer
-  cost_ceiling_usd: 20.00
 
 shadow_scoring:
   enabled: true
