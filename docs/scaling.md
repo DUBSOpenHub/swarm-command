@@ -1,17 +1,16 @@
 # Scaling Variants
 
-Swarm Command supports 4 scaling configurations, from SS-50 (starter) to SS-1000 (experimental enterprise). This document details each variant with full agent counts, cost estimates, and deployment recommendations.
+Swarm Command supports 3 scaling configurations, from SS-50 (fast) to SS-250 (full consensus swarm). This document details each variant with full agent counts and deployment recommendations.
 
 ---
 
 ## Scaling Overview
 
-| Scale | Total Agents | Commanders | Squad Leads | Workers | Reviewers | Wall-Clock | Cost Range |
-|---|---|---|---|---|---|---|---|
-| **SS-50** | ~52 | 3 | — | 45 | 3 | ~30s | $1.50–$3.50 |
-| **SS-100** | ~89 | 5 | — | 75 | 8 | ~45s | $3.50–$8.00 |
-| **SS-250** | ~316 | 5 | 50 | 250 | 10 | ~65–90s | $8.00–$16.22 |
-| **SS-1000** ⚠️ | ~896 | 10 | 100 | 800 | 20 | ~110s | $25–$50 |
+| Scale | Total Agents | Commanders | Squad Leads | Workers | Reviewers | Wall-Clock |
+|---|---|---|---|---|---|---|
+| **SS-50** | ~52 | 3 | — | 45 | 3 | ~30s |
+| **SS-100** | ~89 | 5 | — | 75 | 8 | ~45s |
+| **SS-250** | ~316 | 5 | 50 | 250 | 10 | ~65–90s |
 
 > Agent counts include ALL deployed agents across all layers (Nexus + Commanders + Squad Leads + Workers + Reviewers).
 
@@ -152,43 +151,6 @@ Time:  ~65-90s wall-clock
 
 ---
 
-## SS-1000 — Enterprise (Experimental)
-
-> ⚠️ **Experimental**: SS-1000 is a speculative variant. It currently violates Law 4 (workers-per-squad-lead cap exceeds 5) and totals 991, not 1000. Use SS-250 for production deployments.
-
-Best for: Entire codebase migrations, multi-repo operations (when stable).
-
-```
-L0: 1 Nexus (opus)
-L1: 10 Commanders (sonnet)        — 2 per domain (redundancy)
-L2: 100 Squad Leads (haiku)       — 10 per commander
-L3: 800 Workers (haiku/mini)      — 8 per squad lead ⚠️
-L4: 20 Reviewers (sonnet)         — 4 review meshes
-L5: 5 Meta-Reviewers (opus)       — review the reviewers
-    Shadow Scoring (Nexus-internal, sealed criteria, 6 meta-criteria)
-──────────────────────────────
-Total: ~896 agents
-Cost:  $25 – $50
-Time:  ~110s wall-clock
-```
-
-### SS-1000 Known Issues
-
-1. **Law 4 violation**: Workers per Squad Lead (8) exceeds the cap of 5 defined in Depth Guard Law 4
-2. **Not exactly 1000**: Actual count is ~896 agents
-3. **Adds L5 layer**: Introduces Meta-Reviewers, increasing depth beyond the standard 3-layer limit
-4. **Commander redundancy**: 2 Commanders per domain adds complexity for conflict resolution
-5. **Cost unpredictable**: $25-$50 range is a rough estimate
-
-### SS-1000 Mitigations (Future Work)
-
-- Increase Squad Lead count to 200 (5 workers each = 1000 workers within Law 4)
-- Add formal L5 protocol to Depth Guard
-- Implement commander pair reconciliation protocol
-- Add more granular cost tracking per domain
-
----
-
 ## Sub-Linear Scaling Proof
 
 ```
@@ -196,8 +158,6 @@ Agents     Wall-Clock     Ratio vs SS-50
   50         ~30s           1.0×
  100         ~42s           1.4×
  250         ~65s           2.2×
- 500         ~85s           2.8×
-1000        ~110s           3.7×
 
 Scaling exponent ≈ 0.45 (vs 1.0 for linear)
 ```
@@ -230,7 +190,6 @@ Everything else runs in parallel.
 | SS-50 | $3.50 | $2.80 | $2.50 | $1.50 |
 | SS-100 | $8.00 | $6.50 | $5.50 | $3.50 |
 | SS-250 | $16.22 | $12.50 | $10.00 | $8.00 |
-| SS-1000 | $50.00 | $38.00 | $30.00 | $25.00 |
 
 Budget configuration uses 60% `explore` (cheapest) + 30% `task` + 10% `general-purpose`.
 
@@ -247,9 +206,6 @@ Is your task about a module or feature (3-10 files)?
 
 Does your task span the entire repo or multiple modules?
   → SS-250
-
-Are you migrating an entire codebase or multiple repos?
-  → SS-1000 (experimental — test with SS-250 first)
 ```
 
 ### Decision Matrix
@@ -259,5 +215,4 @@ Are you migrating an entire codebase or multiple repos?
 | Simple refactor | 1-2 | 1-2 | SS-50 |
 | Module feature | 3-10 | 2-3 | SS-100 |
 | Cross-module feature | 10-50 | 3-5 | SS-250 |
-| Repo-wide migration | 50+ | 5 | SS-250 or SS-1000 |
-| Multi-repo operation | 100+ | 5 | SS-1000 |
+| Repo-wide migration | 50+ | 5 | SS-250 |
