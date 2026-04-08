@@ -1,0 +1,18 @@
+schema_version: "1"
+id: swarm-command
+name: Swarm Command
+description: >
+  Multi-model swarm orchestrator with consensus scoring and shadow validation.
+  Launches 50-250+ AI agents across 16 models with hierarchical fan-out,
+  cross-family review, and quality-gated synthesis. Say "swarm command" to start.
+emoji: "🐝"
+codename: Hive Mind
+category: orchestrator
+version: "1.0.0"
+tags: [swarm, consensus, multi-model, orchestrator, shadow-scoring, copilot-cli]
+platforms: [copilot-cli]
+input_format: free-text
+links:
+  skill_file: skills/swarm-command/SKILL.md
+  agents:
+    - agents/swarm-command.agent.md

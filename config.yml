@@ -1,0 +1,88 @@
+swarm_command:
+  default_scale: "ss-100"
+  scales:
+    ss-50:
+      commanders: 3
+      workers_per_commander: 15
+      reviewers: 4
+      total: ~52
+    ss-100:
+      commanders: 5
+      workers_per_commander: 15
+      reviewers: 8
+      total: ~83
+    ss-250:
+      commanders: 5
+      squad_leads_per_commander: 10
+      workers_per_squad_lead: 5
+      reviewers: 10
+      shadow_validators: 3
+      total: ~268
+    ss-1000:
+      status: experimental
+      commanders: 10
+      squad_leads_per_commander: 10
+      workers_per_squad_lead: 8
+      reviewers: 20
+      shadow_validators: 6
+      total: ~896
+
+  consensus:
+    threshold_consensus: 0.70
+    threshold_majority: 0.50
+    formula_weights:
+      confidence: 0.40
+      evidence: 0.30
+      scope: 0.15
+      coverage: 0.15
+      conflict_penalty_cap: 0.10
+
+  depth_guard:
+    max_spawn_depth: 3
+    max_workers_per_squad_lead: 5
+    worker_agent_types: ["explore", "task"]
+    commander_agent_type: "general-purpose"
+
+  circuit_breaker:
+    commander_failure_threshold: 0.60
+    worker_failure_threshold: 0.50
+    timeout_cascade: [90, 60, 40, 30]
+    cost_ceiling_usd: 20.00
+
+  shadow_scoring:
+    enabled: true
+    validators: 3
+    criteria:
+      - id: "shd-01"
+        name: "mathematical_soundness"
+        weight: 0.30
+      - id: "shd-02"
+        name: "internal_consistency"
+        weight: 0.25
+      - id: "shd-03"
+        name: "executability"
+        weight: 0.25
+      - id: "shd-04"
+        name: "constraint_adherence"
+        weight: 0.20
+    divergence_alert_threshold: 0.15
+    critical_divergence_threshold: 0.30
+
+  models:
+    commander_pool:
+      - claude-opus-4.6
+      - claude-sonnet-4.6
+      - gpt-5.4
+      - gpt-5.2
+      - claude-sonnet-4.5
+    worker_pool:
+      - claude-haiku-4.5
+      - gpt-5.4-mini
+      - gpt-5-mini
+      - gpt-4.1
+    reviewer_pairs:
+      - [claude-sonnet-4.6, gpt-5.4]
+      - [claude-opus-4.5, gpt-5.2]
+      - [claude-sonnet-4.5, gpt-5.1]
+      - [claude-haiku-4.5, gpt-5.4-mini]
+      - [goldeneye, gpt-4.1]
