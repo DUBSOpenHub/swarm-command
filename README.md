@@ -128,7 +128,6 @@ T+0s     T+2s       T+5s         T+12s       T+45s      T+65s    T+80s   T+90s
 | **SS-50** | ~52 | 3 | 45 | 3 | ~30s | $1.50–$3.50 |
 | **SS-100** | ~83 | 3 | 72 | 6 | ~45s | $3.50–$8.00 |
 | **SS-250** | ~268 | 5 | 250 | 10 | ~65–90s | $8.00–$16.22 |
-| **SS-1000** ⚠️ | ~896 | 10 | 800 | 20 | ~110s | $25–$50 |
 
 Default is **SS-100**. Say `swarm command ss-250` for full deployment or `swarm command ss-50` for quick tasks.
 

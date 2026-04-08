@@ -252,16 +252,10 @@ graph LR
         A250["5 Commanders<br/>50 Squad Leads<br/>250 Workers<br/>10 Reviewers<br/>3 Shadow<br/>~268 agents"]
     end
 
-    subgraph SS1000["🐝🐝🐝🐝 SS-1000 ⚠️"]
-        A1000["10 Commanders<br/>100 Squad Leads<br/>800 Workers<br/>20 Reviewers<br/>6 Shadow<br/>~896 agents<br/>(Experimental)"]
-    end
-
     SS50 -.->|"Scale up"| SS100
     SS100 -.->|"Scale up"| SS250
-    SS250 -.->|"Scale up"| SS1000
 
     style SS50 fill:#2ecc71,stroke:#27ae60,color:#fff
     style SS100 fill:#3498db,stroke:#2980b9,color:#fff
     style SS250 fill:#9b59b6,stroke:#8e44ad,color:#fff
-    style SS1000 fill:#e74c3c,stroke:#c0392b,color:#fff
 ```

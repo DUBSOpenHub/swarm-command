@@ -59,7 +59,7 @@ Swarm Command ships one Copilot CLI skill and one standalone agent. The **skill*
 
 - **No API keys required** — all models are accessed through your active Copilot subscription
 - **No servers or infrastructure** — swarm state lives in memory during the session
-- **Scaling modes**: SS-50 (starter), SS-100 (default), SS-250 (full), SS-1000 (experimental)
+- **Scaling modes**: SS-50 (starter), SS-100 (default), SS-250 (full consensus swarm)
 - **Consensus threshold**: 70% for auto-accept, 50% for majority, below 50% for Nexus arbitration
 - **Shadow scoring**: 3 independent validators with hidden criteria running in parallel
 - **Cost ceiling**: $20 hard cap with automatic kill-switch

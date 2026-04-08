@@ -21,14 +21,6 @@ swarm_command:
       reviewers: 10
       shadow_validators: 3
       total: ~268
-    ss-1000:
-      status: experimental
-      commanders: 10
-      squad_leads_per_commander: 10
-      workers_per_squad_lead: 8
-      reviewers: 20
-      shadow_validators: 6
-      total: ~896
 
   consensus:
     threshold_consensus: 0.70
