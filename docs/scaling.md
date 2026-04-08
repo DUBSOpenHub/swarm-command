@@ -42,7 +42,7 @@ Time:  ~30s wall-clock
 | Squad Leads per Commander | 5 |
 | Workers per Squad Lead | 3 |
 | Reviewers | 3 |
-| Shadow validators | 0 (disabled) |
+| Shadow scoring | Disabled (score computed, no hardening) |
 | Cost ceiling | $5.00 |
 | Timeout cascade | 60/40/30/20s |
 
@@ -67,7 +67,7 @@ L1: 3 Commanders (sonnet)
 L2: 18 Squad Leads (haiku)   — 6 per commander
 L3: 72 Workers (haiku/mini)  — 4 per squad lead
 L4: 6 Reviewers (sonnet)
-    2 Shadow Validators (explore)
+    Shadow Scoring (Nexus-internal, sealed criteria)
 ──────────────────────────
 Total: ~83 agents
 Cost:  $3.50 – $8.00
@@ -83,7 +83,7 @@ Time:  ~45s wall-clock
 | Squad Leads per Commander | 6 |
 | Workers per Squad Lead | 4 |
 | Reviewers | 6 (3 pairs) |
-| Shadow validators | 2 |
+| Shadow scoring | 8 sealed criteria, hardening at >15% |
 | Cost ceiling | $10.00 |
 | Timeout cascade | 75/50/35/25s |
 
@@ -108,7 +108,7 @@ L1: 5 Commanders (sonnet)
 L2: 50 Squad Leads (haiku)   — 10 per commander
 L3: 250 Workers (haiku/mini) — 5 per squad lead
 L4: 10 Reviewers (sonnet)
-    3 Shadow Validators (explore)
+    Shadow Scoring (Nexus-internal, sealed criteria)
 ──────────────────────────
 Total: ~268 agents
 Cost:  $8.00 – $16.22
@@ -124,7 +124,7 @@ Time:  ~65-90s wall-clock
 | Squad Leads per Commander | 10 |
 | Workers per Squad Lead | 5 |
 | Reviewers | 10 (5 cross-family pairs) |
-| Shadow validators | 3 (median-of-3) |
+| Shadow scoring | 10 sealed criteria, hardening at >15% (Shadow Score Spec L2) |
 | Cost ceiling | $20.00 |
 | Timeout cascade | 90/60/40/30s |
 
@@ -163,7 +163,7 @@ L2: 100 Squad Leads (haiku)       — 10 per commander
 L3: 800 Workers (haiku/mini)      — 8 per squad lead ⚠️
 L4: 20 Reviewers (sonnet)         — 4 review meshes
 L5: 5 Meta-Reviewers (opus)       — review the reviewers
-    6 Shadow Validators (explore)
+    Shadow Scoring (Nexus-internal, sealed criteria, 6 meta-criteria)
 ──────────────────────────────
 Total: ~896 agents
 Cost:  $25 – $50

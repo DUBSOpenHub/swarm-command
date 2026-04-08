@@ -8,7 +8,7 @@ Swarm Command ships one Copilot CLI skill and one standalone agent. The **skill*
 
 ### swarm-command (Skill)
 
-- **Purpose**: Multi-model swarm orchestrator with consensus scoring and shadow validation. Launches 50–250+ AI agents across 16 models in a 5-layer hierarchy (Nexus → Commander → Squad Lead → Worker → Reviewer), performs cross-family review, applies shadow scoring with hidden criteria, and synthesizes the final output through a 4-stage consensus algorithm.
+- **Purpose**: Multi-model swarm orchestrator with consensus scoring and [Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2 conformance. Launches 50–250+ AI agents across 16 models in a 5-layer hierarchy (Nexus → Commander → Squad Lead → Worker → Reviewer), performs cross-family review, validates outputs against sealed acceptance criteria, and synthesizes the final output through a 4-stage consensus algorithm.
 - **Trigger**: `swarm command`
 - **Usage**: Install via Copilot CLI, then invoke with natural language:
   ```
@@ -61,7 +61,7 @@ Swarm Command ships one Copilot CLI skill and one standalone agent. The **skill*
 - **No servers or infrastructure** — swarm state lives in memory during the session
 - **Scaling modes**: SS-50 (starter), SS-100 (default), SS-250 (full consensus swarm)
 - **Consensus threshold**: 70% for auto-accept, 50% for majority, below 50% for Nexus arbitration
-- **Shadow scoring**: 3 independent validators with hidden criteria running in parallel
+- **Shadow scoring**: [Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2 — sealed acceptance criteria generated before execution, validated after, hardened on failure
 - **Cost ceiling**: $20 hard cap with automatic kill-switch
 - **Timeout cascade**: 90s → 60s → 40s → 30s per layer (children always finish before parents)
 

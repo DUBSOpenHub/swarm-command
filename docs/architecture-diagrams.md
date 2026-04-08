@@ -36,8 +36,8 @@ graph TB
         REV["Cross-Review Mesh<br/>5 Claude↔GPT pairs<br/>general-purpose"]
     end
 
-    subgraph SHADOW["🛡️ SHADOW LAYER"]
-        SHD["Shadow Validators (3)<br/>Hidden criteria scoring<br/>Divergence detection"]
+    subgraph SHADOW["👻 SHADOW SCORING (Shadow Score Spec L2)"]
+        SHD["Sealed Acceptance Criteria<br/>Generated Phase 1.5<br/>Validated Phase 6<br/>Hardened if score > 15%"]
     end
 
     NEXUS -->|"Context Capsule<br/>2K tokens"| CMD_A
@@ -83,16 +83,20 @@ graph TB
     CMD_D -->|"Report"| NEXUS
     CMD_E -->|"Report"| NEXUS
 
-    NEXUS -.->|"Parallel<br/>sealed"| SHD
-    REV -.->|"Scores for<br/>comparison"| SHD
-    SHD -.->|"Divergence<br/>alerts"| NEXUS
+    NEXUS -.->|"Phase 1.5:<br/>Seal criteria"| SHD
+    CMD_A -.->|"Phase 6:<br/>Validate"| SHD
+    CMD_B -.->|"Phase 6:<br/>Validate"| SHD
+    CMD_C -.->|"Phase 6:<br/>Validate"| SHD
+    CMD_D -.->|"Phase 6:<br/>Validate"| SHD
+    CMD_E -.->|"Phase 6:<br/>Validate"| SHD
+    SHD -.->|"Gap Reports<br/>+ Hardening"| NEXUS
 
     style L0 fill:#1a1a2e,stroke:#e94560,color:#fff
     style L1 fill:#16213e,stroke:#0f3460,color:#fff
     style L2 fill:#0f3460,stroke:#533483,color:#fff
     style L3 fill:#533483,stroke:#e94560,color:#fff
     style L4 fill:#2d4059,stroke:#ea5455,color:#fff
-    style SHADOW fill:#1b1b2f,stroke:#ffd700,color:#ffd700,stroke-dasharray: 5 5
+    style SHADOW fill:#1b1b2f,stroke:#ffd700,color:#ffd700,stroke-dasharray: 5 5,stroke-width:2px
 ```
 
 ## Signal Flow — Token Compression
@@ -125,7 +129,8 @@ gantt
 
     section Launch
     Nexus Boot           :a1, 00, 2s
-    Commander Spawn      :a2, after a1, 3s
+    Seal Criteria (1.5)  :a15, after a1, 1s
+    Commander Spawn      :a2, after a15, 3s
 
     section Fan-Out
     Squad Lead Deploy    :b1, after a2, 5s
@@ -136,7 +141,8 @@ gantt
 
     section Converge
     Review Mesh          :d1, after c1, 15s
-    Shadow Validation    :d2, after c1, 12s
+    Shadow Validation    :d2, after c1, 10s
+    Shadow Hardening     :d3, after d2, 8s
     Consensus Merge      :e1, after d1, 10s
     Final Emit           :e2, after e1, 5s
 ```
@@ -249,7 +255,7 @@ graph LR
     end
 
     subgraph SS250["🐝🐝🐝 SS-250"]
-        A250["5 Commanders<br/>50 Squad Leads<br/>250 Workers<br/>10 Reviewers<br/>3 Shadow<br/>~268 agents"]
+        A250["5 Commanders<br/>50 Squad Leads<br/>250 Workers<br/>10 Reviewers<br/>Shadow Score L2<br/>~268 agents"]
     end
 
     SS50 -.->|"Scale up"| SS100

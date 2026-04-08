@@ -12,14 +12,12 @@ swarm_command:
       squad_leads_per_commander: 6
       workers_per_squad_lead: 4
       reviewers: 6
-      shadow_validators: 2
       total: ~83
     ss-250:
       commanders: 5
       squad_leads_per_commander: 10
       workers_per_squad_lead: 5
       reviewers: 10
-      shadow_validators: 3
       total: ~268
 
   consensus:
@@ -46,22 +44,18 @@ swarm_command:
 
   shadow_scoring:
     enabled: true
-    validators: 3
-    criteria:
-      - id: "shd-01"
-        name: "mathematical_soundness"
-        weight: 0.30
-      - id: "shd-02"
-        name: "internal_consistency"
-        weight: 0.25
-      - id: "shd-03"
-        name: "executability"
-        weight: 0.25
-      - id: "shd-04"
-        name: "constraint_adherence"
-        weight: 0.20
-    divergence_alert_threshold: 0.15
-    critical_divergence_threshold: 0.30
+    spec_version: "1.0.0"
+    conformance_level: "L2"
+    sealed_criteria_count: 10  # criteria per task
+    hardening:
+      enabled: true
+      max_cycles: 1
+      threshold: 15  # hardening triggers if score > 15%
+    categories:
+      - happy_path
+      - edge_case
+      - error_handling
+      - completeness
 
   models:
     commander_pool:

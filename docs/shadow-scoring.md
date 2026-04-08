@@ -1,153 +1,177 @@
 # Shadow Scoring
 
-Shadow scoring is an independent quality audit layer that runs parallel to the main consensus pipeline. It uses **hidden criteria that agents never see**, preventing Goodhart's Law — when agents optimize for visible metrics at the expense of actual quality.
+Swarm Command implements **[Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2 conformance** for independent quality validation of commander outputs. Instead of the spec's sealed *code tests*, Swarm Command generates sealed *acceptance criteria* — task-specific assertions that commander outputs must satisfy, generated before commanders execute and validated after they complete.
 
 ---
 
 ## Why Shadow Scoring Exists
 
-During the SwarmSpeed 250 self-analysis test run (Havoc Hackathon #48), 3 sealed judges gave scores of 44-46/50 to a document containing **critical arithmetic errors**. The judges evaluated *design quality* but never tested *internal consistency*. Shadow scoring closes this blind spot.
+During the SwarmSpeed 250 self-analysis test run (Havoc Hackathon #48), 3 sealed judges gave scores of 44-46/50 to a document containing **critical arithmetic errors**. The judges evaluated *design quality* but never tested *internal consistency*. Shadow scoring closes this blind spot using the sealed-envelope approach: criteria generated before work begins, hidden from all agents, revealed only at validation time.
 
 The core insight: **What you measure, agents optimize for. What you don't measure, they ignore.** Shadow scoring measures what you don't tell them about.
 
 ---
 
-## Shadow Criteria (Hidden from Workers)
+## Shadow Score Spec Conformance
 
-These criteria are NEVER shown to workers, reviewers, or commanders. Only Shadow Validators see them.
+| Level | Requirement | Swarm Command |
+|---|---|---|
+| **L1** | Compute + report Shadow Score | ✅ Implemented |
+| **L2** | L1 + sealed-envelope isolation + tamper hash | ✅ Implemented |
+| L3 | L2 + hardening loop + velocity tracking | Partial (hardening loop ✅, velocity tracking not yet) |
 
-| Criterion ID | Name | What It Checks | Weight |
+**Swarm Command implements Shadow Score Spec L2 conformance.**
+
+---
+
+## The Formula
+
+```
+Shadow Score = (sealed_failures / sealed_total) × 100
+```
+
+A Shadow Score of 0% means all sealed criteria passed. Higher scores indicate more failures.
+
+### Interpretation Scale
+
+| Shadow Score | Level | Emoji | Meaning |
 |---|---|---|---|
-| `shd-01` | `mathematical_soundness` | All formulas are computable. Coefficients are normalized (sum to expected values). Arithmetic is correct. No division by zero. Bounds are respected. | 0.30 |
-| `shd-02` | `internal_consistency` | Claims in section X match claims in section Y. No contradictions across the output. Cross-references resolve correctly. Terminology is used consistently. | 0.25 |
-| `shd-03` | `executability` | Outputs can be parsed by a machine. Templates can be copy-pasted and run. JSON schemas validate against draft-07. Code snippets compile/run. | 0.25 |
-| `shd-04` | `constraint_adherence` | Output doesn't violate any rules defined in the system. Depth guard laws are respected. Token caps are not exceeded. Agent type restrictions are followed. | 0.20 |
-
-**Total weight: 1.00**
-
----
-
-## Shadow Validator Deployment
-
-Shadow validators are launched by the Nexus in parallel with Cross-Reviewers:
-
-### Configuration
-
-| Setting | Value |
-|---|---|
-| Number of validators | 3 (configurable in `config.yml`) |
-| Agent type | `explore` (leaf node, can't spawn) |
-| Models | Different from main pipeline (e.g., if main uses Sonnet, shadow uses GPT or vice versa) |
-| Context budget | 16K tokens |
-| `can_launch` | `false` |
-| Timeout | 45 seconds |
-
-### What Shadow Validators Receive
-
-Each shadow validator receives:
-- The **full output** of a Commander bundle (not compressed)
-- The scoring rubric (the 4 hidden criteria above)
-- Instructions to verify, not create
-
-### What Shadow Validators Do NOT Receive
-
-- Main reviewer scores (sealed envelope — shadow must be independent)
-- Worker self-scores
-- Consensus tier classifications
-- Any indication of which model produced the output
-
-### Shadow Validator Prompt Pattern
-
-```
-Score this output for correctness and consistency.
-
-1. Check ALL arithmetic. Verify all formulas are computable. Confirm coefficients normalize correctly.
-2. Check ALL cross-references. Verify claims in one section match claims in other sections.
-3. Try to parse ALL structured outputs. Verify JSON schemas validate. Test templates.
-4. Verify ALL rules and constraints are followed. Check depth limits, token caps, agent types.
-
-Score each criterion 0.0 to 1.0. Provide evidence for any score below 0.6.
-```
+| 0% | Perfect | ✅ | All sealed criteria passed |
+| 1–15% | Minor | 🟢 | Acceptable — minor gaps only |
+| 16–30% | Moderate | 🟡 | Notable gaps — review recommended |
+| 31–50% | Significant | 🟠 | Serious gaps — hardening required |
+| > 50% | Critical | 🔴 | Fundamental failures — re-work needed |
 
 ---
 
-## Shadow Score Calculation
+## Sealed-Envelope Protocol (4 Phases)
 
-For each bundle, the shadow score is:
+The Shadow Score Spec defines a 4-phase sealed-envelope protocol. Here's how Swarm Command implements each phase within its swarm execution pipeline:
 
-```
-shadow_score = 0.30 × mathematical_soundness
-             + 0.25 × internal_consistency
-             + 0.25 × executability
-             + 0.20 × constraint_adherence
-```
+### Phase 1: SEAL GENERATION (Swarm Command Phase 1.5)
 
-With 3 validators, use the **median** shadow score (not mean) — same median-of-3 principle as main consensus.
+**When:** After task decomposition (Phase 1), before commanders execute (Phase 3).
 
----
+The Nexus generates sealed acceptance criteria from the task specification:
 
-## Divergence Detection
-
-After both main reviewers and shadow validators complete, compute divergence:
-
-```
-divergence = |main_consensus_score − shadow_median_score|
-```
-
-### Alert Thresholds
-
-| Divergence | Level | Alert | Action |
-|---|---|---|---|
-| ≤ 0.15 | Normal | None | Main consensus proceeds normally |
-| 0.15 – 0.30 | Warning | `SHADOW DIVERGENCE — main scoring may be miscalibrated` | Escalate to Nexus for manual review. Attach shadow findings. |
-| > 0.30 | Critical | `CRITICAL SHADOW DIVERGENCE — high confidence with low quality` | **HALT consensus**. Re-review bundle with shadow findings attached. |
-
-### Critical Divergence Pattern
-
-The most dangerous pattern is **high main score + low shadow score**:
-
-```
-if shadow_score < 0.5 AND main_score > 0.8:
-    alert: "CRITICAL SHADOW DIVERGENCE — high confidence with low quality"
-    action: HALT consensus for this bundle
-    action: Re-review with shadow findings attached
-    action: Nexus arbitrates with full evidence
-```
-
-This catches "looks good but is wrong" outputs — the most dangerous category of AI error.
-
----
-
-## Shadow Score Integration
-
-Shadow scores do NOT replace main consensus scores. They act as a **circuit breaker**:
-
-### Integration Rules
-
-| Shadow Result | Action |
-|---|---|
-| All criteria ≥ 0.6 | Main consensus proceeds normally. Shadow passes. |
-| Any criterion 0.3–0.6 | Findings attached to bundle as `shadow_flags[]`. Warning level. Bundle proceeds with flags visible to Nexus. |
-| Any criterion < 0.3 | Bundle is **QUARANTINED**. Removed from main consensus. Re-reviewed with shadow evidence. Nexus decides whether to include. |
-
-### Shadow Flags
-
-When shadow scoring identifies issues, they are attached as structured flags:
+1. Analyze the task decomposition and generate 10 binary pass/fail acceptance criteria
+2. Distribute criteria across 4 categories: `happy_path`, `edge_case`, `error_handling`, `completeness`
+3. Compute a SHA-256 tamper hash of the sealed criteria
+4. Store the sealed envelope in Nexus memory — **never shared with any agent**
 
 ```json
 {
-  "shadow_flags": [
+  "sealed_envelope": {
+    "generated_at": "2025-01-15T10:30:00Z",
+    "task_hash": "sha256:b7e2...",
+    "sealed_hash": "sha256:a3f2...",
+    "criteria_count": 10,
+    "criteria": [
+      {
+        "id": "sc-01",
+        "category": "happy_path",
+        "assertion": "Architecture section defines module boundaries for all 5 domains",
+        "expected": "Each domain has a clearly defined module boundary"
+      },
+      {
+        "id": "sc-02",
+        "category": "edge_case",
+        "assertion": "Implementation handles empty input gracefully",
+        "expected": "Empty input produces a structured error, not a crash"
+      }
+    ]
+  }
+}
+```
+
+### Phase 2: IMPLEMENTATION (Swarm Command Phases 2–5)
+
+Commanders, Squad Leads, Workers, and Reviewers execute normally. **They never see the sealed criteria.** The sealed envelope remains locked in Nexus memory throughout the entire execution pipeline.
+
+### Phase 3: VALIDATION (Swarm Command Phase 6)
+
+After commanders complete and cross-review finishes:
+
+1. **Verify tamper hash** — Confirm the sealed criteria haven't been modified since Phase 1.5
+2. **Run each sealed criterion** against each Commander bundle as a binary pass/fail
+3. **Compute Shadow Score:** `(failures / total) × 100`
+4. **Classify** using the interpretation scale
+5. **Produce a Gap Report** for each bundle
+
+### Phase 4: HARDENING (Swarm Command Phase 6, continued)
+
+If Shadow Score > 15% for any bundle:
+
+1. Share **only failure messages** with the affected Commander — never the criteria themselves
+2. Commander gets 1 fix cycle to address the failures
+3. Re-validate and re-compute Shadow Score
+4. Record pre-hardening and post-hardening scores
+
+**What commanders receive during hardening:**
+```
+SHADOW HARDENING — Fix these issues:
+- [sc-07] Edge case for empty input not addressed
+- [sc-09] Error response format missing HTTP status codes
+```
+
+**What commanders do NOT receive:** criteria list, scoring formula, pass/fail breakdown, or any mention of the sealed-envelope protocol.
+
+---
+
+## Protocol Flow Within Swarm Phases
+
+```
+Phase 0   Mission Intake
+Phase 1   Task Decomposition (5 domains)
+              │
+Phase 1.5 ◄── SEAL GENERATION ──► Sealed criteria locked, hash recorded
+              │
+Phase 2   Context Capsule Construction
+Phase 3   Commander Deployment (commanders never see criteria)
+Phase 4   Execution & Monitoring
+Phase 5   Cross-Review
+              │
+Phase 6   ◄── VALIDATION ──► Unseal, validate, compute Shadow Score
+              │
+          ◄── HARDENING ──► If score > 15%, share failure messages, one fix cycle
+              │
+Phase 7   Consensus Synthesis (Shadow Gate uses Shadow Score)
+Phase 8   Final Output (Gap Report included)
+```
+
+---
+
+## Gap Report Format
+
+Each bundle receives a Gap Report in the Shadow Score Spec standard format:
+
+```json
+{
+  "shadow_score_spec_version": "1.0.0",
+  "report": {
+    "shadow_score": 20.0,
+    "level": "moderate",
+    "sealed_hash": "sha256:a3f2..."
+  },
+  "sealed_tests": {
+    "total": 10,
+    "passed": 8,
+    "failed": 2
+  },
+  "failures": [
     {
-      "criterion": "mathematical_soundness",
-      "score": 0.4,
-      "evidence": "Consensus formula coefficients sum to 1.15, not 1.0",
-      "severity": "warning"
+      "test_name": "sc-07",
+      "category": "edge_case",
+      "expected": "Output handles empty input gracefully",
+      "actual": "No empty input handling found in IMPL bundle",
+      "message": "Edge case for empty input not addressed"
     },
     {
-      "criterion": "internal_consistency",
-      "score": 0.2,
-      "evidence": "Section 3 claims max_depth=3, Section 9 claims max_depth=2",
-      "severity": "critical"
+      "test_name": "sc-09",
+      "category": "error_handling",
+      "expected": "Error responses include HTTP status codes",
+      "actual": "Error format uses string messages without status codes",
+      "message": "Error response format missing HTTP status codes"
     }
   ]
 }
@@ -155,47 +179,32 @@ When shadow scoring identifies issues, they are attached as structured flags:
 
 ---
 
-## What Shadow Scoring Catches vs. Main Scoring
+## Shadow Score Integration with Consensus
 
-| Bug Type | Main Scoring | Shadow Scoring |
-|---|---|---|
-| "Looks good but math is wrong" | ❌ Misses | ✅ `mathematical_soundness` |
-| "§1 says X, §9 says Y" | ❌ Misses | ✅ `internal_consistency` |
-| "Template has syntax error" | ❌ Misses | ✅ `executability` |
-| "SS-1000 violates Law 4" | ❌ Misses | ✅ `constraint_adherence` |
-| "Design is inelegant" | ✅ Catches | ❌ Not its job |
-| "Missing a deliverable" | ✅ Catches | ⚠️ Partial (completeness) |
-| "Output is unclear" | ✅ Catches (clarity axis) | ❌ Not its job |
-| "Contradicts external spec" | ❌ Misses (no external context) | ❌ Misses (no external context) |
+Shadow Scores act as a **quality gate** in the consensus pipeline (Phase 7, Stage 3):
 
-### Key Insight
-
-Main scoring excels at **design quality** (is this good?). Shadow scoring excels at **internal correctness** (is this right?). Together they cover both dimensions. Neither alone is sufficient.
+| Shadow Score | Action |
+|---|---|
+| 0% (Perfect) or 1–15% (Minor) | Bundle proceeds normally through consensus |
+| 16–30% (Moderate) | Gap Report attached to bundle, warning in output |
+| 31–50% (Significant) | Bundle QUARANTINED — Nexus re-reviews with failure messages |
+| > 50% (Critical) | Bundle REJECTED from synthesis |
 
 ---
 
-## Deployment Recommendations
+## Adaptation: Acceptance Criteria vs. Code Tests
 
-### For SS-50 (Starter)
-- Shadow scoring: **disabled** (not enough agents to justify overhead)
-- Alternative: Manual spot-check of results
+The Shadow Score Spec is designed for code-producing agents where sealed tests are executable test files. Swarm Command adapts this for general-purpose AI orchestration:
 
-### For SS-100 (Standard)
-- Shadow validators: **2** (one per bundle pair)
-- Use different model family from commanders
-- Divergence alert threshold: 0.20 (more lenient for smaller swarm)
+| Spec Concept | Swarm Command Adaptation |
+|---|---|
+| Sealed code tests | Sealed acceptance criteria (natural-language assertions) |
+| Test runner execution | Nexus evaluates criteria against bundle content |
+| Test pass/fail | Binary assertion pass/fail |
+| Test suite | Criteria set across 4 categories |
+| CI environment | Nexus memory (sealed, tamper-hashed) |
 
-### For SS-250 (Full)
-- Shadow validators: **3** (median-of-3 for robust scoring)
-- Use different model family from commanders AND reviewers
-- Divergence alert threshold: 0.15
-- Critical divergence threshold: 0.30
-
-### For SS-1000 (Enterprise)
-- Shadow validators: **6** (one per 2 commanders)
-- Add a **Meta-Shadow** layer that reviews shadow validator consistency
-- Divergence alert threshold: 0.10 (stricter for large deployments)
-- Critical divergence threshold: 0.25
+The math is identical: `(failures / total) × 100`. The isolation is identical: agents never see criteria. The hardening is identical: only failure messages shared. The adaptation is in *what* gets tested — acceptance criteria instead of code assertions.
 
 ---
 
@@ -206,22 +215,28 @@ Shadow scoring is configured in `config.yml`:
 ```yaml
 shadow_scoring:
   enabled: true
-  validators: 3
-  criteria:
-    - id: "shd-01"
-      name: "mathematical_soundness"
-      weight: 0.30
-    - id: "shd-02"
-      name: "internal_consistency"
-      weight: 0.25
-    - id: "shd-03"
-      name: "executability"
-      weight: 0.25
-    - id: "shd-04"
-      name: "constraint_adherence"
-      weight: 0.20
-  divergence_alert_threshold: 0.15
-  critical_divergence_threshold: 0.30
+  spec_version: "1.0.0"
+  conformance_level: "L2"
+  sealed_criteria_count: 10
+  hardening:
+    enabled: true
+    max_cycles: 1
+    threshold: 15
+  categories:
+    - happy_path
+    - edge_case
+    - error_handling
+    - completeness
 ```
 
 Set `enabled: false` to disable shadow scoring entirely (e.g., for cost-sensitive SS-50 deployments).
+
+---
+
+## Scale-Specific Behavior
+
+| Scale | Sealed Criteria | Hardening | Notes |
+|---|---|---|---|
+| **SS-50** | 6 (reduced) | Disabled | Shadow Score computed but no fix cycle |
+| **SS-100** | 8 | 1 cycle if > 15% | Moderate hardening |
+| **SS-250** | 10 (full) | 1 cycle if > 15% | Full hardening |

@@ -21,7 +21,7 @@ This repository contains **Swarm Command**, a GitHub Copilot CLI skill that orch
 3. **All outputs are strict JSON.** Every layer boundary uses schema-validated JSON. No prose parsing.
 4. **Just a skill.** Do not add runtime code, package managers, telemetry, dashboards, or plugin systems.
 5. **Parent controls spawning.** The parent computes `can_launch` for every child. The child never decides for itself.
-6. **Shadow criteria are hidden.** Shadow scoring criteria must never appear in worker or reviewer prompts. Only shadow validators see them.
+6. **Sealed criteria are hidden.** Shadow scoring uses the [Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) sealed-envelope protocol. Sealed acceptance criteria are generated before commanders execute and must never appear in any agent prompt. Only the Nexus sees them during Phase 6 validation.
 7. **Context compresses monotonically.** 128K → 2K → 512 → 128 tokens. File scope narrows at every layer.
 
 ## Prohibited actions

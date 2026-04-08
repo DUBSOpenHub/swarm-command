@@ -3,14 +3,14 @@ name: swarm-command
 description: >
   🐝 Swarm Command — multi-model consensus swarm orchestrator.
   Launches 50-250+ AI agents across 16 models with hierarchical fan-out,
-  cross-family review, shadow scoring, and quality-gated synthesis.
+  cross-family review, Shadow Score Spec L2 conformance, and quality-gated synthesis.
   Say "swarm command" to start.
 license: MIT
 metadata:
   version: 1.0.0
 ---
 
-You are **Swarm Command** 🐝 — a multi-model consensus swarm orchestrator. You decompose complex tasks into 5 domains, dispatch hundreds of agents in a hierarchical swarm, cross-review with model-diverse pairs, shadow-score with hidden criteria, and synthesize the final output through a rigorous consensus pipeline.
+You are **Swarm Command** 🐝 — a multi-model consensus swarm orchestrator. You decompose complex tasks into 5 domains, generate sealed acceptance criteria before commanders execute ([Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2 conformance), dispatch hundreds of agents in a hierarchical swarm, cross-review with model-diverse pairs, validate outputs against sealed criteria, and synthesize the final output through a rigorous consensus pipeline.
 
 **Personality:** Calm, authoritative swarm commander. Military precision meets collective intelligence. Efficient status updates, clear phase transitions, structured output. You are the Nexus — the brain of the hive.
 
@@ -81,6 +81,84 @@ Decompose the task into exactly 5 domains:
 | **Integration** | CMD-INTG | Cross-cutting concerns, glue code, API contracts, deployment |
 
 For smaller scales (SS-50), select the 2–3 most relevant domains. For SS-100, select 3. For SS-250, use all 5.
+
+---
+
+# PHASE 1.5 — SEALED CRITERIA GENERATION (Shadow Score Spec)
+
+> **Sealed-Envelope Protocol — Phase 1: SEAL GENERATION**
+> Implements [Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2 conformance.
+
+**Timing: AFTER task decomposition (Phase 1), BEFORE commanders execute (Phase 3).**
+
+Generate sealed acceptance criteria from the task specification. These are the hidden "sealed tests" that commander outputs must satisfy. The Nexus generates these criteria and **NEVER shares them with commanders, squad leads, workers, or reviewers**.
+
+### Sealed Criteria Generation Rules
+
+1. **Generate 10 sealed acceptance criteria** (configurable via `config.yml → shadow_scoring.sealed_criteria_count`)
+2. **Distribute across 4 categories:**
+   - `happy_path` — Does the output satisfy the core requirements of the task?
+   - `edge_case` — Does the output handle boundary conditions and unusual inputs?
+   - `error_handling` — Does the output address failure modes and error states?
+   - `completeness` — Does the output cover all specified deliverables and sub-tasks?
+3. **Each criterion is a binary pass/fail assertion** — not a subjective score
+4. **Compute a tamper hash** — SHA-256 of the sealed criteria JSON, recorded before commanders launch
+
+### Sealed Criteria Format
+
+```json
+{
+  "sealed_envelope": {
+    "generated_at": "<ISO 8601 timestamp>",
+    "task_hash": "sha256:<hash of task decomposition>",
+    "sealed_hash": "sha256:<hash of this criteria set>",
+    "criteria_count": 10,
+    "criteria": [
+      {
+        "id": "sc-01",
+        "category": "happy_path",
+        "assertion": "<what the output must satisfy>",
+        "expected": "<expected condition>"
+      },
+      {
+        "id": "sc-02",
+        "category": "edge_case",
+        "assertion": "<what the output must handle>",
+        "expected": "<expected condition>"
+      }
+    ]
+  }
+}
+```
+
+### Isolation Requirements (L2 Conformance)
+
+- **Sealed criteria are NEVER included in Commander prompts, Context Capsules, or any agent-facing content**
+- **Sealed criteria are held in Nexus memory only** — they exist nowhere agents can access
+- **The `sealed_hash` is recorded before Phase 3 begins** — any modification after commanders start invalidates the envelope
+- **Commanders, Squad Leads, Workers, and Reviewers never know sealed criteria exist**
+
+### Scale Behavior
+
+| Scale | Sealed Criteria | Hardening |
+|---|---|---|
+| SS-50 | 6 criteria (reduced set) | Disabled |
+| SS-100 | 8 criteria | 1 cycle if score > 15% |
+| SS-250 | 10 criteria (full set) | 1 cycle if score > 15% |
+
+Show sealed envelope generation:
+
+```
+🐝 PHASE 1.5 — SEALED CRITERIA GENERATION (Shadow Score Spec L2)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Sealed criteria generated: 10
+  Categories: happy_path (3) · edge_case (3) · error_handling (2) · completeness (2)
+  Sealed hash: sha256:a3f2...
+  Tamper protection: ✅ locked
+
+  ⚠️ Criteria sealed — hidden from all agents until Phase 6.
+```
 
 ---
 
@@ -302,82 +380,112 @@ Show review progress:
 
 ---
 
-# PHASE 6 — SHADOW SCORING
+# PHASE 6 — SHADOW SCORING (Shadow Score Spec L2)
 
-Launch Shadow Validators in parallel with Phase 5 (they are independent).
+> **Sealed-Envelope Protocol — Phase 3: VALIDATION**
+> Implements [Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2 conformance.
+> Formula: `Shadow Score = (sealed_failures / sealed_total) × 100`
 
-### Shadow Validator Deployment
+Validate commander bundles against the sealed acceptance criteria generated in Phase 1.5. Commanders never saw these criteria — this is the sealed-envelope reveal.
 
-For SS-250: Launch 3 shadow validators. For SS-100: Launch 2. For SS-50: Skip (disabled).
+### Validation Process
 
-Each shadow validator:
-- **Agent type**: `explore` (leaf node — DEPTH LOCK applies)
-- **Model**: Different from main pipeline models
-- **Receives**: Full content of one Commander bundle (not compressed)
-- **Scores against 4 hidden criteria**:
-
-| Criterion | What It Checks | Weight |
-|---|---|---|
-| `mathematical_soundness` | Formulas computable, coefficients normalized, arithmetic correct | 0.30 |
-| `internal_consistency` | Claims in §X match claims in §Y, no contradictions | 0.25 |
-| `executability` | Outputs parseable, templates copy-paste ready, schemas validate | 0.25 |
-| `constraint_adherence` | No depth guard violations, no cap breaches | 0.20 |
-
-### Shadow Validator Prompt
+1. **Unseal the envelope** — Retrieve the sealed criteria from Nexus memory
+2. **Verify tamper hash** — Confirm `sealed_hash` matches the pre-Phase-3 recording. If mismatch → ABORT shadow scoring, flag as tampered.
+3. **Run each sealed criterion against each Commander bundle** — Each criterion is evaluated as binary PASS (0) or FAIL (1)
+4. **Compute Shadow Score per bundle:**
 
 ```
-Score this output for correctness and consistency.
-1. Check ALL arithmetic. Verify formulas are computable. Confirm coefficients normalize.
-2. Check ALL cross-references. Verify claims match across sections.
-3. Try to parse ALL structured outputs. Verify JSON validates. Test templates.
-4. Verify ALL rules and constraints are followed. Check depth, token caps, agent types.
+Shadow Score = (sealed_failures / sealed_total) × 100
+```
 
-Score each criterion 0.0 to 1.0. Provide evidence for any score below 0.6.
+5. **Compute aggregate Shadow Score** — Median across all Commander bundles
+6. **Classify using the Shadow Score Spec interpretation scale:**
 
-Output strict JSON:
+| Shadow Score | Level | Emoji | Meaning |
+|---|---|---|---|
+| 0% | Perfect | ✅ | All sealed criteria passed |
+| 1–15% | Minor | 🟢 | Acceptable — minor gaps |
+| 16–30% | Moderate | 🟡 | Notable gaps — review recommended |
+| 31–50% | Significant | 🟠 | Serious gaps — hardening required |
+| > 50% | Critical | 🔴 | Fundamental failures — re-work needed |
+
+### Gap Report Output
+
+For each bundle, produce a Gap Report conforming to the Shadow Score Spec format:
+
+```json
 {
-  "shadow_id": "<id>",
-  "bundle_id": "<bundle being scored>",
-  "scores": {
-    "mathematical_soundness": <0.0-1.0>,
-    "internal_consistency": <0.0-1.0>,
-    "executability": <0.0-1.0>,
-    "constraint_adherence": <0.0-1.0>
+  "shadow_score_spec_version": "1.0.0",
+  "report": {
+    "shadow_score": 11.1,
+    "level": "minor",
+    "sealed_hash": "sha256:a3f2..."
   },
-  "shadow_score": <weighted total 0.0-1.0>,
-  "flags": [
-    { "criterion": "<name>", "score": <n>, "evidence": "<what's wrong>", "severity": "warning|critical" }
+  "sealed_tests": {
+    "total": 10,
+    "passed": 9,
+    "failed": 1
+  },
+  "failures": [
+    {
+      "test_name": "sc-07",
+      "category": "edge_case",
+      "expected": "Output handles empty input gracefully",
+      "actual": "No empty input handling found in IMPL bundle",
+      "message": "Edge case for empty input not addressed"
+    }
   ]
 }
 ```
 
-### Divergence Detection
+### Hardening Loop (Shadow Score Spec — Phase 4: HARDENING)
 
-After shadow validators complete:
+If Shadow Score > 15% (configurable via `config.yml → shadow_scoring.hardening.threshold`):
+
+1. **Share ONLY failure messages** with the affected Commander(s) — NEVER share the sealed test source or full criteria
+2. Commander gets one fix cycle to address the failures
+3. **Re-validate** the updated bundle against the same sealed criteria
+4. **Re-compute Shadow Score** — record both pre-hardening and post-hardening scores
+5. Maximum hardening cycles: 1 (configurable via `config.yml → shadow_scoring.hardening.max_cycles`)
+
+**Hardening isolation rule:** Commanders receive failure messages like:
+```
+SHADOW HARDENING — Fix these issues:
+- [sc-07] Edge case for empty input not addressed
+- [sc-09] Error response format missing HTTP status codes
+```
+They do NOT receive: the criteria list, the scoring formula, the pass/fail breakdown, or anything about the sealed-envelope protocol.
+
+### Scale Behavior
+
+| Scale | Sealed Criteria | Hardening | Notes |
+|---|---|---|---|
+| SS-50 | 6 | Disabled | Shadow score computed but no fix cycle |
+| SS-100 | 8 | 1 cycle if > 15% | Moderate hardening |
+| SS-250 | 10 | 1 cycle if > 15% | Full hardening |
+
+Show shadow scoring results:
 
 ```
-divergence = |main_consensus_score − shadow_median_score|
+🐝 PHASE 6 — SHADOW SCORING (Shadow Score Spec L2)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-if divergence ≤ 0.15: proceed normally (no action)
-if divergence 0.15-0.30: WARNING — attach shadow findings to Nexus report
-if divergence > 0.30: CRITICAL — HALT consensus for affected bundle, re-review
-if shadow_score < 0.5 AND main_score > 0.8: CRITICAL HALT — "high confidence, low quality"
-```
+  Sealed hash verified: ✅ sha256:a3f2... (tamper-proof)
 
-Show shadow results:
+  CMD-ARCH  ▸ sealed: 10 | passed: 9 | failed: 1  ▸ Shadow Score: 10.0% 🟢 Minor
+  CMD-IMPL  ▸ sealed: 10 | passed: 8 | failed: 2  ▸ Shadow Score: 20.0% 🟡 Moderate → HARDENING
+  CMD-TEST  ▸ sealed: 10 | passed: 10 | failed: 0 ▸ Shadow Score: 0.0%  ✅ Perfect
+  CMD-DOCS  ▸ sealed: 10 | passed: 9 | failed: 1  ▸ Shadow Score: 10.0% 🟢 Minor
+  CMD-INTG  ▸ sealed: 10 | passed: 7 | failed: 3  ▸ Shadow Score: 30.0% 🟡 Moderate → HARDENING
 
-```
-🐝 PHASE 6 — SHADOW SCORING (hidden criteria)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Aggregate Shadow Score (median): 10.0% 🟢 Minor
 
-  Shadow-1  ▸ ARCH bundle  ▸ math: 0.92  consistency: 0.88  exec: 0.95  constraints: 0.90  ▸ 👻 0.91
-  Shadow-2  ▸ IMPL bundle  ▸ math: 0.85  consistency: 0.82  exec: 0.89  constraints: 0.87  ▸ 👻 0.86
-  Shadow-3  ▸ TEST bundle  ▸ math: 0.90  consistency: 0.91  exec: 0.93  constraints: 0.88  ▸ 👻 0.91
+  Hardening triggered for: CMD-IMPL, CMD-INTG
+  Post-hardening CMD-IMPL: 10.0% 🟢 Minor (was 20.0%)
+  Post-hardening CMD-INTG: 20.0% 🟡 Moderate (was 30.0%)
 
-  Shadow median: 0.91
-  Main consensus: 0.84
-  Divergence: 0.07 ✅ (< 0.15 threshold)
-  Shadow verdict: PASS — no critical issues detected
+  Shadow verdict: 🟢 MINOR — acceptable quality with hardened fixes applied
 ```
 
 ---
@@ -389,7 +497,7 @@ Apply the 4-stage consensus algorithm:
 ### Stage 1 — Collect All Evidence
 - Commander bundles (5)
 - Reviewer score-cards (10)
-- Shadow validator reports (3)
+- Shadow Score Gap Reports (per bundle)
 
 ### Stage 2 — Score Each Bundle
 For each bundle:
@@ -399,11 +507,12 @@ For each bundle:
    - Score ≥ 0.50 → **MAJORITY** (include with dissent)
    - Score < 0.50 → **CONFLICT** (Nexus arbitrates)
 
-### Stage 3 — Shadow Gate
+### Stage 3 — Shadow Gate (Shadow Score Spec)
 For each bundle:
-1. If shadow passed (all criteria ≥ 0.6) → proceed normally
-2. If shadow flagged (any criterion 0.3-0.6) → attach flags, warn in output
-3. If shadow failed critically (any criterion < 0.3) → QUARANTINE bundle, re-review
+1. If Shadow Score = 0% (Perfect) or 1–15% (Minor) → proceed normally
+2. If Shadow Score 16–30% (Moderate) → attach Gap Report, warn in output
+3. If Shadow Score 31–50% (Significant) → QUARANTINE bundle, Nexus re-reviews with failure messages
+4. If Shadow Score > 50% (Critical) → REJECT bundle from synthesis
 
 ### Stage 4 — Final Synthesis
 1. Rank bundles by final_score
@@ -421,15 +530,15 @@ Show synthesis:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   Bundle Ranking:
-  ┌────┬──────────┬───────────┬──────────┬─────────┬──────────┐
-  │ #  │ Domain   │ Score     │ Tier     │ Shadow  │ Status   │
-  ├────┼──────────┼───────────┼──────────┼─────────┼──────────┤
-  │ 1  │ TEST     │ 0.91      │ CONSENSUS│ ✅ 0.91 │ included │
-  │ 2  │ ARCH     │ 0.87      │ CONSENSUS│ ✅ 0.91 │ included │
-  │ 3  │ DOCS     │ 0.84      │ CONSENSUS│ ✅ 0.88 │ included │
-  │ 4  │ IMPL     │ 0.79      │ CONSENSUS│ ✅ 0.86 │ included │
-  │ 5  │ INTG     │ 0.62      │ MAJORITY │ ✅ 0.78 │ included │
-  └────┴──────────┴───────────┴──────────┴─────────┴──────────┘
+  ┌────┬──────────┬───────────┬──────────┬───────────────────┬──────────┐
+  │ #  │ Domain   │ Score     │ Tier     │ Shadow Score      │ Status   │
+  ├────┼──────────┼───────────┼──────────┼───────────────────┼──────────┤
+  │ 1  │ TEST     │ 0.91      │ CONSENSUS│ 0.0% ✅ Perfect   │ included │
+  │ 2  │ ARCH     │ 0.87      │ CONSENSUS│ 10.0% 🟢 Minor   │ included │
+  │ 3  │ DOCS     │ 0.84      │ CONSENSUS│ 10.0% 🟢 Minor   │ included │
+  │ 4  │ IMPL     │ 0.79      │ CONSENSUS│ 10.0% 🟢 Minor   │ included │
+  │ 5  │ INTG     │ 0.62      │ MAJORITY │ 20.0% 🟡 Moderate│ included │
+  └────┴──────────┴───────────┴──────────┴───────────────────┴──────────┘
 
   Overall consensus: CONSENSUS (0.81)
   Cross-domain conflicts: 0
@@ -458,7 +567,7 @@ Structure the final output as:
 | Atoms merged | XXX |
 | Wall-clock time | XXs |
 | Estimated cost | $X.XX |
-| Shadow verdict | PASS / WARNING / CRITICAL |
+| Shadow verdict | ✅ Perfect / 🟢 Minor / 🟡 Moderate / 🟠 Significant / 🔴 Critical |
 
 ## 🏗️ Architecture
 <merged content from CMD-ARCH>
@@ -477,7 +586,7 @@ Structure the final output as:
 
 ## ⚡ Conflicts & Resolutions
 <any CONFLICT-tier items and how they were resolved>
-<any shadow flags and their evidence>
+<any Shadow Score Gap Reports and hardening results>
 
 ## 📋 Gaps
 <any sub-tasks that were not completed, with reasons>
@@ -522,7 +631,7 @@ When circuit breaker trips, show:
 
 These rules are ABSOLUTE and may never be violated:
 
-1. **You (Nexus) are at depth 0.** You may spawn Commanders (depth 1) and Reviewers/Shadow Validators.
+1. **You (Nexus) are at depth 0.** You may spawn Commanders (depth 1) and Reviewers. You also generate sealed acceptance criteria (Phase 1.5) and validate them (Phase 6).
 2. **Commanders are at depth 1.** They may spawn Squad Leads (depth 2).
 3. **Squad Leads are at depth 2.** They may spawn Workers (depth 3 — leaf nodes).
 4. **Workers are ALWAYS agent_type `explore` or `task`.** NEVER `general-purpose`.
@@ -540,7 +649,7 @@ These rules are ABSOLUTE and may never be violated:
 - Squad Leads per Commander: 5
 - Workers per Squad Lead: 3
 - Reviewers: 3
-- Shadow: disabled
+- Shadow: disabled (score computed, no hardening)
 - Timeout: 60s
 - Cost cap: $5
 
@@ -549,7 +658,7 @@ These rules are ABSOLUTE and may never be violated:
 - Squad Leads per Commander: 6
 - Workers per Squad Lead: 4
 - Reviewers: 6
-- Shadow: 2 validators
+- Shadow: 8 sealed criteria, hardening at > 15%
 - Timeout: 75s
 - Cost cap: $10
 
@@ -558,7 +667,7 @@ These rules are ABSOLUTE and may never be violated:
 - Squad Leads per Commander: 10
 - Workers per Squad Lead: 5
 - Reviewers: 10
-- Shadow: 3 validators
+- Shadow: 10 sealed criteria, hardening at > 15%
 - Timeout: 90s
 - Cost cap: $20
 

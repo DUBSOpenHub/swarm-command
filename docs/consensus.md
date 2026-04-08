@@ -158,9 +158,11 @@ For each bundle:
      - Auto-include in final output
   6. For MAJORITY-tier items:
      - Include with dissent notes attached
-  7. Check shadow validation:
-     - If shadow divergence > 0.15: attach warning
-     - If shadow critical divergence > 0.30: re-review with shadow findings
+  7. Check Shadow Score (sealed criteria, Shadow Score Spec L2):
+     - If Shadow Score ≤ 15% (Minor): proceed normally
+     - If Shadow Score 16-30% (Moderate): attach Gap Report as warning
+     - If Shadow Score 31-50% (Significant): quarantine bundle, re-review
+     - If Shadow Score > 50% (Critical): reject bundle from synthesis
   8. Emit final report with:
      - Attribution (which domains contributed)
      - Confidence intervals (per-domain and overall)
@@ -205,7 +207,7 @@ Consider a task "Refactor authentication module" being processed by SS-100 (100 
 - CMD-ARCH scored 8.2 by median-of-3 reviewers → auto-include
 - CMD-IMPL scored 7.5 → auto-include
 - CMD-TEST scored 4.8 → CONFLICT tier → Nexus arbitrates using full context
-- Shadow validators confirm no critical divergence
+- Shadow Score (sealed criteria) confirms no critical failures
 - Final report emitted with overall confidence 0.79
 
 ---

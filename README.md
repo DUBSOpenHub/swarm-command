@@ -1,6 +1,6 @@
 # 🐝 Swarm Command
 
-**Multi-model consensus swarm orchestration. 50–250+ AI agents. 16 models. Shadow scoring. One command.**
+**Multi-model consensus swarm orchestration. 50–250+ AI agents. 16 models. Shadow Score Spec L2. One command.**
 
 [![GitHub](https://img.shields.io/badge/GitHub-Copilot_CLI-blue?logo=github)](https://github.com/features/copilot)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -31,7 +31,7 @@
 
 ## 🤔 What Is This?
 
-**Swarm Command** is a multi-model swarm orchestration skill for the [Copilot CLI](https://docs.github.com/copilot/concepts/agents/about-copilot-cli) that launches **50 to 250+ AI agents** across **16 different models** to solve complex tasks through hierarchical fan-out, cross-family review, and consensus-gated synthesis. Give it any task — architecture, refactoring, testing, documentation — and it decomposes it into 5 domains, dispatches commanders, squad leads, and workers in a 5-layer hierarchy, cross-reviews with model-diverse pairs, shadow-scores with hidden criteria, and synthesizes the final output from collective intelligence.
+**Swarm Command** is a multi-model swarm orchestration skill for the [Copilot CLI](https://docs.github.com/copilot/concepts/agents/about-copilot-cli) that launches **50 to 250+ AI agents** across **16 different models** to solve complex tasks through hierarchical fan-out, cross-family review, and consensus-gated synthesis. Give it any task — architecture, refactoring, testing, documentation — and it decomposes it into 5 domains, dispatches commanders, squad leads, and workers in a 5-layer hierarchy, cross-reviews with model-diverse pairs, validates outputs against sealed acceptance criteria ([Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2), and synthesizes the final output from collective intelligence.
 
 ### 💬 The Problem
 
@@ -43,7 +43,7 @@ You ask one AI model and get one perspective. Maybe it's great, maybe it's medio
 - 🏗️ **5-layer hierarchy** — Nexus → Commander → Squad Lead → Worker → Reviewer
 - 🔀 **Cross-model diversity** — Claude + GPT families mixed within every pod
 - 🗳️ **Consensus scoring** — 4-stage gate-then-rank with CONSENSUS / MAJORITY / CONFLICT tiers
-- 👻 **Shadow scoring** — Hidden criteria agents never see catch errors main scoring misses
+- 👻 **Shadow Score** — [Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2 conformance. Sealed acceptance criteria generated before commanders execute, validated after, hardened on failure.
 - 🛡️ **Depth Guard** — 5 Laws + 3-layer enforcement prevent runaway agent spawning
 - ⚡ **Circuit breaker** — 3-state FSM with 5-level recovery escalation
 - 📉 **Sub-linear scaling** — 5× more agents ≈ 2.2× more wall-clock time (α ≈ 0.45)
@@ -84,7 +84,7 @@ You ask one AI model and get one perspective. Maybe it's great, maybe it's medio
                     │    16K ctx   │  4-axis sealed scoring + consensus tiers
                     └──────────────┘
 
-              + 3 SHADOW VALIDATORS (hidden criteria, sealed envelope)
+              + SHADOW SCORING (sealed acceptance criteria, Shadow Score Spec L2)
 ```
 
 ### Time-Flow Architecture
@@ -135,16 +135,23 @@ Default is **SS-100**. Say `swarm command ss-250` for full deployment or `swarm 
 
 ## 👻 Shadow Scoring
 
-Shadow scoring runs parallel to the main consensus pipeline as an independent quality audit using **hidden criteria that agents never see**:
+Swarm Command implements **[Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2 conformance** — sealed acceptance criteria generated before commanders execute, validated after, hardened on failure.
 
-| Criterion | What It Checks | Weight |
-|-----------|----------------|--------|
-| `mathematical_soundness` | Formulas computable, coefficients normalized, arithmetic correct | 0.30 |
-| `internal_consistency` | Claims in §X match claims in §Y, no contradictions | 0.25 |
-| `executability` | Outputs parseable, templates copy-paste ready, schemas validate | 0.25 |
-| `constraint_adherence` | No depth guard violations, no cap breaches, no law violations | 0.20 |
+**Formula:** `Shadow Score = (sealed_failures / sealed_total) × 100`
 
-Shadow scores act as a **circuit breaker** — if shadow detects critical issues (score < 0.3 on any criterion), the bundle is quarantined and re-reviewed with shadow evidence attached.
+| Shadow Score | Level | Action |
+|---|---|---|
+| 0% | ✅ Perfect | All sealed criteria passed |
+| 1–15% | 🟢 Minor | Proceed normally |
+| 16–30% | 🟡 Moderate | Attach Gap Report, warn |
+| 31–50% | 🟠 Significant | Quarantine bundle, hardening cycle |
+| > 50% | 🔴 Critical | Reject bundle from synthesis |
+
+**Sealed-Envelope Protocol:**
+1. **Phase 1.5** — Nexus generates sealed acceptance criteria from the task (hidden from all agents)
+2. **Phases 2–5** — Commanders execute without knowledge of sealed criteria
+3. **Phase 6** — Validate outputs against sealed criteria, compute Shadow Score, produce Gap Report
+4. **Hardening** — If score > 15%, share failure messages only (not criteria) for one fix cycle
 
 ---
 
@@ -192,8 +199,12 @@ circuit_breaker:
 
 shadow_scoring:
   enabled: true
-  validators: 3
-  divergence_alert_threshold: 0.15
+  spec_version: "1.0.0"
+  conformance_level: "L2"
+  sealed_criteria_count: 10
+  hardening:
+    enabled: true
+    threshold: 15
 ```
 
 See [docs/scaling.md](docs/scaling.md) for full scaling configuration and cost estimates.
@@ -209,7 +220,6 @@ See [docs/scaling.md](docs/scaling.md) for full scaling configuration and cost e
 | **Squad Leads** | claude-haiku-4.5, gpt-5.4-mini |
 | **Workers** | claude-haiku-4.5, gpt-5.4-mini, gpt-5-mini, gpt-4.1 |
 | **Reviewers** | Cross-family pairs (Claude × GPT) |
-| **Shadow Validators** | Different models from main pipeline |
 
 ---
 
@@ -279,6 +289,6 @@ swarm-command/
 ---
 
 > **Swarm Command v1.0.0** — Powered by the SwarmSpeed 250 Protocol
-> 16 models · 268 agents · Sub-linear scaling · Consensus-gated · Shadow-validated
+> 16 models · 268 agents · Sub-linear scaling · Consensus-gated · Shadow Score Spec L2
 >
 > *"The swarm is smarter than any single model."* 🐝

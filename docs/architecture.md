@@ -56,8 +56,8 @@ Swarm Command implements a 5-layer hierarchical multi-agent architecture derived
 | Model | `claude-opus-4.6` |
 | Context budget | 128K tokens |
 | `can_launch` | `true` |
-| Responsibilities | Task decomposition, commander assignment, reviewer dispatch, shadow validator dispatch, final synthesis, circuit breaker authority |
-| Spawns | 5 Commanders + 10 Reviewers + 3 Shadow Validators |
+| Responsibilities | Task decomposition, commander assignment, reviewer dispatch, sealed criteria generation (Phase 1.5), shadow score validation (Phase 6), final synthesis, circuit breaker authority |
+| Spawns | 5 Commanders + 10 Reviewers |
 
 The Nexus is the brain of the swarm. It receives the user's task, decomposes it into 5 domains, creates Context Capsules for each Commander, monitors the swarm, and synthesizes the final output from all bundles and review scores.
 
@@ -121,15 +121,17 @@ The Nexus is the brain of the swarm. It receives the user's task, decomposes it 
 | `can_launch` | `false` |
 | Responsibilities | Cross-domain scoring, conflict detection, consensus voting |
 
-### Shadow Validators (3 agents)
+### Shadow Scoring ([Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2)
+
+Shadow scoring is Nexus-internal — no separate shadow validator agents are spawned. The Nexus generates sealed acceptance criteria in Phase 1.5 (before commanders execute) and validates commander outputs against them in Phase 6.
 
 | Property | Value |
 |---|---|
-| Agent type | `explore` |
-| Model | Different models from main pipeline |
-| Context budget | 16K tokens |
-| `can_launch` | `false` |
-| Responsibilities | Hidden criteria scoring, divergence detection |
+| Implementation | Nexus-internal (sealed-envelope protocol) |
+| Criteria | 10 binary pass/fail acceptance criteria |
+| Formula | `Shadow Score = (failures / total) × 100` |
+| Hardening | 1 cycle if score > 15% |
+| Conformance | Shadow Score Spec L2 |
 
 ---
 

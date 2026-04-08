@@ -25,7 +25,7 @@ Nexus spawns Commander:     can_launch = true   (Commanders spawn Squad Leads)
 Commander spawns Squad Lead: can_launch = true   (Squad Leads spawn Workers)
 Squad Lead spawns Worker:    can_launch = false  (Workers are leaf nodes)
 Nexus spawns Reviewer:       can_launch = false  (Reviewers don't spawn)
-Nexus spawns Shadow:         can_launch = false  (Shadow validators don't spawn)
+Nexus spawns Shadow:         N/A — Shadow scoring is Nexus-internal (Shadow Score Spec L2)
 ```
 
 **Rule: If `can_launch = false`, the agent's prompt MUST contain the DEPTH LOCK block:**
@@ -86,7 +86,7 @@ L1: Commanders (3)      depth=1, can_launch=true
 L2: Squad Leads (18)    depth=2, can_launch=true   → spawn workers
 L3: Workers (72)         depth=3, can_launch=false  → LEAF
 L4: Reviewers (6)        depth=1, can_launch=false  → LEAF
-    Shadow (2)           depth=1, can_launch=false  → LEAF
+    Shadow scoring         Nexus-internal (sealed criteria, no agents spawned)
 Total: ~83
 ```
 
@@ -98,7 +98,7 @@ L1: Commanders (5)      depth=1, can_launch=true
 L2: Squad Leads (50)    depth=2, can_launch=true   → spawn workers
 L3: Workers (250)        depth=3, can_launch=false  → LEAF
 L4: Reviewers (10)       depth=1, can_launch=false  → LEAF
-    Shadow (3)           depth=1, can_launch=false  → LEAF
+    Shadow scoring         Nexus-internal (sealed criteria, no agents spawned)
 Total: ~268
 ```
 
@@ -113,7 +113,7 @@ Before deploying any swarm, verify ALL items:
 - [ ] Squad Lead prompts specify worker agent types as `explore` or `task` only
 - [ ] All worker prompts contain the complete DEPTH LOCK block
 - [ ] All reviewer prompts contain the complete DEPTH LOCK block
-- [ ] All shadow validator prompts contain the complete DEPTH LOCK block
+- [ ] Shadow scoring is Nexus-internal — no shadow validator agents spawned (Shadow Score Spec L2)
 - [ ] No agent at depth 2+ has `can_launch = true` (only Squad Leads at depth 2 may, for spawning workers)
 - [ ] No `general-purpose` agent is spawned at the worker level (depth 3)
 - [ ] Commander max children ≤ 10
