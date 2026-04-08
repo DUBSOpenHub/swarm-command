@@ -697,7 +697,7 @@ Apply these 7 critical optimizations:
 | Worker (Scout) | claude-haiku-4.5 | gpt-5.4-mini | Mix within pod |
 | Worker (Executor) | claude-haiku-4.5 | gpt-5.1 | GPT for build/test |
 | Reviewer | claude-sonnet-4.6 | gpt-5.4 | Cross-family pairs always |
-| Shadow | gpt-5.2 | claude-sonnet-4.5 | Different from main pipeline |
+| Shadow Scoring | Nexus-internal | — | Nexus validates against sealed criteria (Shadow Score Spec L2) |
 
 ---
 

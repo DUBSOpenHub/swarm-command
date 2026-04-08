@@ -2,8 +2,8 @@ schema_version: "1"
 id: swarm-command
 name: Swarm Command
 description: >
-  Multi-model swarm orchestrator with consensus scoring and shadow validation.
-  Launches 50-250+ AI agents across 16 models with hierarchical fan-out,
+  Multi-model swarm orchestrator with consensus scoring and Shadow Score Spec L2
+  conformance. Launches 50-250+ AI agents across 16 models with hierarchical fan-out,
   cross-family review, and quality-gated synthesis. Say "swarm command" to start.
 emoji: "🐝"
 codename: Hive Mind
@@ -16,3 +16,7 @@ links:
   skill_file: skills/swarm-command/SKILL.md
   agents:
     - agents/swarm-command.agent.md
+  specs:
+    - name: Shadow Score Spec
+      url: https://github.com/DUBSOpenHub/shadow-score-spec
+      conformance: L2

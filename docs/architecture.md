@@ -36,10 +36,7 @@ Swarm Command implements a 5-layer hierarchical multi-agent architecture derived
                     │    16K ctx   │  Type: general-purpose (can_launch=false)
                     └──────────────┘  Model: mixed (cross-family pairs)
 
-              +     ┌──────────────┐
-                    │ SHADOW × 3   │  Hidden criteria validators
-                    │   16K ctx    │  Type: explore (LEAF)
-                    └──────────────┘  Model: different from main pipeline
+              + SHADOW SCORING (Nexus-internal, sealed acceptance criteria, Shadow Score Spec L2)
 ```
 
 **Total agents for SS-250: ~268**

@@ -6,12 +6,12 @@ Swarm Command supports 4 scaling configurations, from SS-50 (starter) to SS-1000
 
 ## Scaling Overview
 
-| Scale | Total Agents | Commanders | Squad Leads | Workers | Reviewers | Shadow | Wall-Clock | Cost Range |
-|---|---|---|---|---|---|---|---|---|
-| **SS-50** | ~52 | 3 | 15 | 45 | 3 | 0 | ~30s | $1.50–$3.50 |
-| **SS-100** | ~83 | 3 | 18 | 72 | 6 | 2 | ~45s | $3.50–$8.00 |
-| **SS-250** | ~268 | 5 | 50 | 250 | 10 | 3 | ~65–90s | $8.00–$16.22 |
-| **SS-1000** ⚠️ | ~896 | 10 | 100 | 800 | 20 | 6 | ~110s | $25–$50 |
+| Scale | Total Agents | Commanders | Squad Leads | Workers | Reviewers | Wall-Clock | Cost Range |
+|---|---|---|---|---|---|---|---|
+| **SS-50** | ~52 | 3 | 15 | 45 | 3 | ~30s | $1.50–$3.50 |
+| **SS-100** | ~83 | 3 | 18 | 72 | 6 | ~45s | $3.50–$8.00 |
+| **SS-250** | ~268 | 5 | 50 | 250 | 10 | ~65–90s | $8.00–$16.22 |
+| **SS-1000** ⚠️ | ~896 | 10 | 100 | 800 | 20 | ~110s | $25–$50 |
 
 Default: **SS-100**. Use `swarm command ss-250` for full or `swarm command ss-50` for quick.
 

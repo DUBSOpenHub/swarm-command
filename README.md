@@ -252,6 +252,7 @@ chmod +x quickstart.sh && ./quickstart.sh
 swarm-command/
 ├── README.md                           # This file
 ├── AGENTS.md                           # Agent/skill descriptions
+├── CONTRIBUTING.md                     # Contribution guidelines
 ├── catalog.yml                         # Skill metadata
 ├── config.yml                          # All tunables
 ├── LICENSE                             # MIT
@@ -285,6 +286,12 @@ swarm-command/
 ## 📄 License
 
 [MIT](LICENSE) — use it, fork it, build on it.
+
+---
+
+## 🛡️ Spec Conformance
+
+This project implements **[Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2** — sealed acceptance criteria generated before execution, validated after, hardened on failure. See [docs/shadow-scoring.md](docs/shadow-scoring.md) for implementation details.
 
 ---
 

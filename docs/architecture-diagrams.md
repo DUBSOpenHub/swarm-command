@@ -36,8 +36,8 @@ graph TB
         REV["Cross-Review Mesh<br/>5 Claude↔GPT pairs<br/>general-purpose"]
     end
 
-    subgraph SHADOW["👻 SHADOW SCORING (Shadow Score Spec L2)"]
-        SHD["Sealed Acceptance Criteria<br/>Generated Phase 1.5<br/>Validated Phase 6<br/>Hardened if score > 15%"]
+    subgraph SHADOW["👻 SHADOW SCORING (Nexus-internal, Shadow Score Spec L2)"]
+        SHD["Sealed Acceptance Criteria<br/>Generated Phase 1.5 (Nexus)<br/>Validated Phase 6 (Nexus)<br/>No separate agents spawned"]
     end
 
     NEXUS -->|"Context Capsule<br/>2K tokens"| CMD_A
@@ -84,11 +84,7 @@ graph TB
     CMD_E -->|"Report"| NEXUS
 
     NEXUS -.->|"Phase 1.5:<br/>Seal criteria"| SHD
-    CMD_A -.->|"Phase 6:<br/>Validate"| SHD
-    CMD_B -.->|"Phase 6:<br/>Validate"| SHD
-    CMD_C -.->|"Phase 6:<br/>Validate"| SHD
-    CMD_D -.->|"Phase 6:<br/>Validate"| SHD
-    CMD_E -.->|"Phase 6:<br/>Validate"| SHD
+    NEXUS -.->|"Phase 6:<br/>Validate bundles<br/>against sealed criteria"| SHD
     SHD -.->|"Gap Reports<br/>+ Hardening"| NEXUS
 
     style L0 fill:#1a1a2e,stroke:#e94560,color:#fff
