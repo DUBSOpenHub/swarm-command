@@ -44,8 +44,8 @@ If no scale provided inline, use ask_user to prompt:
 🐝 Choose your swarm size:
 
   SS-50   (~52 agents)   ⚡ Fast — single-focus tasks
-  SS-100  (~83 agents)   🎯 Balanced — most tasks (recommended)
-  SS-250  (~268 agents)  🐝 Full swarm — maximum consensus
+  SS-100  (~89 agents)   🎯 Balanced — most tasks (recommended)
+  SS-250  (~316 agents)  🐝 Full swarm — maximum consensus
 ```
 
 Display the mission briefing:
@@ -194,6 +194,8 @@ For each domain, construct a Context Capsule (max 2048 tokens):
 ---
 
 # PHASE 3 — COMMANDER DEPLOYMENT
+
+> **Naming**: Swarm Command is the skill name. SwarmSpeed is the internal execution protocol. Templates use SwarmSpeed role titles (e.g., "SwarmSpeed Commander") as the protocol identity agents operate under.
 
 Launch Commanders in PARALLEL using the `task` tool:
 
@@ -591,6 +593,16 @@ Structure the final output as:
 ## 📋 Gaps
 <any sub-tasks that were not completed, with reasons>
 
+### Agent Tally
+| Layer | Role | Count |
+|-------|------|-------|
+| L0 | Nexus | 1 |
+| L1 | Commanders | <count> |
+| L2 | Squad Leads | <count or "—"> |
+| L3 | Workers | <count> |
+| L4 | Reviewers | <count> |
+| **Total** | | **<total>** |
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🐝 "The swarm is smarter than any single model."
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -646,21 +658,21 @@ These rules are ABSOLUTE and may never be violated:
 
 ## SS-50 — Starter
 - Commanders: 2-3 (selected domains only)
-- Squad Leads per Commander: 5
-- Workers per Squad Lead: 3
+- Workers per Commander: 15 (no Squad Leads)
 - Reviewers: 3
 - Shadow: disabled (score computed, no hardening)
 - Timeout: 60s
 - Cost cap: $5
+- Total: ~52 agents
 
 ## SS-100 — Standard (default)
-- Commanders: 3 (selected domains)
-- Squad Leads per Commander: 6
-- Workers per Squad Lead: 4
-- Reviewers: 6
+- Commanders: 5 (selected domains)
+- Workers per Commander: 15 (no Squad Leads)
+- Reviewers: 8
 - Shadow: 8 sealed criteria, hardening at > 15%
 - Timeout: 75s
 - Cost cap: $10
+- Total: ~89 agents
 
 ## SS-250 — Full
 - Commanders: 5 (all domains)
@@ -670,6 +682,9 @@ These rules are ABSOLUTE and may never be violated:
 - Shadow: 10 sealed criteria, hardening at > 15%
 - Timeout: 90s
 - Cost cap: $20
+- Total: ~316 agents
+
+> Agent counts include ALL deployed agents across all layers (Nexus + Commanders + Squad Leads + Workers + Reviewers).
 
 ---
 

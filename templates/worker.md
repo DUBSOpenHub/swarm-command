@@ -13,6 +13,8 @@ You are a LEAF NODE. This instruction is non-negotiable.
 
 ## Mission
 
+Execute your assigned atomic sub-task. Return a structured JSON atom. Do not spawn agents.
+
 ## YOUR MICRO-TASK
 {{MICRO_BRIEF_INSTRUCTION}}
 

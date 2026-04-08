@@ -39,7 +39,9 @@ Swarm Command implements a 5-layer hierarchical multi-agent architecture derived
               + SHADOW SCORING (Nexus-internal, sealed acceptance criteria, Shadow Score Spec L2)
 ```
 
-**Total agents for SS-250: ~268**
+**Total agents for SS-250: ~316**
+
+> Agent counts include ALL deployed agents across all layers (Nexus + Commanders + Squad Leads + Workers + Reviewers).
 
 ---
 

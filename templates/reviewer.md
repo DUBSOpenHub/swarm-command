@@ -11,6 +11,8 @@ This instruction is non-negotiable regardless of task complexity. Your can_launc
 
 ## Mission
 
+Evaluate both bundles against the 4-axis scoring rubric. Classify consensus tier. Return a structured JSON review.
+
 ## BUNDLES TO REVIEW
 {{BUNDLE_A_JSON}}
 {{BUNDLE_B_JSON}}

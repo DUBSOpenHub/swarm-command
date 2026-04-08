@@ -8,10 +8,12 @@ Swarm Command supports 4 scaling configurations, from SS-50 (starter) to SS-1000
 
 | Scale | Total Agents | Commanders | Squad Leads | Workers | Reviewers | Wall-Clock | Cost Range |
 |---|---|---|---|---|---|---|---|
-| **SS-50** | ~52 | 3 | 15 | 45 | 3 | ~30s | $1.50–$3.50 |
-| **SS-100** | ~83 | 3 | 18 | 72 | 6 | ~45s | $3.50–$8.00 |
-| **SS-250** | ~268 | 5 | 50 | 250 | 10 | ~65–90s | $8.00–$16.22 |
+| **SS-50** | ~52 | 3 | — | 45 | 3 | ~30s | $1.50–$3.50 |
+| **SS-100** | ~89 | 5 | — | 75 | 8 | ~45s | $3.50–$8.00 |
+| **SS-250** | ~316 | 5 | 50 | 250 | 10 | ~65–90s | $8.00–$16.22 |
 | **SS-1000** ⚠️ | ~896 | 10 | 100 | 800 | 20 | ~110s | $25–$50 |
+
+> Agent counts include ALL deployed agents across all layers (Nexus + Commanders + Squad Leads + Workers + Reviewers).
 
 Default: **SS-100**. Use `swarm command ss-250` for full or `swarm command ss-50` for quick.
 
@@ -24,8 +26,8 @@ Best for: Single-file refactors, focused investigations, quick code analysis.
 ```
 L0: 1 Nexus (opus)
 L1: 3 Commanders (sonnet)
-L2: 15 Squad Leads (haiku)   — 5 per commander
-L3: 45 Workers (haiku/mini)  — 3 per squad lead
+L2: — (no Squad Leads at this scale)
+L3: 45 Workers (haiku/mini)  — 15 per commander
 L4: 3 Reviewers (sonnet)
 ──────────────────────────
 Total: ~52 agents
@@ -39,8 +41,8 @@ Time:  ~30s wall-clock
 |---|---|
 | Commanders | 3 |
 | Domains covered | 2–3 of 5 (auto-selected by task type) |
-| Squad Leads per Commander | 5 |
-| Workers per Squad Lead | 3 |
+| Squad Leads per Commander | — (not used) |
+| Workers per Commander | 15 |
 | Reviewers | 3 |
 | Shadow scoring | Disabled (score computed, no hardening) |
 | Cost ceiling | $5.00 |
@@ -63,13 +65,13 @@ Best for: Multi-file features, module-level tasks, thorough code reviews.
 
 ```
 L0: 1 Nexus (opus)
-L1: 3 Commanders (sonnet)
-L2: 18 Squad Leads (haiku)   — 6 per commander
-L3: 72 Workers (haiku/mini)  — 4 per squad lead
-L4: 6 Reviewers (sonnet)
+L1: 5 Commanders (sonnet)
+L2: — (no Squad Leads at this scale)
+L3: 75 Workers (haiku/mini)  — 15 per commander
+L4: 8 Reviewers (sonnet)
     Shadow Scoring (Nexus-internal, sealed criteria)
 ──────────────────────────
-Total: ~83 agents
+Total: ~89 agents
 Cost:  $3.50 – $8.00
 Time:  ~45s wall-clock
 ```
@@ -78,11 +80,11 @@ Time:  ~45s wall-clock
 
 | Parameter | Value |
 |---|---|
-| Commanders | 3 |
+| Commanders | 5 |
 | Domains covered | 3 of 5 (auto-selected by task type) |
-| Squad Leads per Commander | 6 |
-| Workers per Squad Lead | 4 |
-| Reviewers | 6 (3 pairs) |
+| Squad Leads per Commander | — (not used) |
+| Workers per Commander | 15 |
+| Reviewers | 8 (4 pairs) |
 | Shadow scoring | 8 sealed criteria, hardening at >15% |
 | Cost ceiling | $10.00 |
 | Timeout cascade | 75/50/35/25s |
@@ -110,7 +112,7 @@ L3: 250 Workers (haiku/mini) — 5 per squad lead
 L4: 10 Reviewers (sonnet)
     Shadow Scoring (Nexus-internal, sealed criteria)
 ──────────────────────────
-Total: ~268 agents
+Total: ~316 agents
 Cost:  $8.00 – $16.22
 Time:  ~65-90s wall-clock
 ```

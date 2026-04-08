@@ -118,29 +118,24 @@ graph LR
 ## Time-Flow Pipeline
 
 ```mermaid
-gantt
-    title Swarm Command Execution Timeline
-    dateFormat ss
-    axisFormat %S s
+flowchart LR
+    subgraph LAUNCH["⚡ Launch (0-12s)"]
+        A1["Nexus Boot<br/>2s"] --> A2["Seal Criteria<br/>3s"]
+        A2 --> A3["Commander Spawn<br/>3s"]
+        A3 --> A4["Squad Deploy<br/>5s"]
+    end
 
-    section Launch
-    Nexus Boot           :a1, 00, 2s
-    Seal Criteria (1.5)  :a15, after a1, 1s
-    Commander Spawn      :a2, after a15, 3s
+    subgraph EXECUTE["🔨 Execute (12-45s)"]
+        B1["Workers<br/>(parallel)<br/>33s"]
+    end
 
-    section Fan-Out
-    Squad Lead Deploy    :b1, after a2, 5s
-    Canary Verify        :b2, after a2, 3s
+    subgraph CONVERGE["🎯 Converge (45-90s)"]
+        C1["Review Mesh<br/>15s"] --> C2["Shadow Score<br/>10s"]
+        C2 --> C3["Consensus<br/>10s"]
+        C3 --> C4["Emit<br/>5s"]
+    end
 
-    section Execute
-    Workers (parallel)   :crit, c1, after b1, 33s
-
-    section Converge
-    Review Mesh          :d1, after c1, 15s
-    Shadow Validation    :d2, after c1, 10s
-    Shadow Hardening     :d3, after d2, 8s
-    Consensus Merge      :e1, after d1, 10s
-    Final Emit           :e2, after e1, 5s
+    LAUNCH --> EXECUTE --> CONVERGE
 ```
 
 ## Depth Guard Model
@@ -247,11 +242,11 @@ graph LR
     end
 
     subgraph SS100["🐝🐝 SS-100"]
-        A100["3 Commanders<br/>24 Workers each<br/>6 Reviewers<br/>~83 agents"]
+        A100["5 Commanders<br/>15 Workers each<br/>8 Reviewers<br/>~89 agents"]
     end
 
     subgraph SS250["🐝🐝🐝 SS-250"]
-        A250["5 Commanders<br/>50 Squad Leads<br/>250 Workers<br/>10 Reviewers<br/>Shadow Score L2<br/>~268 agents"]
+        A250["5 Commanders<br/>50 Squad Leads<br/>250 Workers<br/>10 Reviewers<br/>Shadow Score L2<br/>~316 agents"]
     end
 
     SS50 -.->|"Scale up"| SS100

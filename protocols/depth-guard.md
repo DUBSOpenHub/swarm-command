@@ -72,8 +72,8 @@ You are a LEAF NODE. This instruction is non-negotiable.
 ```
 L0: Nexus (1)           depth=0, can_launch=true
 L1: Commanders (3)      depth=1, can_launch=true
-L2: Squad Leads (15)    depth=2, can_launch=true   → spawn workers
-L3: Workers (45)         depth=3, can_launch=false  → LEAF
+L2: — (no Squad Leads at this scale)
+L3: Workers (45)         depth=3, can_launch=false  → LEAF (15 per commander)
 L4: Reviewers (3)        depth=1, can_launch=false  → LEAF
 Total: ~52
 ```
@@ -82,12 +82,12 @@ Total: ~52
 
 ```
 L0: Nexus (1)           depth=0, can_launch=true
-L1: Commanders (3)      depth=1, can_launch=true
-L2: Squad Leads (18)    depth=2, can_launch=true   → spawn workers
-L3: Workers (72)         depth=3, can_launch=false  → LEAF
-L4: Reviewers (6)        depth=1, can_launch=false  → LEAF
+L1: Commanders (5)      depth=1, can_launch=true
+L2: — (no Squad Leads at this scale)
+L3: Workers (75)         depth=3, can_launch=false  → LEAF (15 per commander)
+L4: Reviewers (8)        depth=1, can_launch=false  → LEAF
     Shadow scoring         Nexus-internal (sealed criteria, no agents spawned)
-Total: ~83
+Total: ~89
 ```
 
 ### SS-250
@@ -99,8 +99,10 @@ L2: Squad Leads (50)    depth=2, can_launch=true   → spawn workers
 L3: Workers (250)        depth=3, can_launch=false  → LEAF
 L4: Reviewers (10)       depth=1, can_launch=false  → LEAF
     Shadow scoring         Nexus-internal (sealed criteria, no agents spawned)
-Total: ~268
+Total: ~316
 ```
+
+> Agent counts include ALL deployed agents across all layers (Nexus + Commanders + Squad Leads + Workers + Reviewers).
 
 ---
 

@@ -3,22 +3,29 @@ swarm_command:
   scales:
     ss-50:
       commanders: 3
-      squad_leads_per_commander: 5
-      workers_per_squad_lead: 3
+      workers_per_commander: 15
       reviewers: 3
+      sealed_criteria_count: 6
+      cost_ceiling_usd: 5.00
+      timeout_s: 60
       total: ~52
     ss-100:
-      commanders: 3
-      squad_leads_per_commander: 6
-      workers_per_squad_lead: 4
-      reviewers: 6
-      total: ~83
+      commanders: 5
+      workers_per_commander: 15
+      reviewers: 8
+      sealed_criteria_count: 8
+      cost_ceiling_usd: 10.00
+      timeout_s: 75
+      total: ~89
     ss-250:
       commanders: 5
       squad_leads_per_commander: 10
       workers_per_squad_lead: 5
       reviewers: 10
-      total: ~268
+      sealed_criteria_count: 10
+      cost_ceiling_usd: 20.00
+      timeout_s: 90
+      total: ~316
 
   consensus:
     threshold_consensus: 0.70

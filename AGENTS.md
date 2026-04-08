@@ -57,6 +57,13 @@ Swarm Command ships one Copilot CLI skill and one standalone agent. The **skill*
 
 ## Configuration
 
+### Reference vs Operational Files
+
+The `templates/` and `protocols/` directories contain **reference documentation** — canonical prompt templates and protocol specifications. The SKILL.md embeds this logic inline for self-contained execution. These files exist for:
+- Contributors who want to understand or modify the prompt templates
+- Documentation of the protocols that SKILL.md implements
+- Copy-paste source material when building custom deployments
+
 - **No API keys required** — all models are accessed through your active Copilot subscription
 - **No servers or infrastructure** — swarm state lives in memory during the session
 - **Scaling modes**: SS-50 (starter), SS-100 (default), SS-250 (full consensus swarm)
@@ -66,6 +73,11 @@ Swarm Command ships one Copilot CLI skill and one standalone agent. The **skill*
 - **Timeout cascade**: 90s → 60s → 40s → 30s per layer (children always finish before parents)
 
 ## Agent Prompt Rules
+
+### Terminology Note
+- **"task tool"**: The Copilot CLI tool that launches sub-agents (`task()` function). Used by Commanders to spawn workers.
+- **"task" agent type**: A lightweight agent type (Haiku model, all tools, no sub-agent spawning). Used for workers that need bash/command execution.
+- **Depth Guard rule**: "DO NOT use the task tool" means "do not spawn sub-agents" — it does NOT mean "do not be a task-type agent."
 
 1. **Depth Guard is non-negotiable** — Workers MUST be told "DO NOT use the task tool. You are a leaf node." Workers are ALWAYS `explore` or `task` agent type, never `general-purpose`.
 2. **Parent controls spawning** — The parent computes `can_launch` for every child. The child never decides for itself.
