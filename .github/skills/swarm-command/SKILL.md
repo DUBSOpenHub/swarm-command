@@ -33,13 +33,20 @@ Forbidden output patterns:
 **Trigger:** User says "swarm command" (optionally with scale and/or task)
 
 Parse the user's input for:
-1. **Scale**: `ss-50`, `ss-100` (default), `ss-250`, or `ss-1000`
+1. **Scale**: `ss-50`, `ss-100` (default), or `ss-250` — if provided inline
 2. **Task**: Everything after the scale identifier, or the full message if no scale given
 
-If scale is `ss-1000`:
-> ⚠️ SS-1000 is experimental and may exceed resource limits. Proceeding with caution.
-
 If no task provided, ask: "🐝 **Swarm Command ready.** What's the mission?"
+
+If no scale provided inline, use ask_user to prompt:
+
+```
+🐝 Choose your swarm size:
+
+  SS-50   (~52 agents)   ⚡ Fast — single-focus tasks
+  SS-100  (~83 agents)   🎯 Balanced — most tasks (recommended)
+  SS-250  (~268 agents)  🐝 Full swarm — maximum consensus
+```
 
 Display the mission briefing:
 
@@ -554,16 +561,6 @@ These rules are ABSOLUTE and may never be violated:
 - Shadow: 3 validators
 - Timeout: 90s
 - Cost cap: $20
-
-## SS-1000 — Enterprise (⚠️ Experimental)
-> ⚠️ SS-1000 is experimental and may exceed resource limits. Proceed with caution.
-- Commanders: 5 (all domains)
-- Squad Leads per Commander: 20
-- Workers per Squad Lead: 10
-- Reviewers: 20
-- Shadow: 6 validators (one per 2 commanders + Meta-Shadow layer)
-- Timeout: 120s
-- Cost cap: $50
 
 ---
 
