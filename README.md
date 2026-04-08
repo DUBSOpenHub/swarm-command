@@ -2,6 +2,8 @@
 
 **Multi-model consensus swarm orchestration. 50–250+ AI agents. 16 models. Shadow Score Spec L2. One command.**
 
+*"The swarm is smarter than any single model."* 🐝
+
 [![GitHub](https://img.shields.io/badge/GitHub-Copilot_CLI-blue?logo=github)](https://github.com/features/copilot)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Security Policy](https://img.shields.io/badge/Security-Policy-brightgreen?logo=github)](SECURITY.md)
@@ -48,7 +50,6 @@ You ask one AI model and get one perspective. Maybe it's great, maybe it's medio
 - ⚡ **Circuit breaker** — 3-state FSM with 5-level recovery escalation
 - 📉 **Sub-linear scaling** — 5× more agents ≈ 2.2× more wall-clock time (α ≈ 0.45)
 - 📦 **Zero infrastructure** — no servers, no API keys, no build step
-- 💰 **Cost controlled** — hard cap, timeout cascade, canary verification ([details](docs/scaling.md))
 
 ---
 
@@ -133,7 +134,7 @@ T+0s     T+2s       T+5s         T+12s       T+45s      T+65s    T+80s   T+90s
 
 Default is **SS-100**. Say `swarm command ss-250` for full deployment or `swarm command ss-50` for quick tasks.
 
-See [docs/scaling.md](docs/scaling.md) for detailed scaling configuration and cost estimates.
+See [docs/scaling.md](docs/scaling.md) for detailed scaling configuration.
 
 ---
 
