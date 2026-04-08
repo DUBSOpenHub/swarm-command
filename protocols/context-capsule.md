@@ -82,7 +82,7 @@ Sent from Nexus to each Commander. Contains the domain-specific task and constra
       "required": ["current_depth", "max_depth", "can_launch"],
       "properties": {
         "current_depth": { "type": "integer", "minimum": 0, "maximum": 4 },
-        "max_depth": { "type": "integer", "const": 2 },
+        "max_depth": { "type": "integer", "const": 3 },
         "can_launch": { "type": "boolean" }
       }
     },
@@ -110,7 +110,7 @@ Sent from Nexus to each Commander. Contains the domain-specific task and constra
   },
   "depth_config": {
     "current_depth": 1,
-    "max_depth": 2,
+    "max_depth": 3,
     "can_launch": true
   },
   "parent_context": "Nexus: refactoring auth module for microservice extraction"
@@ -158,7 +158,7 @@ Sent from Commander to each Squad Lead. Compressed subset of the Context Capsule
       "required": ["current_depth", "max_depth", "can_launch"],
       "properties": {
         "current_depth": { "type": "integer", "minimum": 1, "maximum": 4 },
-        "max_depth": { "type": "integer", "const": 2 },
+        "max_depth": { "type": "integer", "const": 3 },
         "can_launch": { "type": "boolean" }
       }
     }
@@ -176,7 +176,7 @@ Sent from Commander to each Squad Lead. Compressed subset of the Context Capsule
   "file_scope": ["src/auth/index.ts", "src/auth/types.ts", "src/auth/middleware.ts"],
   "depth_config": {
     "current_depth": 2,
-    "max_depth": 2,
+    "max_depth": 3,
     "can_launch": true
   }
 }

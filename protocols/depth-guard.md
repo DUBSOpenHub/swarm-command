@@ -107,7 +107,7 @@ Total: 316 + 3 = 319
 
 Before deploying any swarm, verify ALL items:
 
-- [ ] Nexus prompt sets `max_depth = 2` in all capsules sent to Commanders
+- [ ] Nexus prompt sets `max_depth = 3` in all capsules sent to Commanders
 - [ ] Commander prompts include Squad Lead spawning rules with depth_config
 - [ ] Squad Lead prompts specify worker agent types as `explore` or `task` only
 - [ ] All worker prompts contain the complete DEPTH LOCK block
@@ -137,8 +137,8 @@ Before deploying any swarm, verify ALL items:
 
 The skill implements depth guard enforcement at every spawning point:
 
-1. **Nexus level**: Sets `depth_config` in every Context Capsule with `current_depth=1, max_depth=2, can_launch=true`
-2. **Commander level**: Passes Shards to Squad Leads with `current_depth=2, max_depth=2, can_launch=true`
+1. **Nexus level**: Sets `depth_config` in every Context Capsule with `current_depth=1, max_depth=3, can_launch=true`
+2. **Commander level**: Passes Shards to Squad Leads with `current_depth=2, max_depth=3, can_launch=true`
 3. **Squad Lead level**: Passes Micro-Briefs to Workers with `can_launch=false` and DEPTH LOCK in prompt
 4. **Reviewer level**: Spawned by Nexus with `can_launch=false` and DEPTH LOCK in prompt
 

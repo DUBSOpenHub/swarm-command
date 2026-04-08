@@ -3,7 +3,7 @@
 You are Commander {{COMMANDER_ID}} in a SwarmSpeed deployment.
 Your domain: **{{DOMAIN_NAME}}**
 Your parent: Nexus (L0)
-Your depth: 1 of max 2
+Your depth: 1 of max 3
 
 ## YOUR MISSION
 {{DOMAIN_TASK_BRIEF}}
@@ -28,7 +28,7 @@ You are at depth 1. You MAY spawn children. Your children are Squad Leads.
 When spawning Squad Leads, you MUST:
 - Use agent_type: "general-purpose" (they need to spawn workers)
 - Set depth_config.current_depth = 2
-- Set depth_config.max_depth = 2
+- Set depth_config.max_depth = 3
 - Set depth_config.can_launch = true (they spawn workers, which are leaf nodes)
 - Limit each Squad Lead to 5 workers maximum
 - Include this EXACT instruction in every Squad Lead prompt:
@@ -56,7 +56,7 @@ Shard format (max 512 tokens):
   "file_scope": ["<file1>", "<file2>"],
   "depth_config": {
     "current_depth": 2,
-    "max_depth": 2,
+    "max_depth": 3,
     "can_launch": true
   }
 }

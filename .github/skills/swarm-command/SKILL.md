@@ -36,6 +36,9 @@ Parse the user's input for:
 1. **Scale**: `ss-50`, `ss-100` (default), `ss-250`, or `ss-1000`
 2. **Task**: Everything after the scale identifier, or the full message if no scale given
 
+If scale is `ss-1000`:
+> ⚠️ SS-1000 is experimental and may exceed resource limits. Proceeding with caution.
+
 If no task provided, ask: "🐝 **Swarm Command ready.** What's the mission?"
 
 Display the mission briefing:
@@ -91,7 +94,7 @@ For each domain, construct a Context Capsule (max 2048 tokens):
   },
   "depth_config": {
     "current_depth": 1,
-    "max_depth": 2,
+    "max_depth": 3,
     "can_launch": true
   },
   "parent_context": "Nexus: <one-line task summary>"
@@ -145,7 +148,7 @@ Each Commander prompt MUST include:
 3. **Spawning rules (DEPTH GUARD)**:
    - "You are at depth 1. You MAY spawn Squad Leads."
    - "Use agent_type: general-purpose for Squad Leads."
-   - "Set depth_config.current_depth = 2, max_depth = 2, can_launch = true for Squad Leads."
+   - "Set depth_config.current_depth = 2, max_depth = 3, can_launch = true for Squad Leads."
    - "Limit each Squad Lead to 5 workers maximum."
    - "Squad Leads MUST use agent_type explore or task for workers."
    - "Include in every worker prompt: DO NOT use the task tool. You are a LEAF NODE."
@@ -218,6 +221,13 @@ As each Commander returns, validate its Bundle JSON:
 - Has valid `status` (success/partial/failed)
 - Has `confidence` in [0.0, 1.0]
 - Has `content` within token limit
+
+### JSON Recovery
+If a Commander returns unparseable output:
+1. Treat as status='failed'
+2. Increment circuit breaker failure count
+3. If retry_budget > 0: re-launch with simplified prompt
+4. If retry_budget exhausted: proceed without this Commander's domain
 
 Track:
 ```
@@ -474,6 +484,13 @@ Structure the final output as:
 
 # CIRCUIT BREAKER RULES (applies to ALL phases)
 
+### Circuit Breaker States
+- **CLOSED** (normal): All agents launching, monitoring failure rate
+- **OPEN** (broken): No new agent spawns, synthesize partial results, wait for cooldown
+- **HALF-OPEN** (testing): Launch 1 probe agent — if success → CLOSED, if failure → OPEN
+
+Transitions: failure_count > threshold → OPEN. cooldown_expired → HALF-OPEN. probe_success → CLOSED.
+
 Monitor continuously during execution:
 
 1. **Commander failure**: If 3+ of 5 Commanders fail → STOP all spawning → return partial results from successful Commanders
@@ -537,6 +554,16 @@ These rules are ABSOLUTE and may never be violated:
 - Shadow: 3 validators
 - Timeout: 90s
 - Cost cap: $20
+
+## SS-1000 — Enterprise (⚠️ Experimental)
+> ⚠️ SS-1000 is experimental and may exceed resource limits. Proceed with caution.
+- Commanders: 5 (all domains)
+- Squad Leads per Commander: 20
+- Workers per Squad Lead: 10
+- Reviewers: 20
+- Shadow: 6 validators (one per 2 commanders + Meta-Shadow layer)
+- Timeout: 120s
+- Cost cap: $50
 
 ---
 
