@@ -3,13 +3,16 @@ swarm_command:
   scales:
     ss-50:
       commanders: 3
-      workers_per_commander: 15
-      reviewers: 4
+      squad_leads_per_commander: 5
+      workers_per_squad_lead: 3
+      reviewers: 3
       total: ~52
     ss-100:
-      commanders: 5
-      workers_per_commander: 15
-      reviewers: 8
+      commanders: 3
+      squad_leads_per_commander: 6
+      workers_per_squad_lead: 4
+      reviewers: 6
+      shadow_validators: 2
       total: ~83
     ss-250:
       commanders: 5

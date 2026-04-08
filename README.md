@@ -125,10 +125,10 @@ T+0s     T+2s       T+5s         T+12s       T+45s      T+65s    T+80s   T+90s
 
 | Scale | Agents | Commanders | Workers | Reviewers | Wall-Clock | Cost |
 |-------|--------|------------|---------|-----------|------------|------|
-| **SS-50** | ~46 | 2 | 30 | 3 | ~30s | $1.50–$3.50 |
-| **SS-100** | ~100 | 3 | 72 | 6 | ~45s | $3.50–$8.00 |
-| **SS-250** | ~316 | 5 | 250 | 10 | ~65–90s | $8.00–$16.22 |
-| **SS-1000** ⚠️ | ~991 | 10 | 850 | 25 | ~110s | $25–$50 |
+| **SS-50** | ~52 | 3 | 45 | 3 | ~30s | $1.50–$3.50 |
+| **SS-100** | ~83 | 3 | 72 | 6 | ~45s | $3.50–$8.00 |
+| **SS-250** | ~268 | 5 | 250 | 10 | ~65–90s | $8.00–$16.22 |
+| **SS-1000** ⚠️ | ~896 | 10 | 800 | 20 | ~110s | $25–$50 |
 
 Default is **SS-100**. Say `swarm command ss-250` for full deployment or `swarm command ss-50` for quick tasks.
 
@@ -280,6 +280,6 @@ swarm-command/
 ---
 
 > **Swarm Command v1.0.0** — Powered by the SwarmSpeed 250 Protocol
-> 16 models · 316 agents · Sub-linear scaling · Consensus-gated · Shadow-validated
+> 16 models · 268 agents · Sub-linear scaling · Consensus-gated · Shadow-validated
 >
 > *"The swarm is smarter than any single model."* 🐝

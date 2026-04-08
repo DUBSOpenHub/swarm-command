@@ -42,7 +42,7 @@ Swarm Command implements a 5-layer hierarchical multi-agent architecture derived
                     └──────────────┘  Model: different from main pipeline
 ```
 
-**Total agents for SS-250: 1 + 5 + 50 + 250 + 10 + 3 = 319**
+**Total agents for SS-250: ~268**
 
 ---
 

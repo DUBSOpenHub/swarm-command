@@ -71,11 +71,11 @@ You are a LEAF NODE. This instruction is non-negotiable.
 
 ```
 L0: Nexus (1)           depth=0, can_launch=true
-L1: Commanders (2)      depth=1, can_launch=true
-L2: Squad Leads (10)    depth=2, can_launch=true   → spawn workers
-L3: Workers (30)         depth=3, can_launch=false  → LEAF
+L1: Commanders (3)      depth=1, can_launch=true
+L2: Squad Leads (15)    depth=2, can_launch=true   → spawn workers
+L3: Workers (45)         depth=3, can_launch=false  → LEAF
 L4: Reviewers (3)        depth=1, can_launch=false  → LEAF
-Total: 46
+Total: ~52
 ```
 
 ### SS-100
@@ -86,7 +86,8 @@ L1: Commanders (3)      depth=1, can_launch=true
 L2: Squad Leads (18)    depth=2, can_launch=true   → spawn workers
 L3: Workers (72)         depth=3, can_launch=false  → LEAF
 L4: Reviewers (6)        depth=1, can_launch=false  → LEAF
-Total: 100
+    Shadow (2)           depth=1, can_launch=false  → LEAF
+Total: ~83
 ```
 
 ### SS-250
@@ -98,7 +99,7 @@ L2: Squad Leads (50)    depth=2, can_launch=true   → spawn workers
 L3: Workers (250)        depth=3, can_launch=false  → LEAF
 L4: Reviewers (10)       depth=1, can_launch=false  → LEAF
     Shadow (3)           depth=1, can_launch=false  → LEAF
-Total: 316 + 3 = 319
+Total: ~268
 ```
 
 ---

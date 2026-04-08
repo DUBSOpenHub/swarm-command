@@ -8,10 +8,10 @@ Swarm Command supports 4 scaling configurations, from SS-50 (starter) to SS-1000
 
 | Scale | Total Agents | Commanders | Squad Leads | Workers | Reviewers | Shadow | Wall-Clock | Cost Range |
 |---|---|---|---|---|---|---|---|---|
-| **SS-50** | 46 | 2 | 10 | 30 | 3 | 0 | ~30s | $1.50–$3.50 |
-| **SS-100** | 100 | 3 | 18 | 72 | 6 | 2 | ~45s | $3.50–$8.00 |
-| **SS-250** | 319 | 5 | 50 | 250 | 10 | 3 | ~65–90s | $8.00–$16.22 |
-| **SS-1000** ⚠️ | 991+ | 10 | 100 | 850 | 25 | 6 | ~110s | $25–$50 |
+| **SS-50** | ~52 | 3 | 15 | 45 | 3 | 0 | ~30s | $1.50–$3.50 |
+| **SS-100** | ~83 | 3 | 18 | 72 | 6 | 2 | ~45s | $3.50–$8.00 |
+| **SS-250** | ~268 | 5 | 50 | 250 | 10 | 3 | ~65–90s | $8.00–$16.22 |
+| **SS-1000** ⚠️ | ~896 | 10 | 100 | 800 | 20 | 6 | ~110s | $25–$50 |
 
 Default: **SS-100**. Use `swarm command ss-250` for full or `swarm command ss-50` for quick.
 
@@ -23,12 +23,12 @@ Best for: Single-file refactors, focused investigations, quick code analysis.
 
 ```
 L0: 1 Nexus (opus)
-L1: 2 Commanders (sonnet)
-L2: 10 Squad Leads (haiku)   — 5 per commander
-L3: 30 Workers (haiku/mini)  — 3 per squad lead
+L1: 3 Commanders (sonnet)
+L2: 15 Squad Leads (haiku)   — 5 per commander
+L3: 45 Workers (haiku/mini)  — 3 per squad lead
 L4: 3 Reviewers (sonnet)
 ──────────────────────────
-Total: 46 agents
+Total: ~52 agents
 Cost:  $1.50 – $3.50
 Time:  ~30s wall-clock
 ```
@@ -37,8 +37,8 @@ Time:  ~30s wall-clock
 
 | Parameter | Value |
 |---|---|
-| Commanders | 2 |
-| Domains covered | 2 of 5 (auto-selected by task type) |
+| Commanders | 3 |
+| Domains covered | 2–3 of 5 (auto-selected by task type) |
 | Squad Leads per Commander | 5 |
 | Workers per Squad Lead | 3 |
 | Reviewers | 3 |
@@ -67,8 +67,9 @@ L1: 3 Commanders (sonnet)
 L2: 18 Squad Leads (haiku)   — 6 per commander
 L3: 72 Workers (haiku/mini)  — 4 per squad lead
 L4: 6 Reviewers (sonnet)
+    2 Shadow Validators (explore)
 ──────────────────────────
-Total: 100 agents
+Total: ~83 agents
 Cost:  $3.50 – $8.00
 Time:  ~45s wall-clock
 ```
@@ -109,7 +110,7 @@ L3: 250 Workers (haiku/mini) — 5 per squad lead
 L4: 10 Reviewers (sonnet)
     3 Shadow Validators (explore)
 ──────────────────────────
-Total: 319 agents
+Total: ~268 agents
 Cost:  $8.00 – $16.22
 Time:  ~65-90s wall-clock
 ```
@@ -159,20 +160,20 @@ Best for: Entire codebase migrations, multi-repo operations (when stable).
 L0: 1 Nexus (opus)
 L1: 10 Commanders (sonnet)        — 2 per domain (redundancy)
 L2: 100 Squad Leads (haiku)       — 10 per commander
-L3: 850 Workers (haiku/mini)      — 8-9 per squad lead ⚠️
-L4: 25 Reviewers (sonnet)         — 5 review meshes
+L3: 800 Workers (haiku/mini)      — 8 per squad lead ⚠️
+L4: 20 Reviewers (sonnet)         — 4 review meshes
 L5: 5 Meta-Reviewers (opus)       — review the reviewers
     6 Shadow Validators (explore)
 ──────────────────────────────
-Total: 991+ agents
+Total: ~896 agents
 Cost:  $25 – $50
 Time:  ~110s wall-clock
 ```
 
 ### SS-1000 Known Issues
 
-1. **Law 4 violation**: Workers per Squad Lead (8-9) exceeds the cap of 5 defined in Depth Guard Law 4
-2. **Not exactly 1000**: Actual count is 991 agents
+1. **Law 4 violation**: Workers per Squad Lead (8) exceeds the cap of 5 defined in Depth Guard Law 4
+2. **Not exactly 1000**: Actual count is ~896 agents
 3. **Adds L5 layer**: Introduces Meta-Reviewers, increasing depth beyond the standard 3-layer limit
 4. **Commander redundancy**: 2 Commanders per domain adds complexity for conflict resolution
 5. **Cost unpredictable**: $25-$50 range is a rough estimate

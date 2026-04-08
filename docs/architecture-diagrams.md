@@ -241,19 +241,19 @@ flowchart TD
 ```mermaid
 graph LR
     subgraph SS50["🐝 SS-50"]
-        A50["3 Commanders<br/>15 Workers each<br/>4 Reviewers<br/>~52 agents"]
+        A50["3 Commanders<br/>15 Workers each<br/>3 Reviewers<br/>~52 agents"]
     end
 
     subgraph SS100["🐝🐝 SS-100"]
-        A100["5 Commanders<br/>15 Workers each<br/>8 Reviewers<br/>~83 agents"]
+        A100["3 Commanders<br/>24 Workers each<br/>6 Reviewers<br/>~83 agents"]
     end
 
     subgraph SS250["🐝🐝🐝 SS-250"]
-        A250["5 Commanders<br/>50 Squad Leads<br/>250 Workers<br/>10 Reviewers<br/>3 Shadow<br/>~318 agents"]
+        A250["5 Commanders<br/>50 Squad Leads<br/>250 Workers<br/>10 Reviewers<br/>3 Shadow<br/>~268 agents"]
     end
 
     subgraph SS1000["🐝🐝🐝🐝 SS-1000 ⚠️"]
-        A1000["10 Commanders<br/>100 Squad Leads<br/>800 Workers<br/>20 Reviewers<br/>6 Shadow<br/>~936 agents<br/>(Experimental)"]
+        A1000["10 Commanders<br/>100 Squad Leads<br/>800 Workers<br/>20 Reviewers<br/>6 Shadow<br/>~896 agents<br/>(Experimental)"]
     end
 
     SS50 -.->|"Scale up"| SS100
