@@ -116,7 +116,33 @@ score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage
 - Conflict penalty is capped at 0.10 (prevents single conflict from dominating)
 - Final score bounded [0.0, 1.0]
 
+**Note:** For detailed operational definitions of each term (confidence, evidence, scope, coverage, conflict_rate), see the "Formula Term Definitions" section below.
+
+### Consensus Tiers
+
+| Tier | Condition | Action |
+|---|---|---|
+| **CONSENSUS** | Score ≥ 0.70 | Auto-accept. Bundle is high-quality with strong agreement. |
+| **MAJORITY** | Score ≥ 0.50 | Accept with dissent note. Most atoms agree but some disagree. |
+| **CONFLICT** | Score < 0.50 | Flag for Nexus arbitration. Significant disagreement exists. |
+| **UNIQUE** | No overlapping results | Keep only if evidence score ≥ 7/10. Novel finding by single squad. |
+
+### Trimmed Mean
+
+For overlapping results scored by 3+ squads, use trimmed mean instead of arithmetic mean:
+
+```
+Given scores: [s₁, s₂, s₃, ..., sₙ] sorted ascending
+trimmed_mean = mean(s₂, s₃, ..., sₙ₋₁)  // drop lowest and highest
+```
+
+This is more resistant to outlier scores than arithmetic mean.
+
 ---
+
+## Formula Term Definitions
+
+This section provides detailed operational definitions for each term in the consensus scoring formula shown in Stage 3. Each definition includes how the term is computed across all 4 stages, worked examples with real numbers, edge case handling, and impact analysis.
 
 ### Confidence
 
@@ -178,6 +204,67 @@ Commander-level totals:
 
 ---
 
+### Scope
+
+**Operational Definition**: `scope` measures task completion as the ratio of addressed sub-tasks to assigned sub-tasks. In **Stage 1**, the Nexus decomposes the original mission into sub-tasks, each assigned a unique `brief_id` and distributed to workers. Each worker's Result Atom includes the `brief_id` of the sub-task it addressed. In **Stage 2**, Squad Leads track which `brief_id` values appeared in their collected atoms. In **Stage 3**, the Commander aggregates: `scope = (count of unique brief_ids addressed) / (count of brief_ids assigned to this domain)`. A sub-task is "addressed" if ≥1 atom references it, regardless of quality or consensus tier. In **Stage 4**, scope is embedded in bundle scores.
+
+**Input Data**: The set of assigned `brief_id` values for the domain (from mission decomposition), the `brief_id` field in each worker's Result Atom, and the Commander's domain assignment table.
+
+**Computation Example** (Stage 3, Commander with 12 assigned sub-tasks):
+
+```
+Assigned brief_ids: [auth-01, auth-02, ..., auth-12] (12 total)
+Atoms collected reference: auth-01, auth-02, auth-03, auth-05, auth-07, auth-08, auth-09, auth-11, auth-12 (9 unique)
+Missing: auth-04, auth-06, auth-10 (3 not addressed)
+
+  scope = 9 / 12 = 0.75
+```
+
+**Edge Cases**:
+- **0.0**: No assigned sub-task was addressed. This is catastrophic — typically means agent spawn failure or total task mismatch. The 0.15 coefficient contributes zero.
+- **1.0**: Every assigned sub-task was addressed by ≥1 agent. Ideal state.
+- **Undefined (no assignments)**: If a domain receives zero assigned sub-tasks, scope defaults to **1.0** (vacuous truth — no work required, all work done).
+- **Over-coverage**: If agents address sub-tasks outside their assignment, these are counted separately as "bonus coverage" but don't inflate scope above 1.0.
+
+**Impact on Final Score**: Coefficient **0.15**. A complete-coverage result (1.0) vs. zero-coverage (0.0) contributes a 0.15-point swing. Combined with `coverage` (also 0.15), the two task-completion metrics together contribute 0.30 to the score.
+
+---
+
+### Coverage
+
+**Operational Definition**: `coverage` measures breadth of investigation as the ratio of addressed aspects to identified aspects. An "aspect" is a facet of the problem space (e.g., "error handling", "performance", "security", "backwards compatibility") identified during mission decomposition or discovered by agents during execution. In **Stage 1**, workers may tag their atoms with `aspect_tags` (e.g., `["security", "performance"]`). In **Stage 2**, Squad Leads aggregate aspect tags. In **Stage 3**, the Commander counts: `coverage = (unique aspects referenced in ≥1 atom) / (total aspects identified for this domain)`. An aspect is "addressed" if ≥1 atom substantively discusses it (≥50 words or includes evidence files tagged with that aspect). In **Stage 4**, coverage is embedded in bundle scores.
+
+**Input Data**: The master list of aspects for the domain (from decomposition + agent discovery), the `aspect_tags` array in each Result Atom, and the Commander's aspect tracking table.
+
+**Computation Example** (Stage 3, Commander with 15 identified aspects):
+
+```
+Identified aspects: [security, performance, error-handling, logging, testing, 
+                     documentation, backwards-compat, migration, data-validation,
+                     API-design, UI-impact, monitoring, rollout, cost, legal]
+                     (15 total)
+
+Atoms collected reference: security (8 atoms), performance (5), error-handling (6),
+                          testing (9), documentation (4), backwards-compat (3),
+                          migration (2), monitoring (1), rollout (2)
+                          (9 unique aspects substantively addressed)
+
+Missing: logging, data-validation, API-design, UI-impact, cost, legal (6 not covered)
+
+  coverage = 9 / 15 = 0.60
+```
+
+**Edge Cases**:
+- **0.0**: No identified aspect was addressed. This indicates agents completely missed the problem space. The 0.15 coefficient contributes zero.
+- **1.0**: Every identified aspect was addressed. Ideal breadth.
+- **Undefined (no aspects)**: If zero aspects are identified, coverage defaults to **1.0** (no dimensions to cover).
+- **Shallow coverage**: An aspect counts as "addressed" only if discussed substantively (≥50 words) or backed by evidence. A one-sentence mention doesn't count.
+- **Aspect discovery**: If agents discover NEW aspects not in the original list, these are added to the denominator mid-flight, which can lower coverage scores.
+
+**Impact on Final Score**: Coefficient **0.15**. Full coverage (1.0) vs. zero coverage (0.0) contributes a 0.15-point swing. `coverage` rewards breadth, while `scope` rewards depth (completing assigned tasks).
+
+---
+
 ### Conflict Rate
 
 **Operational Definition**: `conflict_rate` quantifies unresolved disagreement as a fraction of total atoms. In **Stage 2**, the Squad Lead classifies each sub-task group into CONSENSUS, MAJORITY, or CONFLICT. Atoms in the CONFLICT tier (no majority agreement) are tagged with a conflict flag and forwarded unresolved. In **Stage 3**, the Commander counts atoms still carrying the CONFLICT flag after its own trimmed-mean resolution attempt: `conflict_rate = unresolved_conflicts / total_atoms`. Unlike the positive terms, conflict_rate is applied as a **penalty**: `−min(0.10, conflict_rate × 0.10)`. In **Stage 4**, CONFLICT-tier items are escalated to the Nexus for final arbitration, which may re-dispatch to a single reviewer for tiebreaking.
@@ -208,25 +295,89 @@ Score impact: −0.0133 (subtracted from the positive terms)
 
 **Impact on Final Score**: Penalty capped at **−0.10**. The penalty scales linearly (`conflict_rate × 0.10`) up to the cap. In practice, a conflict_rate above 0.50 (penalty = 0.05) triggers CONFLICT-tier classification (score < 0.50), which escalates the bundle to Nexus arbitration rather than auto-acceptance.
 
-### Consensus Tiers
+---
 
-| Tier | Condition | Action |
-|---|---|---|
-| **CONSENSUS** | Score ≥ 0.70 | Auto-accept. Bundle is high-quality with strong agreement. |
-| **MAJORITY** | Score ≥ 0.50 | Accept with dissent note. Most atoms agree but some disagree. |
-| **CONFLICT** | Score < 0.50 | Flag for Nexus arbitration. Significant disagreement exists. |
-| **UNIQUE** | No overlapping results | Keep only if evidence score ≥ 7/10. Novel finding by single squad. |
+### Complete Formula Example
 
-### Trimmed Mean
+**Scenario**: Commander CMD-ARCH processing "Refactor authentication module to use JWT tokens"
 
-For overlapping results scored by 3+ squads, use trimmed mean instead of arithmetic mean:
+**Input Data**:
+- 10 atoms collected from Squad Leads
+- Worker confidence scores: [0.92, 0.88, 0.85, 0.91, 0.78, 0.86, 0.89, 0.77, 0.83, 0.90]
+- Evidence files: 6 atoms have ≥1 evidence file, 4 atoms have none
+- Assigned sub-tasks: 12 (`auth-01` through `auth-12`)
+- Sub-tasks addressed: 9 (`auth-04`, `auth-06`, `auth-10` not covered)
+- Identified aspects: 15 (security, performance, error-handling, etc.)
+- Aspects addressed: 13 (logging and cost not covered)
+- Conflicts: 2 atoms flagged CONFLICT, 8 atoms CONSENSUS/MAJORITY
+
+**Step 1: Compute confidence (geometric mean)**
 
 ```
-Given scores: [s₁, s₂, s₃, ..., sₙ] sorted ascending
-trimmed_mean = mean(s₂, s₃, ..., sₙ₋₁)  // drop lowest and highest
+confidence = (0.92 × 0.88 × 0.85 × 0.91 × 0.78 × 0.86 × 0.89 × 0.77 × 0.83 × 0.90)^(1/10)
+           = (0.2749)^0.10
+           ≈ 0.8775
 ```
 
-This is more resistant to outlier scores than arithmetic mean.
+**Step 2: Compute evidence**
+
+```
+evidence = (atoms with ≥1 evidence file) / (total atoms)
+         = 6 / 10
+         = 0.60
+```
+
+**Step 3: Compute scope**
+
+```
+scope = (addressed sub-tasks) / (assigned sub-tasks)
+      = 9 / 12
+      = 0.75
+```
+
+**Step 4: Compute coverage**
+
+```
+coverage = (aspects addressed) / (aspects identified)
+         = 13 / 15
+         ≈ 0.8667
+```
+
+**Step 5: Compute conflict penalty**
+
+```
+conflict_rate = (unresolved conflicts) / (total atoms)
+              = 2 / 10
+              = 0.20
+
+penalty = min(0.10, conflict_rate × 0.10)
+        = min(0.10, 0.20 × 0.10)
+        = min(0.10, 0.02)
+        = 0.02
+```
+
+**Step 6: Apply formula**
+
+```
+score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage − penalty
+      = 0.40 × 0.8775 + 0.30 × 0.60 + 0.15 × 0.75 + 0.15 × 0.8667 − 0.02
+      = 0.3510 + 0.18 + 0.1125 + 0.1300 − 0.02
+      = 0.7535
+```
+
+**Step 7: Classify tier**
+
+```
+score = 0.7535 ≥ 0.70 → CONSENSUS tier
+```
+
+**Result**: CMD-ARCH bundle is **auto-accepted** with high confidence (0.75 score, CONSENSUS tier).
+
+**Sensitivity Analysis** (what would improve the score most):
+- Raising evidence from 0.60 to 1.0 → +0.12 points (biggest single lever)
+- Raising confidence from 0.88 to 1.0 → +0.049 points
+- Eliminating conflicts (penalty 0.02 → 0) → +0.02 points
+- Raising scope from 0.75 to 1.0 → +0.0375 points
 
 ---
 

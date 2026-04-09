@@ -1,45 +1,876 @@
-# 📋 Example Output
+# Example Swarm Output (SS-100)
 
-This is a **representative** excerpt of what a completed Swarm Command run can look like in the Copilot CLI.
+This document shows a realistic example of what a completed SS-100 swarm run produces. The task is: **"Refactor the authentication module to use JWT tokens"**
 
-> Note: Exact timings, commander IDs, and output ordering may vary by deployment scale (SS-50 / SS-100 / SS-250) and the task.
+---
 
-## Representative CLI transcript (SS-100)
+## Mission Briefing
 
-```text
-$ copilot
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                                                                               ║
+║                            🐝 SWARM COMMAND                                  ║
+║                                                                               ║
+║                         Multi-Agent Code Intelligence                         ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
 
-> swarm command ss-100 "Document the auth system, add missing tests, and flag rollout risks"
+┌─ MISSION PARAMETERS ────────────────────────────────────────────────────────┐
+│                                                                              │
+│  Configuration:  SS-100 (100 agents, 5 domains, max depth 3)                │
+│  Session ID:     swarm-2024-04-08-22-34-a7f3                                │
+│  Task:           Refactor the authentication module to use JWT tokens       │
+│  Repository:     ~/projects/webapp-auth                                     │
+│  Branch:         feature/jwt-migration                                      │
+│                                                                              │
+│  Agent Allocation:                                                           │
+│    • Architecture Domain (CMD-ARCH):    20 workers                           │
+│    • Implementation Domain (CMD-IMPL):  25 workers                           │
+│    • Testing Domain (CMD-TEST):         20 workers                           │
+│    • Documentation Domain (CMD-DOCS):   18 workers                           │
+│    • Integration Domain (CMD-INTG):     17 workers                           │
+│                                                                              │
+│  Model Config:                                                               │
+│    • Nexus (L0):           claude-sonnet-4                                   │
+│    • Commanders (L1):      claude-sonnet-4                                   │
+│    • Squad Leads (L2):     claude-haiku-4                                    │
+│    • Workers (L3):         claude-haiku-4                                    │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
 
-[NEXUS] Booting SS-100 swarm...
-[NEXUS] Sealing acceptance criteria (8 checks)
-[CMD-ARCH] Mapping auth boundaries and module ownership
-[CMD-IMPL] Tracing token issuance, refresh, and revocation flows
-[CMD-TEST] Enumerating missing happy-path, edge-case, and failure-path tests
-[CMD-DOCS] Drafting operator-facing docs and examples
-[CMD-INTG] Checking rollout risks across API, web, DB, and monitoring
-[REVIEW] Cross-family review mesh started
-[SHADOW] 1 criterion failed on first pass → hardening cycle triggered
-[SHADOW] Re-validated bundle: 0 critical failures remaining
-
-✅ Final bundle ready in 47s
-
-Top outputs:
-1. Auth architecture brief with module boundaries
-2. Ranked test-gap list with highest-risk paths first
-3. Rollout checklist covering cookies, refresh tokens, and observability
-4. Updated docs outline for onboarding + operations
-
-Consensus: CONSENSUS on 3/4 major findings
-Shadow Score: 12.5% → hardened and accepted
+────────────────────────────────────────────────────────────────────────────────
 ```
 
-## What you typically get
+---
 
-A successful run usually produces:
+## Phase Progression
 
-- A synthesized, operator-friendly final bundle (not raw agent logs)
-- A consensus tier per major finding (**CONSENSUS / MAJORITY / CONFLICT / UNIQUE**)
-- A Shadow Score result (sealed acceptance criteria validation)
+```
+═══════════════════════════════════════════════════════════════════════════════
+Phase 0: Mission Briefing
+═══════════════════════════════════════════════════════════════════════════════
+✓ Mission parameters validated
+✓ Repository scanned (142 files, 18,347 LOC)
+✓ Context capsule prepared (3.2 MB compressed)
+                                                           [Elapsed: 2.1s]
 
-If you changed the output format, please keep this page in sync so README excerpts remain accurate.
+─────────────────────────────────────────────────────────────────────────────
+
+═══════════════════════════════════════════════════════════════════════════════
+Phase 1: Nexus Initialization
+═══════════════════════════════════════════════════════════════════════════════
+✓ Nexus agent spawned (session: nexus-a7f3)
+✓ Mission decomposed into 58 sub-tasks across 5 domains
+✓ Domain allocation strategy computed
+✓ Aspect taxonomy generated (15 aspects identified)
+                                                           [Elapsed: 8.4s]
+
+─────────────────────────────────────────────────────────────────────────────
+
+═══════════════════════════════════════════════════════════════════════════════
+Phase 2: Commander Spawn (5 domains)
+═══════════════════════════════════════════════════════════════════════════════
+✓ CMD-ARCH spawned  (Architecture)      → 12 sub-tasks assigned
+✓ CMD-IMPL spawned  (Implementation)    → 18 sub-tasks assigned
+✓ CMD-TEST spawned  (Testing)           → 14 sub-tasks assigned
+✓ CMD-DOCS spawned  (Documentation)     → 8 sub-tasks assigned
+✓ CMD-INTG spawned  (Integration)       → 6 sub-tasks assigned
+                                                           [Elapsed: 3.2s]
+
+─────────────────────────────────────────────────────────────────────────────
+
+═══════════════════════════════════════════════════════════════════════════════
+Phase 3: Squad Lead Spawn
+═══════════════════════════════════════════════════════════════════════════════
+⚙️  Spawning 20 Squad Leads across 5 domains...
+✓ Architecture:    4 Squad Leads (SQ-ARCH-01 through SQ-ARCH-04)
+✓ Implementation:  5 Squad Leads (SQ-IMPL-01 through SQ-IMPL-05)
+✓ Testing:         4 Squad Leads (SQ-TEST-01 through SQ-TEST-04)
+✓ Documentation:   4 Squad Leads (SQ-DOCS-01 through SQ-DOCS-04)
+✓ Integration:     3 Squad Leads (SQ-INTG-01 through SQ-INTG-03)
+                                                           [Elapsed: 4.7s]
+
+─────────────────────────────────────────────────────────────────────────────
+
+═══════════════════════════════════════════════════════════════════════════════
+Phase 4: Worker Spawn (100 workers)
+═══════════════════════════════════════════════════════════════════════════════
+⚙️  Spawning 100 workers across 20 Squad Leads...
+✓ Architecture:    20 workers spawned
+✓ Implementation:  25 workers spawned
+✓ Testing:         20 workers spawned
+✓ Documentation:   18 workers spawned
+✓ Integration:     17 workers spawned
+                                                           [Elapsed: 6.1s]
+
+─────────────────────────────────────────────────────────────────────────────
+
+═══════════════════════════════════════════════════════════════════════════════
+Phase 5: Worker Execution
+═══════════════════════════════════════════════════════════════════════════════
+⏳ Workers investigating codebase and generating Result Atoms...
+
+[████████████████████████████████████████████████████████████] 100/100
+
+✓ 97 workers completed successfully
+⚠️  2 workers timed out (W-IMPL-14, W-TEST-09) → recovered by squad leads
+⚠️  1 worker failed (W-DOCS-07) → task redistributed
+• 342 Result Atoms generated
+• 287 evidence files referenced
+                                                           [Elapsed: 142.8s]
+
+─────────────────────────────────────────────────────────────────────────────
+
+═══════════════════════════════════════════════════════════════════════════════
+Phase 6: Squad Lead Merge (L2 Consensus)
+═══════════════════════════════════════════════════════════════════════════════
+⚙️  20 Squad Leads performing local consensus...
+
+✓ SQ-ARCH-01: 17 atoms → 12 merged (5 CONSENSUS, 6 MAJORITY, 1 CONFLICT)
+✓ SQ-ARCH-02: 21 atoms → 14 merged (8 CONSENSUS, 5 MAJORITY, 1 CONFLICT)
+✓ SQ-ARCH-03: 18 atoms → 13 merged (7 CONSENSUS, 5 MAJORITY, 1 CONFLICT)
+✓ SQ-ARCH-04: 16 atoms → 11 merged (6 CONSENSUS, 4 MAJORITY, 1 CONFLICT)
+✓ SQ-IMPL-01: 22 atoms → 16 merged (9 CONSENSUS, 6 MAJORITY, 1 CONFLICT)
+  ... (15 more squads)
+
+• 342 atoms → 187 merged atom-sets
+• Deduplication boost applied: 23 content-hash matches
+• 18 conflicts preserved for Commander review
+                                                           [Elapsed: 28.4s]
+
+─────────────────────────────────────────────────────────────────────────────
+
+═══════════════════════════════════════════════════════════════════════════════
+Phase 7: Commander Domain Merge (L1 Consensus)
+═══════════════════════════════════════════════════════════════════════════════
+⚙️  5 Commanders applying consensus formula and cross-squad merge...
+
+✓ CMD-ARCH: 50 atoms → 42 final (consensus score: 0.87, CONSENSUS tier)
+✓ CMD-IMPL: 71 atoms → 48 final (consensus score: 0.81, CONSENSUS tier)
+✓ CMD-TEST: 47 atoms → 38 final (consensus score: 0.72, CONSENSUS tier)
+✓ CMD-DOCS: 52 atoms → 35 final (consensus score: 0.68, MAJORITY tier)
+✓ CMD-INTG: 48 atoms → 37 final (consensus score: 0.79, CONSENSUS tier)
+
+• 187 atoms → 200 domain-merged atoms
+• 12 conflicts resolved via trimmed mean
+• 3 conflicts escalated to Nexus (token expiry policy, hashing algorithm, token storage location)
+                                                           [Elapsed: 34.2s]
+
+─────────────────────────────────────────────────────────────────────────────
+
+═══════════════════════════════════════════════════════════════════════════════
+Phase 8: Nexus Synthesis (L0 Final Merge)
+═══════════════════════════════════════════════════════════════════════════════
+⚙️  Nexus performing cross-domain synthesis + shadow scoring...
+
+✓ Cross-domain conflicts resolved (3/3)
+✓ Shadow Score validation: 80% GREEN (12% minor gaps)
+✓ Gap Report generated: 5 gaps identified (2 🔴 blocking)
+✓ Final report synthesized with attribution and confidence intervals
+
+                                                           [Elapsed: 18.7s]
+
+─────────────────────────────────────────────────────────────────────────────
+```
+
+---
+
+## Results Summary
+
+```
+┌─ DOMAIN RESULTS ────────────────────────────────────────────────────────────┐
+│                                                                              │
+│  Domain             Tier        Confidence   Agents   Time (s)              │
+│  ──────────────────────────────────────────────────────────────────────     │
+│  Architecture       CONSENSUS   0.87         42       156.3                 │
+│  Implementation     CONSENSUS   0.81         48       168.9                 │
+│  Testing            CONSENSUS   0.72         38       147.2                 │
+│  Documentation      MAJORITY    0.68         35       132.1                 │
+│  Integration        CONSENSUS   0.79         37       151.4                 │
+│                                                                              │
+│  ─────────────────────────────────────────────────────────────────────────  │
+│  Overall Confidence: 0.77 (High)                                            │
+│  Total Execution Time: 4m 32s                                               │
+│  Cost Estimate: ~$2.47 (342k input tokens, 89k output tokens)               │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+Phase Breakdown:
+[██▓▓▓▓░░] Phase 0-4: Setup     (24.5s,  9%)
+[████████] Phase 5:   Execution (142.8s, 52%)
+[████▓▓░░] Phase 6:   L2 Merge  (28.4s, 10%)
+[█████▓░░] Phase 7:   L1 Merge  (34.2s, 13%)
+[███▓░░░░] Phase 8:   Synthesis (18.7s,  7%)
+[███░░░░░] Overhead             (23.4s,  9%)
+```
+
+---
+
+## Domain Reports
+
+### 🏗️ Architecture Domain (CMD-ARCH)
+
+**Consensus Tier:** ✅ CONSENSUS (score: 0.87)  
+**Confidence:** 0.87 (High)  
+**Agents:** 42 workers across 4 Squad Leads  
+**Evidence Files:** 38/42 atoms cited evidence (90%)
+
+#### Summary
+
+The Architecture domain achieved high consensus on the JWT migration design. All agents agree on a three-layer architecture: token generation service, validation middleware, and refresh token handler. The design maintains backwards compatibility with existing session-based auth during the migration period.
+
+#### Key Findings
+
+1. **JWT Token Structure** (38/42 agents agree, CONSENSUS)
+   - Standard JWT structure with header, payload, signature
+   - Payload includes: `user_id`, `email`, `roles[]`, `issued_at`, `expires_at`
+   - Signature algorithm: RS256 (asymmetric) for enhanced security
+   - Token size: ~450 bytes (within HTTP header limits)
+
+2. **Authentication Flow** (40/42 agents agree, CONSENSUS)
+   - Login → validate credentials → generate access token (1h expiry) + refresh token (7d expiry)
+   - Access token in `Authorization: Bearer <token>` header
+   - Refresh token in `HttpOnly` secure cookie
+   - Token validation in Express middleware layer (`src/middleware/jwt-auth.ts`)
+
+3. **Key Management** (35/42 agents agree, CONSENSUS)
+   - RSA key pair (2048-bit) generated at service startup
+   - Private key stored in environment variable or secrets manager (AWS Secrets Manager / Azure Key Vault)
+   - Public key exposed at `/.well-known/jwks.json` endpoint for validation
+   - Key rotation strategy: monthly rotation with 24h overlap period
+
+4. **Migration Strategy** (39/42 agents agree, CONSENSUS)
+   - Dual-mode authentication: support both session cookies AND JWT tokens during 90-day migration
+   - Detection logic: check for `Authorization` header first, fallback to session cookie
+   - New logins issue JWT tokens; legacy sessions honored until expiry
+   - Feature flag: `ENABLE_JWT_AUTH` (default: true in v2.0+)
+
+5. **Error Handling** (36/42 agents agree, CONSENSUS)
+   - Token expired (401): client must refresh via `/auth/refresh` endpoint
+   - Token malformed (401): reject immediately, log security event
+   - Token signature invalid (401): reject + alert security team
+   - Missing token (401 or 403 depending on endpoint protection level)
+
+#### Evidence Files Referenced
+
+- `src/auth/session-manager.ts` (current session implementation)
+- `src/middleware/auth-check.ts` (existing auth middleware)
+- `src/models/user.model.ts` (user schema with roles)
+- `src/config/security.config.ts` (security settings)
+- `package.json` (dependencies: express, cookie-parser, bcrypt)
+- `.env.example` (environment variable template)
+
+#### Agent Agreement
+
+- **CONSENSUS**: 35 atoms (83%)
+- **MAJORITY**: 5 atoms (12%)
+- **CONFLICT**: 2 atoms (5%) — escalated to Nexus
+
+---
+
+### 💻 Implementation Domain (CMD-IMPL)
+
+**Consensus Tier:** ✅ CONSENSUS (score: 0.81)  
+**Confidence:** 0.81 (High)  
+**Agents:** 48 workers across 5 Squad Leads  
+**Evidence Files:** 41/48 atoms cited evidence (85%)
+
+#### Summary
+
+The Implementation domain converged on a clear file structure and dependency plan. All agents identified the need for 3 new modules (`jwt-service.ts`, `jwt-middleware.ts`, `refresh-handler.ts`) and updates to 7 existing files. Implementation follows Express.js conventions and maintains existing error handling patterns.
+
+#### Key Findings
+
+1. **New Dependencies** (46/48 agents agree, CONSENSUS)
+   ```json
+   "jsonwebtoken": "^9.0.2",     // JWT generation and validation
+   "jwks-rsa": "^3.1.0",          // Public key rotation support
+   "@types/jsonwebtoken": "^9.0.3" // TypeScript definitions
+   ```
+   - Remove after migration complete: N/A (session code remains for legacy support)
+
+2. **File Structure** (44/48 agents agree, CONSENSUS)
+   ```
+   src/auth/
+     ├── jwt-service.ts           (NEW) — token generation, validation, refresh
+     ├── jwt-middleware.ts        (NEW) — Express middleware for JWT extraction
+     ├── session-manager.ts       (MODIFY) — add JWT fallback logic
+     ├── auth-routes.ts           (MODIFY) — add /auth/refresh endpoint
+     └── types/jwt-payload.ts     (NEW) — TypeScript interfaces
+   
+   src/middleware/
+     ├── auth-check.ts            (MODIFY) — dual-mode authentication wrapper
+   
+   src/config/
+     ├── security.config.ts       (MODIFY) — JWT secret, expiry, algorithm config
+     └── keys/                    (NEW DIR) — RSA key pair storage (gitignored)
+   ```
+
+3. **Core Implementation: JWT Service** (45/48 agents agree, CONSENSUS)
+   ```typescript
+   // src/auth/jwt-service.ts (excerpt)
+   export class JWTService {
+     private privateKey: string;
+     private publicKey: string;
+
+     async generateAccessToken(user: User): Promise<string> {
+       const payload: JWTPayload = {
+         sub: user.id,
+         email: user.email,
+         roles: user.roles,
+         iat: Math.floor(Date.now() / 1000),
+         exp: Math.floor(Date.now() / 1000) + 3600 // 1 hour
+       };
+       return jwt.sign(payload, this.privateKey, { algorithm: 'RS256' });
+     }
+
+     async verifyToken(token: string): Promise<JWTPayload> {
+       return jwt.verify(token, this.publicKey, { algorithms: ['RS256'] });
+     }
+   }
+   ```
+
+4. **Middleware Integration** (43/48 agents agree, CONSENSUS)
+   ```typescript
+   // src/middleware/auth-check.ts (excerpt)
+   export const authenticateRequest = async (req, res, next) => {
+     // Try JWT first
+     const authHeader = req.headers.authorization;
+     if (authHeader?.startsWith('Bearer ')) {
+       try {
+         const token = authHeader.substring(7);
+         req.user = await jwtService.verifyToken(token);
+         return next();
+       } catch (err) {
+         // JWT invalid, try session fallback
+       }
+     }
+     
+     // Fallback to session (legacy)
+     if (req.session?.userId) {
+       req.user = await getUserFromSession(req.session);
+       return next();
+     }
+     
+     return res.status(401).json({ error: 'Authentication required' });
+   };
+   ```
+
+5. **Migration Checklist** (47/48 agents agree, CONSENSUS)
+   - ✅ Install dependencies (`npm install jsonwebtoken jwks-rsa`)
+   - ✅ Generate RSA key pair (`npm run generate-keys`)
+   - ✅ Update `.env` with `JWT_PRIVATE_KEY_PATH`, `JWT_PUBLIC_KEY_PATH`
+   - ✅ Create JWT service + middleware files
+   - ✅ Update auth routes to issue JWT tokens on login
+   - ✅ Add `/auth/refresh` endpoint
+   - ✅ Update existing middleware to support dual-mode
+   - ✅ Add integration tests (see Testing domain)
+   - ⚠️  Deploy to staging, monitor error rates
+   - ⚠️  Gradual rollout: 10% → 50% → 100% over 2 weeks
+
+#### Evidence Files Referenced
+
+- `src/auth/session-manager.ts` (135 LOC, primary refactor target)
+- `src/middleware/auth-check.ts` (78 LOC, dual-mode logic needed)
+- `src/routes/auth-routes.ts` (92 LOC, add refresh endpoint)
+- `src/models/user.model.ts` (user schema for payload)
+- `package.json` (dependency management)
+- `tsconfig.json` (TypeScript path aliases)
+- `.env.example` (config template)
+
+#### Agent Agreement
+
+- **CONSENSUS**: 43 atoms (90%)
+- **MAJORITY**: 4 atoms (8%)
+- **CONFLICT**: 1 atom (2%) — escalated (token storage: memory vs. Redis)
+
+---
+
+### 🧪 Testing Domain (CMD-TEST)
+
+**Consensus Tier:** ✅ CONSENSUS (score: 0.72)  
+**Confidence:** 0.72 (Medium-High)  
+**Agents:** 38 workers across 4 Squad Leads  
+**Evidence Files:** 29/38 atoms cited evidence (76%)
+
+#### Summary
+
+The Testing domain identified comprehensive test coverage needs across unit, integration, and security layers. All agents agree on the critical test cases, though some edge cases (token expiry timing, clock skew) had minority dissent. Test framework: Jest + Supertest (existing stack).
+
+#### Key Findings
+
+1. **Unit Tests** (32/38 agents agree, CONSENSUS)
+   - JWT Service: token generation, validation, expiry, malformed tokens
+   - Middleware: header extraction, Bearer prefix handling, missing token
+   - Refresh Handler: valid refresh, expired refresh, token rotation
+   - Coverage target: ≥95% for new JWT modules
+
+2. **Integration Tests** (35/38 agents agree, CONSENSUS)
+   - End-to-end login flow: credentials → access + refresh tokens
+   - Protected route access: valid token → 200, invalid → 401
+   - Token refresh: expired access + valid refresh → new access token
+   - Dual-mode authentication: JWT vs. session fallback logic
+   - Key rotation: old key still valid during overlap, fully invalid after
+
+3. **Security Tests** (30/38 agents agree, CONSENSUS)
+   - Token tampering: modified signature → 401
+   - Replay attack: expired token rejected even with valid signature
+   - CSRF protection: HttpOnly cookie for refresh token
+   - Algorithm confusion: HS256 token rejected (only RS256 accepted)
+   - Key exposure: private key never in HTTP response or logs
+
+4. **Edge Cases** (28/38 agents agree, MAJORITY)
+   - Token expiry within 1s boundary (clock skew handling)
+   - Concurrent refresh requests (race condition)
+   - Very long user role arrays (token size > 4KB)
+   - Key rotation overlap: token signed with old key, validated with new key
+   - Database unavailable during token validation
+
+5. **Test Matrix** (36/38 agents agree, CONSENSUS)
+   | Test Type | New Tests | Modified Tests | Priority |
+   |-----------|-----------|----------------|----------|
+   | Unit      | 24        | 8              | P0       |
+   | Integration | 16      | 12             | P0       |
+   | Security  | 12        | 3              | P0       |
+   | Performance | 4       | 2              | P1       |
+   | E2E       | 8         | 6              | P1       |
+   | **Total** | **64**    | **31**         | —        |
+
+#### Evidence Files Referenced
+
+- `tests/auth/session-manager.test.ts` (existing auth tests)
+- `tests/middleware/auth-check.test.ts` (middleware tests)
+- `tests/integration/login.test.ts` (login flow tests)
+- `jest.config.js` (test configuration)
+- `package.json` (test scripts and dependencies)
+
+#### Agent Agreement
+
+- **CONSENSUS**: 30 atoms (79%)
+- **MAJORITY**: 7 atoms (18%)
+- **CONFLICT**: 1 atom (3%) — edge case priority (clock skew vs. token size)
+
+---
+
+### 📚 Documentation Domain (CMD-DOCS)
+
+**Consensus Tier:** ⚠️ MAJORITY (score: 0.68)  
+**Confidence:** 0.68 (Medium)  
+**Agents:** 35 workers across 4 Squad Leads  
+**Evidence Files:** 23/35 atoms cited evidence (66%)
+
+#### Summary
+
+The Documentation domain reached majority consensus but had significant dissent on API documentation format (OpenAPI vs. JSDoc). All agents agree on the need for migration guide, README updates, and inline code comments. The Nexus resolved the format conflict in favor of OpenAPI (existing standard in this repo).
+
+#### Key Findings
+
+1. **README Updates** (33/35 agents agree, CONSENSUS)
+   - New section: "Authentication with JWT" (before "API Endpoints")
+   - Update "Getting Started": add key generation step
+   - Update "Environment Variables": document JWT config vars
+   - Update "Deployment": note key rotation schedule
+
+2. **API Documentation** (22/35 agents agree, MAJORITY) — **DISSENT NOTED**
+   - **Majority view (22 agents)**: Update OpenAPI spec (`docs/api.yaml`)
+     - Add `/auth/login` response with JWT token structure
+     - Add `/auth/refresh` endpoint documentation
+     - Document `Authorization: Bearer <token>` header for protected routes
+   - **Minority view (13 agents)**: Use JSDoc comments in code
+     - Add JSDoc annotations to JWT service methods
+     - Generate docs with TypeDoc
+   - **NEXUS DECISION**: Use OpenAPI (existing standard in this repo). JSDoc as supplementary.
+
+3. **Migration Guide** (34/35 agents agree, CONSENSUS)
+   - New file: `docs/migration/jwt-migration.md`
+   - Sections:
+     1. Overview (why JWT, what changes)
+     2. Prerequisites (key generation, config)
+     3. Step-by-step migration (API client updates)
+     4. Rollback procedure (in case of issues)
+     5. FAQ (common questions and answers)
+
+4. **Code Comments** (31/35 agents agree, CONSENSUS)
+   - JSDoc comments for all exported JWT service methods
+   - Inline comments for complex logic (e.g., dual-mode fallback)
+   - Security notes for key handling code
+   - Example usage in docstrings
+
+5. **Developer Onboarding** (29/35 agents agree, CONSENSUS)
+   - Update `CONTRIBUTING.md`: testing new auth features
+   - Add architecture diagram: JWT flow vs. session flow
+   - Video walkthrough (optional): 5-minute screencast of local setup
+
+#### Evidence Files Referenced
+
+- `README.md` (current project README)
+- `docs/api.yaml` (OpenAPI 3.0 spec)
+- `docs/architecture.md` (system architecture)
+- `CONTRIBUTING.md` (contributor guide)
+
+#### Agent Agreement
+
+- **CONSENSUS**: 29 atoms (83%)
+- **MAJORITY**: 6 atoms (17%) — includes API doc format dissent
+
+#### Dissent Report
+
+**Issue:** API documentation format (OpenAPI vs. JSDoc)
+
+**Majority Position (22/35 agents):**
+> "OpenAPI is the existing standard in this repo (`docs/api.yaml`). All endpoints are documented there. Adding JWT auth follows the same pattern. Clients can generate SDKs from the spec."
+
+**Minority Position (13/35 agents):**
+> "JSDoc comments are closer to the code and less likely to drift out of sync. TypeScript developers expect JSDoc. OpenAPI is more for external API consumers, not internal development."
+
+**Nexus Resolution:**
+> Use **OpenAPI as primary** (consistency with existing docs), **JSDoc as supplementary** (developer ergonomics). Update both. OpenAPI for API contract, JSDoc for method-level usage examples.
+
+---
+
+### 🔗 Integration Domain (CMD-INTG)
+
+**Consensus Tier:** ✅ CONSENSUS (score: 0.79)  
+**Confidence:** 0.79 (High)  
+**Agents:** 37 workers across 3 Squad Leads  
+**Evidence Files:** 31/37 atoms cited evidence (84%)
+
+#### Summary
+
+The Integration domain identified all external integration points that require updates: frontend JavaScript client, mobile apps (iOS/Android), API gateway config, and third-party service integrations. All agents agree on the migration strategy: phase 1 (internal services), phase 2 (external partners).
+
+#### Key Findings
+
+1. **Frontend Integration** (35/37 agents agree, CONSENSUS)
+   - Update `src/frontend/api-client.js`: add `Authorization` header to all requests
+   - Store access token in memory (not localStorage, XSS risk)
+   - Store refresh token in HttpOnly cookie (automatically sent by browser)
+   - Add token refresh logic: intercept 401, call `/auth/refresh`, retry original request
+   - Logout: clear in-memory token + call `/auth/logout` to invalidate refresh token
+
+2. **Mobile App Integration** (34/37 agents agree, CONSENSUS)
+   - **iOS**: Use Keychain for secure token storage
+   - **Android**: Use EncryptedSharedPreferences
+   - Refresh token strategy: background refresh 5 minutes before expiry
+   - Handle token revocation: logout + redirect to login on 401
+
+3. **API Gateway Config** (36/37 agents agree, CONSENSUS)
+   - Update NGINX / Kong config: pass `Authorization` header upstream
+   - Add JWT validation at gateway level (optional, reduces backend load)
+   - Configure CORS: allow `Authorization` header in preflight requests
+   - Rate limiting: apply to `/auth/refresh` endpoint (prevent refresh token abuse)
+
+4. **Third-Party Integrations** (33/37 agents agree, CONSENSUS)
+   - **Webhook receivers**: no change (they don't authenticate, we validate HMAC signatures)
+   - **OAuth providers** (Google, GitHub): no change (they issue their own tokens, we exchange for our JWT)
+   - **Partner APIs**: provide migration notice (60 days), update integration docs
+   - **Legacy partners**: session-based auth remains available (backwards compat)
+
+5. **Rollout Strategy** (37/37 agents agree, CONSENSUS)
+   - **Phase 1** (Week 1-2): Internal services (frontend, mobile, admin dashboard)
+   - **Phase 2** (Week 3-4): Partner API clients (with migration support)
+   - **Phase 3** (Week 5-6): Monitor, optimize, fix edge cases
+   - **Phase 4** (Week 7+): Deprecation notice for session-based auth (6 months)
+
+#### Integration Points Summary
+
+| Component           | Change Required | Priority | Owner        |
+|---------------------|-----------------|----------|--------------|
+| Frontend Web App    | ✅ High          | P0       | Frontend Team|
+| iOS App             | ✅ High          | P0       | Mobile Team  |
+| Android App         | ✅ High          | P0       | Mobile Team  |
+| API Gateway         | ✅ Medium        | P1       | DevOps Team  |
+| Admin Dashboard     | ✅ Low           | P2       | Backend Team |
+| Partner API Docs    | ✅ High          | P0       | DevRel Team  |
+| Webhook Receivers   | ❌ None          | —        | —            |
+| OAuth Integrations  | ❌ None          | —        | —            |
+
+#### Evidence Files Referenced
+
+- `src/frontend/api-client.js` (frontend API client)
+- `nginx/conf.d/api-gateway.conf` (NGINX config)
+- `docs/integrations/partner-api.md` (partner integration guide)
+- `mobile/ios/AuthService.swift` (iOS auth implementation)
+- `mobile/android/AuthService.kt` (Android auth implementation)
+
+#### Agent Agreement
+
+- **CONSENSUS**: 33 atoms (89%)
+- **MAJORITY**: 4 atoms (11%)
+- **CONFLICT**: 0 atoms
+
+---
+
+## Conflicts & Resolutions
+
+During the swarm run, 3 conflicts were escalated to the Nexus for final arbitration:
+
+### Conflict 1: Token Expiry Duration
+
+**Issue:** Agents disagreed on access token expiry time (1 hour vs. 24 hours vs. 7 days)
+
+**Positions:**
+- **18 agents**: 1 hour (security best practice, reduces exposure window)
+- **12 agents**: 24 hours (user convenience, fewer refresh requests)
+- **7 agents**: 7 days (mobile app UX, mimics session expiry)
+
+**Nexus Decision:** **1 hour access token + 7 day refresh token**
+
+**Rationale:**
+> Short-lived access tokens (1h) minimize the risk window if a token is compromised. The refresh token (7d, HttpOnly cookie) provides the long-lived session experience users expect. This is the industry standard (OAuth 2.0 best practices) and matches security frameworks like OWASP recommendations.
+
+**Resolution Time:** 1.4s  
+**Confidence:** 0.94  
+**Citations:** OWASP JWT Best Practices, RFC 6749 (OAuth 2.0)
+
+---
+
+### Conflict 2: Hashing Algorithm (RS256 vs. HS256)
+
+**Issue:** Agents disagreed on JWT signature algorithm
+
+**Positions:**
+- **32 agents**: RS256 (asymmetric, public key validation)
+- **10 agents**: HS256 (symmetric, simpler key management)
+
+**Nexus Decision:** **RS256 (asymmetric)**
+
+**Rationale:**
+> RS256 allows the public key to be distributed for token validation without exposing the signing key. This enables microservices to validate tokens independently without sharing secrets. HS256 requires the secret key on every service, increasing the attack surface. The complexity overhead of RSA key management is justified by the security benefit.
+
+**Resolution Time:** 0.9s  
+**Confidence:** 0.97  
+**Citations:** JWT.io Best Practices, Auth0 Security Guidelines
+
+---
+
+### Conflict 3: Refresh Token Storage (Cookie vs. Redis vs. Database)
+
+**Issue:** Agents disagreed on where to store refresh tokens server-side
+
+**Positions:**
+- **14 agents**: Redis (fast, TTL support, horizontally scalable)
+- **18 agents**: PostgreSQL (existing DB, transactional guarantees, audit log)
+- **6 agents**: In-memory (stateless, no storage needed)
+
+**Nexus Decision:** **PostgreSQL with Redis cache layer**
+
+**Rationale:**
+> Store refresh tokens in PostgreSQL (`refresh_tokens` table) for auditability, user management (revoke all tokens for a user), and disaster recovery. Add a Redis cache layer for performance (check Redis first, fall back to DB on miss). This hybrid approach balances speed, reliability, and operational requirements. In-memory is rejected because refresh tokens MUST be revocable (security requirement).
+
+**Resolution Time:** 2.1s  
+**Confidence:** 0.89  
+**Implementation Note:** Add `refresh_tokens` table migration script (see Gap Report)
+
+---
+
+## Shadow Score Report
+
+The Nexus applied 15 sealed quality criteria to validate the swarm output. **Shadow Score: 80% GREEN (12% gaps detected, Minor severity).**
+
+```
+┌─ SHADOW CRITERIA SCORECARD ──────────────────────────────────────────────┐
+│                                                                           │
+│  Criterion                                          Status    Details    │
+│  ──────────────────────────────────────────────────────────────────────  │
+│  1.  Security best practices followed              ✅ PASS   RS256, 1h   │
+│  2.  Error handling comprehensive                  ✅ PASS   All cases   │
+│  3.  Test coverage ≥90% for new code               ✅ PASS   95% target  │
+│  4.  Documentation complete (API + guide)          ⚠️  WARN   API format  │
+│  5.  Backwards compatibility maintained            ✅ PASS   Dual-mode   │
+│  6.  Performance impact analyzed                   ✅ PASS   <50ms add   │
+│  7.  Database migrations provided                  ❌ FAIL   Missing     │
+│  8.  Rollback procedure documented                 ✅ PASS   In guide    │
+│  9.  Third-party integrations identified           ✅ PASS   All found   │
+│  10. Edge cases tested                             ⚠️  WARN   Clock skew  │
+│  11. Secrets management secure                     ✅ PASS   Env vars    │
+│  12. Logging and monitoring hooks added            ⚠️  WARN   Partial    │
+│  13. Code follows project conventions              ✅ PASS   Linter OK   │
+│  14. Breaking changes flagged                      ✅ PASS   None found  │
+│  15. Audit trail for token operations              ❌ FAIL   Not impl    │
+│                                                                           │
+│  ──────────────────────────────────────────────────────────────────────  │
+│  PASS: 10/15  │  WARN: 3/15  │  FAIL: 2/15     │   SCORE: 80% 🟢       │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+
+Overall Assessment: MINOR GAPS — Proceed with caution
+
+Warnings:
+  • Criterion 4 (Documentation): API format dissent resolved, but JSDoc coverage incomplete
+  • Criterion 10 (Edge cases): Clock skew handling not explicitly tested
+  • Criterion 12 (Monitoring): Token generation/validation events logged, but refresh token audit trail missing
+
+Failures:
+  • Criterion 7 (Database migrations): refresh_tokens table migration script not created
+  • Criterion 15 (Audit trail): No logging for refresh token issuance/revocation events
+
+Recommendation: Address FAIL items before production deployment. WARN items can be fixed post-MVP.
+```
+
+---
+
+## Gap Report
+
+The Nexus identified **5 gaps** in the swarm output — aspects of the task that were not fully addressed by any agent:
+
+### Gap 1: Database Migration Script (🔴 Blocking)
+
+**Severity:** 🔴 **Blocking** (cannot deploy without this)
+
+**Description:**
+No agent created the database migration script for the `refresh_tokens` table. The Implementation domain described the table schema in prose, but the SQL migration file is missing.
+
+**What's Missing:**
+- `migrations/006_create_refresh_tokens_table.sql` (or Sequelize/TypeORM equivalent)
+- Table schema:
+  ```sql
+  CREATE TABLE refresh_tokens (
+    id UUID PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    token_hash VARCHAR(64) NOT NULL UNIQUE,  -- SHA-256 of token
+    expires_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    revoked_at TIMESTAMP NULL,
+    INDEX idx_user_id (user_id),
+    INDEX idx_token_hash (token_hash),
+    INDEX idx_expires_at (expires_at)
+  );
+  ```
+
+**Owner:** Backend Team  
+**ETA:** 1 hour
+
+---
+
+### Gap 2: Audit Logging for Token Operations (🔴 Blocking for compliance)
+
+**Severity:** 🔴 **Blocking** (compliance requirement for SOC 2)
+
+**Description:**
+No agent implemented audit logging for refresh token operations (issue, revoke, rotate). This is required for security compliance and incident response.
+
+**What's Missing:**
+- Log events:
+  - `TOKEN_ISSUED`: user_id, token_id, issued_at, expires_at, IP address
+  - `TOKEN_REFRESHED`: user_id, old_token_id, new_token_id, refreshed_at, IP address
+  - `TOKEN_REVOKED`: user_id, token_id, revoked_at, reason (logout, manual, security)
+- Integration with existing logging infrastructure (Winston / Splunk)
+- Retention policy: 90 days minimum
+
+**Owner:** Security Team  
+**ETA:** 4 hours
+
+---
+
+### Gap 3: Performance Benchmarks (🟡 Important)
+
+**Severity:** 🟡 **Important** (not blocking, but should be done pre-launch)
+
+**Description:**
+No agent ran performance benchmarks to quantify the impact of JWT validation vs. session lookups. The Architecture domain mentioned "<50ms overhead" but provided no data.
+
+**What's Missing:**
+- Benchmark suite:
+  - Session-based auth: avg latency, p95, p99
+  - JWT-based auth: avg latency, p95, p99
+  - Dual-mode fallback: worst-case latency
+- Load test: 1000 req/s with JWT validation
+- Comparison chart: before vs. after
+
+**Owner:** Performance Team  
+**ETA:** 1 day
+
+---
+
+### Gap 4: Key Rotation Automation (🟡 Important)
+
+**Severity:** 🟡 **Important** (manual rotation is error-prone)
+
+**Description:**
+The Architecture domain described a monthly key rotation strategy with 24h overlap, but no agent implemented the automation script or documented the manual procedure.
+
+**What's Missing:**
+- Automated script: `scripts/rotate-jwt-keys.sh`
+  - Generate new RSA key pair
+  - Update environment variables
+  - Trigger service restart with zero downtime
+  - Verify old keys still work (overlap period)
+  - Retire old keys after 24h
+- Runbook: `docs/runbooks/jwt-key-rotation.md`
+- Monitoring: alert if key age > 31 days
+
+**Owner:** DevOps Team  
+**ETA:** 1 day
+
+---
+
+### Gap 5: Frontend Token Storage Best Practices (🟢 Nice-to-have)
+
+**Severity:** 🟢 **Nice-to-have** (functional but not ideal)
+
+**Description:**
+The Integration domain mentioned "store access token in memory (not localStorage)" but didn't provide a reference implementation or security guide for the frontend team.
+
+**What's Missing:**
+- Example code: `src/frontend/utils/token-storage.js`
+  - In-memory storage with memory leak prevention
+  - Token refresh on SPA route change
+  - Logout clears all traces
+- Security checklist for frontend devs:
+  - ❌ Don't store tokens in localStorage (XSS risk)
+  - ✅ Store in memory (module-scoped variable)
+  - ✅ Refresh token in HttpOnly cookie (automatic)
+  - ❌ Don't log tokens (even in dev mode)
+
+**Owner:** Frontend Team  
+**ETA:** 2 hours
+
+---
+
+## Agent Tally
+
+```
+┌─ AGENT STATISTICS ───────────────────────────────────────────────────────┐
+│                                                                           │
+│  Total Agents Spawned:     123                                           │
+│                                                                           │
+│  By Layer:                                                                │
+│    • L0 (Nexus):           1                                              │
+│    • L1 (Commanders):      5                                              │
+│    • L2 (Squad Leads):     20                                             │
+│    • L3 (Workers):         100                                            │
+│                                                                           │
+│  Completion Status:                                                       │
+│    ✅ Completed:           117  (95.1%)                                   │
+│    ⏱️  Timed Out:          3    (2.4%)  → recovered by squad leads       │
+│    ❌ Failed:              1    (0.8%)  → task redistributed             │
+│    🔄 Retried:             2    (1.6%)  → succeeded on retry             │
+│                                                                           │
+│  Execution Time:                                                          │
+│    • Total:                4m 32s                                         │
+│    • Per Agent (avg):      2.68s                                          │
+│    • Longest Worker:       18.3s (W-IMPL-23, deep codebase analysis)     │
+│    • Shortest Worker:      0.7s (W-DOCS-12, README update)               │
+│                                                                           │
+│  Output Metrics:                                                          │
+│    • Result Atoms:         342                                            │
+│    • Merged Atoms:         200                                            │
+│    • Evidence Files:       287 unique files referenced                    │
+│    • Conflicts:            18 raised, 15 resolved, 3 escalated           │
+│                                                                           │
+│  Token Usage:                                                             │
+│    • Input Tokens:         342,891                                        │
+│    • Output Tokens:        89,247                                         │
+│    • Total Cost:           ~$2.47 USD                                     │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+
+══════════════════════════════════════════════════════════════════════════════
+                        ✅ SWARM COMMAND COMPLETE
+══════════════════════════════════════════════════════════════════════════════
+
+Session Report: ~/.swarm-command/sessions/swarm-2024-04-08-22-34-a7f3/report.md
+Artifacts:      ~/.swarm-command/sessions/swarm-2024-04-08-22-34-a7f3/artifacts/
+Next Steps:     Review Gap Report, address 🔴 blocking items, proceed with implementation.
+```
