@@ -89,16 +89,16 @@ For each overlapping result across squads:
   2. Weight by squad-level confidence
   3. Apply consensus formula:
      score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage
-             − min(0.10, conflict_rate × 0.10)
+             − min(0.30, conflict_rate × 0.30)
   4. Classify into tier (CONSENSUS / MAJORITY / CONFLICT / UNIQUE)
-  5. For UNIQUE results: keep only if evidence score ≥ 7/10
+  5. For UNIQUE results: keep only if evidence score ≥ 0.70
 ```
 
 ### Consensus Scoring Formula
 
 ```
 score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage
-        − min(0.10, conflict_rate × 0.10)
+        − min(0.30, conflict_rate × 0.30)
 ```
 
 **Variables:**
@@ -113,7 +113,7 @@ score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage
 
 **Properties:**
 - Positive coefficients sum to 1.0
-- Conflict penalty is capped at 0.10 (prevents single conflict from dominating)
+- Conflict penalty is capped at 0.30 (high conflict rates meaningfully reduce scores while preventing domination)
 - Final score bounded [0.0, 1.0]
 
 ### Consensus Tiers
@@ -123,7 +123,7 @@ score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage
 | **CONSENSUS** | Score ≥ 0.70 | Auto-accept. Bundle is high-quality with strong agreement. |
 | **MAJORITY** | Score ≥ 0.50 | Accept with dissent note. Most atoms agree but some disagree. |
 | **CONFLICT** | Score < 0.50 | Flag for Nexus arbitration. Significant disagreement exists. |
-| **UNIQUE** | No overlapping results | Keep only if evidence score ≥ 7/10. Novel finding by single squad. |
+| **UNIQUE** | No overlapping results | Keep only if evidence score ≥ 0.70. Novel finding by single squad. |
 
 ### Trimmed Mean
 

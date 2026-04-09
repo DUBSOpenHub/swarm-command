@@ -202,7 +202,7 @@ flowchart TD
     GATE -->|"Fail"| QUARANTINE["🔒 Quarantine<br/>+ Re-review"]
 
     subgraph SCORE["📊 Stage 2: Score"]
-        S1["score = 0.40×confidence<br/>+ 0.30×evidence<br/>+ 0.15×scope<br/>+ 0.15×coverage<br/>− min(0.10, conflict×0.10)"]
+        S1["score = 0.40×confidence<br/>+ 0.30×evidence<br/>+ 0.15×scope<br/>+ 0.15×coverage<br/>− min(0.30, conflict×0.30)"]
     end
 
     SCORE --> TIER

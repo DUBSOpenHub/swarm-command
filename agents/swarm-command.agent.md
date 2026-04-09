@@ -122,7 +122,7 @@ Apply 4-stage consensus:
 
 Consensus formula:
 ```
-score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage − min(0.10, conflict_rate × 0.10)
+score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage − min(0.30, conflict_rate × 0.30)
 ```
 
 ## Phase 8 — Final Output

@@ -52,7 +52,7 @@ After scoring, classify the pair into one of these tiers:
 | **CONSENSUS** | ≥ 70% agreement across axes | Auto-accept both bundles |
 | **MAJORITY** | ≥ 50% agreement | Accept with dissent note attached |
 | **CONFLICT** | < 50% agreement | Flag for Nexus arbitration with both sides |
-| **UNIQUE** | One bundle has no overlap | Keep only if evidence score ≥ 7/10 |
+| **UNIQUE** | One bundle has no overlap | Keep only if evidence score ≥ 0.70 |
 
 ### Agreement Calculation
 
@@ -63,7 +63,7 @@ Example: If A scores 8.2 and B scores 7.1, agreement = 1 − (1.1/10) = 89% → 
 ## CONSENSUS SCORING FORMULA (Nexus reference — computed by the Nexus, not by reviewers)
 
 ```
-score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage − min(0.10, conflict_rate × 0.10)
+score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage − min(0.30, conflict_rate × 0.30)
 ```
 
 Where:

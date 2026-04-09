@@ -238,33 +238,6 @@ T+0s     T+2s       T+5s         T+12s       T+45s      T+65s    T+80s   T+90s
 
 ---
 
-## 📊 Scaling Variants
-
-| Scale | Agents | Commanders | Workers | Reviewers | Best For | Wall-Clock |
-|---|---|---|---|---|---|---|
-| **SS-50** | ~52 | 3 | 45 | 3 | Fast bounded tasks | ~30s |
-| **SS-100** | ~89 | 5 | 75 | 8 | Multi-file features and reviews | ~45s |
-| **SS-250** | ~316 | 5 | 250 | 10 | Repo-wide or high-stakes work | ~65–90s |
-
-### 10-Second Decision Tree
-
-```text
-Do you need a fast second opinion on 1–2 files?
-→ SS-50
-
-Do you need a serious answer for a multi-file feature or subsystem?
-→ SS-100
-
-Do you need repo-wide coverage, compliance-grade review, or maximum consensus?
-→ SS-250
-```
-
-Default is **SS-100**. Say `swarm command ss-250` for full deployment or `swarm command ss-50` for quick tasks.
-
-See [docs/scaling.md](docs/scaling.md) for cost breakdowns, chooser guidance, and a deeper decision matrix.
-
----
-
 ## 📋 Example Output
 
 See what a completed swarm run looks like → [Example Output](docs/example-output.md)
@@ -429,7 +402,7 @@ A 4-stage consensus pipeline merges the best work from hundreds of agents:
 
 **Consensus formula:**
 ```text
-score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage − min(0.10, conflict_rate × 0.10)
+score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage − min(0.30, conflict_rate × 0.30)
 ```
 
 | Tier | Condition | Action |
@@ -437,7 +410,7 @@ score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage
 | **CONSENSUS** | ≥ 70% agreement | Auto-accept |
 | **MAJORITY** | ≥ 50% agreement | Accept with dissent note |
 | **CONFLICT** | < 50% agreement | Nexus arbitration |
-| **UNIQUE** | No overlap | Keep if evidence ≥ 7/10 |
+| **UNIQUE** | No overlap | Keep if evidence ≥ 0.70 |
 
 See [docs/consensus.md](docs/consensus.md) for the full mechanics.
 

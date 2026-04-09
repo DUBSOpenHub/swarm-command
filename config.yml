@@ -35,7 +35,7 @@ swarm_command:
       evidence: 0.30
       scope: 0.15
       coverage: 0.15
-      conflict_penalty_cap: 0.10
+      conflict_penalty_cap: 0.30
 
   depth_guard:
     max_spawn_depth: 3

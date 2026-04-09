@@ -214,11 +214,13 @@ Commander 2: agent_type="general-purpose", model="gpt-5.4"
 Commander 3 (if 3 domains): agent_type="general-purpose", model="claude-sonnet-4.5"
 ```
 
-**SS-100 (3 Commanders):**
+**SS-100 (5 Commanders):**
 ```
 Commander 1: agent_type="general-purpose", model="claude-sonnet-4.6"
 Commander 2: agent_type="general-purpose", model="gpt-5.4"
 Commander 3: agent_type="general-purpose", model="claude-sonnet-4.5"
+Commander 4: agent_type="general-purpose", model="gpt-5.2"
+Commander 5: agent_type="general-purpose", model="claude-sonnet-4"
 ```
 
 **SS-250 (5 Commanders — drawn from commander pool of 10):**
@@ -370,7 +372,7 @@ The reviewer prompt includes:
 2. **Both bundle JSONs** — Full content of both bundles
 3. **4-axis scoring rubric** — Correctness, Completeness, Clarity, Consensus Alignment (0-10 each)
 4. **Consensus tier classification** — CONSENSUS (≥70%) / MAJORITY (≥50%) / CONFLICT (<50%) / UNIQUE
-5. **Consensus formula**: `score = 0.40×confidence + 0.30×evidence + 0.15×scope + 0.15×coverage − min(0.10, conflict_rate×0.10)`
+5. **Consensus formula**: `score = 0.40×confidence + 0.30×evidence + 0.15×scope + 0.15×coverage − min(0.30, conflict_rate×0.30)`
 6. **Strict JSON output** — review_id, scores, consensus_tier, consensus_score, conflicts, recommendation
 
 Show review progress:
@@ -512,7 +514,7 @@ Apply the 4-stage consensus algorithm:
 
 ### Stage 2 — Score Each Bundle
 For each bundle:
-1. Compute `final_score = median(reviewer_weighted_totals)` (median-of-3 where available)
+1. Compute `final_score = median(reviewer_weighted_totals) / 10` (normalize to 0.0–1.0; median-of-3 where available)
 2. Apply consensus tiers:
    - Score ≥ 0.70 → **CONSENSUS** (auto-include)
    - Score ≥ 0.50 → **MAJORITY** (include with dissent)
@@ -530,7 +532,7 @@ For each bundle:
 2. CONSENSUS-tier: Auto-include in final output
 3. MAJORITY-tier: Include with dissent notes
 4. CONFLICT-tier: Nexus makes final call using full context
-5. UNIQUE findings: Include if evidence ≥ 7/10
+5. UNIQUE findings: Include if evidence ≥ 0.70
 6. Resolve cross-domain conflicts (Architecture says X but Implementation says Y)
 7. Identify gaps (sub-tasks that no domain addressed)
 
@@ -727,7 +729,7 @@ Apply these 7 critical optimizations:
 # CONSENSUS FORMULA REFERENCE
 
 ```
-score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage − min(0.10, conflict_rate × 0.10)
+score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage − min(0.30, conflict_rate × 0.30)
 ```
 
 | Tier | Threshold | Action |
@@ -735,7 +737,7 @@ score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage
 | CONSENSUS | ≥ 0.70 | Auto-accept |
 | MAJORITY | ≥ 0.50 | Accept with dissent |
 | CONFLICT | < 0.50 | Nexus arbitrates |
-| UNIQUE | No overlap | Keep if evidence ≥ 7/10 |
+| UNIQUE | No overlap | Keep if evidence ≥ 0.70 |
 
 ---
 
