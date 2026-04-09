@@ -1,6 +1,6 @@
 # 🐝 Swarm Command
 
-**Multi-model consensus swarm orchestration. 50–250+ AI agents. 16 models. Shadow Score Spec L2. One command.**
+**Multi-model consensus swarm orchestration. Launch 50–250+ AI agents. 16 models. Shadow Score Spec L2. One command.**
 
 *"The swarm is smarter than any single model."* 🐝
 
