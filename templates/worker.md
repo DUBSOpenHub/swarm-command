@@ -37,11 +37,21 @@ No prose before or after the JSON. Just the JSON object.
   "status": "success | partial | failed | timeout",
   "content": "<your result, max 200 tokens>",
   "confidence": <0.0-1.0>,
+  "confidence_breakdown": {
+    "evidence_quality": <0.0-1.0>,
+    "task_clarity": <0.0-1.0>,
+    "output_completeness": <0.0-1.0>
+  },
   "evidence": ["<file_path_1>", "<file_path_2>"],
   "self_score": <0-10>,
   "worker_id": "{{WORKER_ID}}",
-  "token_count": 0,
-  "wall_clock_ms": 0
+  "telemetry": {
+    "tools_used": ["<tool_name_1>", "<tool_name_2>"],
+    "tool_call_count": <integer>,
+    "task_complexity": "trivial | simple | moderate | complex",
+    "wall_clock_ms": <integer>,
+    "token_count": <integer>
+  }
 }
 ```
 
@@ -54,6 +64,24 @@ Rate your own output honestly:
 - **9–10**: Very high confidence — complete, verified, well-evidenced result
 
 Your self-score is used for weighting during consensus. Low self-score atoms get de-prioritized. Overestimating your quality is worse than underestimating (cross-reviewers will catch discrepancies).
+
+## CONFIDENCE BREAKDOWN GUIDE
+
+Fill in `confidence_breakdown` to explain your overall `confidence` score:
+- **evidence_quality**: How strong is your supporting evidence? (0 = none, 1 = direct file proof)
+- **task_clarity**: How clear was the micro-brief? (0 = ambiguous, 1 = perfectly clear)
+- **output_completeness**: How fully did you address the brief? (0 = barely started, 1 = fully addressed)
+
+Overall `confidence` should roughly equal the mean of these three values.
+
+## TELEMETRY GUIDE
+
+Fill in the `telemetry` block accurately:
+- **tools_used**: List each tool name you actually called (e.g., `["grep", "view", "bash"]`)
+- **tool_call_count**: Total number of tool invocations
+- **task_complexity**: Your assessment — `trivial` (single lookup), `simple` (a few file reads), `moderate` (multi-step search), `complex` (requires reasoning across many files)
+- **wall_clock_ms**: Approximate elapsed time in milliseconds
+- **token_count**: Approximate tokens in your response
 
 ## CONSTRAINTS
 - Timeout: {{TIMEOUT_S}} seconds (default: 30)

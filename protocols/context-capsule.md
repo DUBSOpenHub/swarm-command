@@ -86,6 +86,58 @@ Sent from Nexus to each Commander. Contains the domain-specific task and constra
         "can_launch": { "type": "boolean" }
       }
     },
+    "depth_budget": {
+      "type": "object",
+      "description": "Squad allocation budget based on domain complexity",
+      "properties": {
+        "squads_allocated": { "type": "integer", "minimum": 3, "maximum": 12 },
+        "complexity_tier": { "type": "string", "enum": ["high", "medium", "low"] },
+        "rationale": { "type": "string", "maxLength": 200 }
+      }
+    },
+    "personality_mode": {
+      "type": "string",
+      "enum": ["thorough", "fast", "creative", "cautious", "balanced"],
+      "default": "balanced",
+      "description": "Operating posture for this run — affects worker count, timeouts, and model selection"
+    },
+    "prior_run_context": {
+      "type": "object",
+      "description": "Optional — populated on iterative/follow-up runs. Provides context from previous execution for incremental work.",
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "description": "ID of the prior run this capsule is a follow-up to"
+        },
+        "completed_sub_tasks": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Sub-tasks completed in the prior run — commander SHOULD NOT re-do these"
+        },
+        "gaps_identified": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Sub-tasks that failed or were skipped in the prior run — commander MUST prioritize these"
+        },
+        "prior_confidence": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Final confidence score from the prior run for this domain"
+        },
+        "prior_shadow_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Shadow score from the prior run — higher means more work needed"
+        },
+        "prior_bundle_summary": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "Compressed 1-paragraph summary of the prior run's bundle for this domain"
+        }
+      }
+    },
     "parent_context": {
       "type": "string",
       "maxLength": 500,
@@ -113,6 +165,13 @@ Sent from Nexus to each Commander. Contains the domain-specific task and constra
     "max_depth": 3,
     "can_launch": true
   },
+  "depth_budget": {
+    "squads_allocated": 10,
+    "complexity_tier": "high",
+    "rationale": "Architecture domain for auth refactor — high interdependency, many module boundaries"
+  },
+  "personality_mode": "balanced",
+  "prior_run_context": null,
   "parent_context": "Nexus: refactoring auth module for microservice extraction"
 }
 ```

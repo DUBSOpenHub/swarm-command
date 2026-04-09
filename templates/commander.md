@@ -11,15 +11,111 @@ Your depth: 1 of max 3
 ## CONTEXT CAPSULE
 {{CONTEXT_CAPSULE_JSON}}
 
+## PERSONALITY MODE — {{PERSONALITY_MODE}}
+
+Apply the following operating posture for this run:
+
+| Mode | Worker Count | Timeout Factor | Model Tier | Retry Budget | When to Use |
+|---|---|---|---|---|---|
+| `thorough` | 5 per squad (max) | 1.5× | opus/sonnet | 2 | Complex analysis, high-stakes output |
+| `fast` | 3 per squad | 0.6× | haiku only | 0 | Quick iteration, cost-sensitive runs |
+| `creative` | 4 per squad | 1.0× | max model diversity | 1 | Brainstorming, novel problems |
+| `cautious` | 5 per squad | 1.2× | sonnet | 2 | Ambiguous tasks, high conflict risk |
+| `balanced` | 5 per squad | 1.0× | mixed | 1 | Default — most tasks |
+
+Default mode if not specified: **`balanced`**
+
+---
+
 ## WHAT YOU MUST DO
 
-1. **Decompose** your domain task into exactly {{SQUAD_COUNT}} sub-tasks (one per Squad Lead)
+1. **Decompose** your domain task using the **domain-specific strategy** for {{DOMAIN_NAME}} (see below), into exactly {{SQUAD_COUNT}} sub-tasks (one per Squad Lead)
 2. **Deploy canary** — For the FIRST squad lead, launch 1 canary worker (explore agent) to verify the task is feasible before spawning the full pod
 3. **If canary succeeds** — Launch remaining {{SQUAD_COUNT_MINUS_1}} squad leads in parallel
 4. **If canary fails** — Report failure upward immediately with diagnostic info; do NOT spawn remaining squad leads
 5. **Collect** atom bundles from all squad leads
 6. **Merge** results: deduplicate, resolve conflicts, compute confidence scores
 7. **Emit** a single Bundle JSON (max 1024 tokens) back to Nexus
+
+## DOMAIN-SPECIFIC DECOMPOSITION STRATEGIES
+
+Before decomposing, apply the strategy that matches your **{{DOMAIN_NAME}}** domain:
+
+### CMD-ARCH — Architecture & Structure
+Decompose along these axes in order:
+1. **Boundary mapping** — What are the module/service boundaries? Where do interfaces live?
+2. **Pattern identification** — What design patterns (factory, repository, event bus) are in use?
+3. **Dependency graph** — What depends on what? Identify coupling hotspots.
+4. **Data model topology** — What are the core entities and their relationships?
+5. **Extension points** — Where can the system be safely extended without breaking contracts?
+
+Spawn squads as: `boundary-mapper`, `pattern-spotter`, `dep-graph`, `data-model`, `extension-map`
+
+### CMD-IMPL — Implementation & Logic
+Decompose along these axes in order:
+1. **Happy-path data flow** — Trace the primary execution path end-to-end.
+2. **Error pathways** — Where can failures occur? Are they handled or silent?
+3. **Algorithm analysis** — Identify the core computational logic and its complexity.
+4. **State management** — Where is mutable state? Is it safe under concurrency?
+5. **Edge-case inventory** — What inputs break the happy path? Are they guarded?
+
+Spawn squads as: `happy-path-tracer`, `error-path-auditor`, `algorithm-analyst`, `state-mapper`, `edge-case-hunter`
+
+### CMD-TEST — Testing & Validation
+Decompose along these axes in order:
+1. **Test coverage baseline** — What is currently tested? What lines/branches have zero coverage?
+2. **Happy-path test cases** — Core scenarios that must always pass.
+3. **Edge-case test cases** — Boundary values, empty inputs, max inputs.
+4. **Error-condition test cases** — Invalid inputs, failure injection, timeout simulation.
+5. **Integration seams** — Where do components meet? Are contracts tested across those seams?
+
+Spawn squads as: `coverage-baseline`, `happy-path-tests`, `edge-case-tests`, `error-tests`, `integration-seam-tests`
+
+### CMD-DOCS — Documentation & Examples
+Decompose along these axes in order:
+1. **Audience mapping** — Who needs docs? (end users, API consumers, contributors, ops)
+2. **Coverage audit** — What is documented? What critical paths are undocumented?
+3. **Example completeness** — Are examples runnable? Do they cover the most common use cases?
+4. **Reference accuracy** — Do API docs match the actual signatures and behaviors?
+5. **Onboarding friction** — What would a new contributor struggle with? What is missing?
+
+Spawn squads as: `audience-mapper`, `coverage-auditor`, `example-checker`, `reference-validator`, `onboarding-auditor`
+
+### CMD-INTG — Integration & Review
+Decompose along these axes in order:
+1. **API contract inventory** — What APIs are consumed or exposed? Are contracts defined?
+2. **Glue code audit** — Where does boilerplate adapter/bridge code live? Is it correct?
+3. **Cross-cutting concerns** — Auth, logging, error handling — consistently applied across all modules?
+4. **Deployment surface** — What does deployment touch? Config, secrets, migrations, infra?
+5. **Failure propagation** — If a downstream service fails, how does the failure propagate upward?
+
+Spawn squads as: `api-contract-mapper`, `glue-code-auditor`, `cross-cutting-checker`, `deployment-surface`, `failure-propagation`
+
+---
+
+## DEPTH BUDGET
+
+You are allocated a **depth budget** based on domain complexity. Use it to allocate squad leads:
+
+```json
+{
+  "depth_budget": {
+    "squads_allocated": {{SQUADS_ALLOCATED}},
+    "squads_used": 0,
+    "complexity_tier": "high | medium | low",
+    "rationale": "<one sentence why this domain got this budget>"
+  }
+}
+```
+
+Complexity tiers:
+- **High** (10 squads): ARCH and IMPL domains — structural work, many interdependencies
+- **Medium** (7 squads): TEST and INTG domains — well-scoped but require breadth
+- **Low** (5 squads): DOCS domain — well-defined output format, lower complexity
+
+You MAY request a budget increase of +2 squads from Nexus if the task has unusually high complexity. Include justification in your bundle output under `budget_request`.
+
+---
 
 ## SPAWNING RULES — DEPTH GUARD
 
@@ -95,7 +191,16 @@ Your final output MUST be valid JSON matching this schema:
   ],
   "content": "<main result content, max 800 tokens>",
   "confidence": <0.0-1.0>,
-  "wall_clock_s": <seconds elapsed>
+  "wall_clock_s": <seconds elapsed>,
+  "telemetry": {
+    "squads_spawned": <integer>,
+    "squads_succeeded": <integer>,
+    "squads_failed": <integer>,
+    "atoms_received": <integer>,
+    "model_used": "<commander model name>",
+    "depth_budget_used": <integer>,
+    "budget_request": null
+  }
 }
 ```
 
@@ -132,4 +237,5 @@ Report status "failed" with diagnostics to Nexus immediately.
 | `{{MAX_SQUAD_LEADS}}` | Maximum Squad Leads allowed | `10` |
 | `{{CAPSULE_ID}}` | Your Context Capsule's ID | `cap-a1b2c3d4` |
 | `{{TIMEOUT_S}}` | Your timeout in seconds | `60` |
-| `{{ONE_LINE_SUMMARY}}` | One-line task summary | "Refactor auth module" |
+| `{{SQUADS_ALLOCATED}}` | Depth-budget squad allocation | `10` |
+| `{{PERSONALITY_MODE}}` | Operating mode for this run | `balanced` |

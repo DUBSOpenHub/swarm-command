@@ -4,6 +4,43 @@ The Depth Guard is the single most critical safety mechanism in Swarm Command. I
 
 ---
 
+## Depth Budget Allocation
+
+The **depth budget** is Nexus-assigned and controls how many squad leads each Commander may spawn. It prevents uniform over-allocation (every commander getting max squads) and ensures harder domains get more resources.
+
+### Default Budget Table
+
+| Domain | Commander | Default Squads | Complexity | Rationale |
+|---|---|---|---|---|
+| Architecture | CMD-ARCH | 10 | High | Structural analysis is deeply interconnected; many sub-areas |
+| Implementation | CMD-IMPL | 10 | High | Logic and data flow require exhaustive tracing |
+| Testing | CMD-TEST | 7 | Medium | Well-scoped but needs breadth across test categories |
+| Integration | CMD-INTG | 7 | Medium | Cross-cutting but narrower than ARCH/IMPL |
+| Documentation | CMD-DOCS | 5 | Low | Constrained output format; parallelization less valuable |
+
+### Budget Override Rules
+
+1. **Commander may request +2 squads** if the micro-task reveals unexpected complexity. Include `budget_request: { "squads_requested": N, "justification": "..." }` in the bundle output.
+2. **Nexus approves budget requests** between Phase 3 and Phase 5 only — no new squads after Phase 5.
+3. **Budget CANNOT decrease mid-run** — if squads are already launched, they run to completion.
+4. **Total squad cap per run: 60** (SS-250) / 40 (SS-100) / 20 (SS-50) — regardless of individual budgets.
+
+### Budget in Context Capsule
+
+```json
+{
+  "depth_budget": {
+    "squads_allocated": 10,
+    "complexity_tier": "high",
+    "rationale": "Architecture domain — high interdependency, many module boundaries"
+  }
+}
+```
+
+The Commander reads `depth_budget.squads_allocated` and uses it in place of the generic `{{SQUAD_COUNT}}` placeholder. If `depth_budget` is absent, default to 10 (SS-250), 8 (SS-100), 5 (SS-50).
+
+---
+
 ## The 5 Laws of Depth Guard
 
 | Law | Statement | Enforcement |

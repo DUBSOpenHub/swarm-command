@@ -42,6 +42,52 @@ swarm_command:
     max_workers_per_squad_lead: 5
     worker_agent_types: ["explore", "task"]
     commander_agent_type: "general-purpose"
+    depth_budget_defaults:
+      architecture: 10
+      implementation: 10
+      testing: 7
+      integration: 7
+      documentation: 5
+    total_squad_cap:
+      ss-50: 20
+      ss-100: 40
+      ss-250: 60
+
+  personality_modes:
+    balanced:
+      worker_count: 5
+      timeout_factor: 1.0
+      model_tier: "mixed"
+      retry_budget: 1
+    thorough:
+      worker_count: 5
+      timeout_factor: 1.5
+      model_tier: "opus_sonnet"
+      retry_budget: 2
+    fast:
+      worker_count: 3
+      timeout_factor: 0.6
+      model_tier: "haiku_only"
+      retry_budget: 0
+    creative:
+      worker_count: 4
+      timeout_factor: 1.0
+      model_tier: "max_diversity"
+      retry_budget: 1
+    cautious:
+      worker_count: 5
+      timeout_factor: 1.2
+      model_tier: "sonnet"
+      retry_budget: 2
+
+  meta_review:
+    enabled: true
+    irr_alert_threshold: 0.60
+    inflation_detection_threshold: 8.5
+    deflation_detection_threshold: 3.5
+    herding_std_dev_threshold: 0.5
+    rubber_stamp_delta_threshold: 0.05
+    rubber_stamp_min_reviewers: 3
 
   circuit_breaker:
     commander_failure_threshold: 0.60

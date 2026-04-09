@@ -13,6 +13,30 @@ Your depth: 2 of max 3
 
 ## WHAT YOU MUST DO
 
+### Phase 0 — Difficulty Estimation (T-2 to T+0)
+Before any decomposition, estimate the complexity of your micro-task:
+
+```json
+{
+  "difficulty_estimate": {
+    "score": <1-5>,
+    "rationale": "<one sentence>",
+    "worker_count": <3-5>,
+    "timeout_factor": <0.8-1.5>
+  }
+}
+```
+
+| Difficulty | Score | Worker Count | Timeout Factor | Example |
+|---|---|---|---|---|
+| Trivial | 1 | 3 | 0.8× | "List all exported functions in one file" |
+| Simple | 2 | 3 | 1.0× | "Find all usages of a specific pattern" |
+| Moderate | 3 | 4 | 1.0× | "Map data flow across 3-5 files" |
+| Complex | 4 | 5 | 1.2× | "Trace auth flow across 10+ files" |
+| Expert | 5 | 5 | 1.5× | "Audit entire module for security invariants" |
+
+Use `worker_count` from this table to cap your pod size (not always 5). Use `timeout_factor` to scale your worker timeouts.
+
 ### Phase 1 — Decompose (T+0 to T+2s)
 1. Break your micro-task into exactly 5 atomic sub-tasks (one per worker)
 2. For each sub-task, create a Micro-Brief (max 128 tokens):
@@ -140,7 +164,19 @@ Your final output MUST be valid JSON:
     }
   ],
   "merged_confidence": <0.0-1.0>,
-  "wall_clock_s": <seconds elapsed>
+  "wall_clock_s": <seconds elapsed>,
+  "difficulty_estimate": {
+    "score": <1-5>,
+    "worker_count": <integer>,
+    "timeout_factor": <float>
+  },
+  "telemetry": {
+    "workers_spawned": <integer>,
+    "workers_succeeded": <integer>,
+    "workers_failed": <integer>,
+    "canary_passed": <boolean>,
+    "models_used": ["<model1>", "<model2>"]
+  }
 }
 ```
 

@@ -29,8 +29,44 @@ The Circuit Breaker is a three-state finite state machine (FSM) that prevents ca
 | State | Description | Behavior |
 |---|---|---|
 | **CLOSED** | Normal operation | All spawning allowed. Failure counter incrementing. |
-| **OPEN** | Halt — too many failures | No new agents spawned. Cooldown timer running. Existing agents continue. |
-| **HALF-OPEN** | Probing — testing recovery | One probe agent dispatched. If it succeeds → CLOSED. If it fails → back to OPEN. |
+| **OPEN** | Halt — too many failures | No new agents spawned. Cooldown timer running. Existing agents continue. Auto-recovery strategy selected. |
+| **HALF-OPEN** | Probing — testing recovery | One probe agent dispatched using selected recovery strategy. If it succeeds → CLOSED. If it fails → escalate strategy, back to OPEN. |
+
+---
+
+## Auto-Recovery Strategy Matrix
+
+When a circuit breaker trips to OPEN, select a recovery strategy based on the **failure signature** — do NOT default to simple retry:
+
+| Failure Signature | Recovery Strategy | Implementation |
+|---|---|---|
+| `status: "timeout"` on ≥50% of agents | **Model Downgrade** — switch to a faster/lighter model | Replace `claude-opus` → `claude-haiku-4.5`; replace `gpt-5.4` → `gpt-5.4-mini` |
+| `status: "failed"` with unparseable output | **Prompt Simplification** — reduce instruction complexity | Strip context to bare minimum; replace compound instructions with single atomic tasks |
+| `status: "failed"` with out-of-scope errors | **Scope Reduction** — narrow file scope | Remove all but the 2 most critical files from file_scope; mark removed scope as `skipped` |
+| Mixed failures (timeout + failed + partial) | **Task Splitting** — decompose further | Split failing task into 2 smaller tasks; spawn each as a fresh canary |
+| All failures are `status: "partial"` | **Confidence Floor Lift** — accept partials | Lower acceptance threshold to `confidence ≥ 0.2`; proceed with partial atoms |
+
+The recovery strategy is embedded in the probe agent's context shard as `recovery_mode: "<strategy>"`.
+
+### Recovery Probe Design
+
+The HALF-OPEN probe MUST:
+1. Use a **different model** than the failed agents (at minimum — see matrix above for full strategy)
+2. Include `recovery_mode` in its context shard
+3. Have a **40% shorter timeout** than the original agents (prevents probe from consuming the full cooldown window)
+4. Report both task result AND `recovery_diagnostics` in its output
+
+```json
+{
+  "recovery_diagnostics": {
+    "recovery_mode": "model_downgrade | prompt_simplification | scope_reduction | task_splitting | confidence_floor_lift",
+    "original_failure_count": <integer>,
+    "original_failure_types": ["timeout", "failed", "partial"],
+    "probe_model": "<model used in probe>",
+    "probe_timeout_s": <integer>
+  }
+}
+```
 
 ---
 
@@ -195,3 +231,39 @@ During a swarm deployment, the following metrics should be tracked:
 | Circuit breaker state | Each layer | Any layer enters OPEN |
 | Timeout count | All layers | > 5 timeouts total |
 | Unparseable output count | All layers | > 3 unparseable outputs |
+| Recovery strategy invocations | HALF-OPEN probes | > 2 recovery cycles at same layer |
+| Adversarial findings count | Reviewer layer | > 3 adversarial findings across reviewer pairs |
+| Depth budget utilization | Commander layer | > 90% of allocated squads used |
+
+### Telemetry Aggregation (Nexus-Level)
+
+At run completion, the Nexus MUST emit a `run_telemetry` block in the Final Report:
+
+```json
+{
+  "run_telemetry": {
+    "run_id": "<run-id>",
+    "scale": "ss-50 | ss-100 | ss-250",
+    "personality_mode": "<mode>",
+    "total_agents_spawned": <integer>,
+    "total_tool_calls": <integer>,
+    "total_wall_clock_s": <number>,
+    "total_tokens_consumed": <integer>,
+    "estimated_cost_usd": <number>,
+    "circuit_breaker_trips": <integer>,
+    "recovery_strategies_used": ["<strategy1>", "<strategy2>"],
+    "adversarial_findings_total": <integer>,
+    "depth_budget_utilization": <0.0-1.0>,
+    "shadow_score_final": <0-100>,
+    "consensus_tier_distribution": {
+      "CONSENSUS": <integer>,
+      "MAJORITY": <integer>,
+      "CONFLICT": <integer>,
+      "UNIQUE": <integer>
+    },
+    "model_usage": {
+      "<model_name>": <integer>
+    }
+  }
+}
+```

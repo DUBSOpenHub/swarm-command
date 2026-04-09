@@ -17,16 +17,37 @@ Evaluate both bundles against the 4-axis scoring rubric. Classify consensus tier
 {{BUNDLE_A_JSON}}
 {{BUNDLE_B_JSON}}
 
-## SCORING RUBRIC — 4-Axis Sealed Envelope
+## SCORING RUBRIC — 5-Axis Adversarial Scoring
 
-Score each bundle on these 4 axes (0-10 each):
+Score each bundle on these 5 axes (0-10 each). **The Adversarial axis is mandatory — you MUST actively hunt for flaws, not just rate quality.**
 
 | Axis | Weight | Description |
 |---|---|---|
-| **Correctness** | 0.40 | Is the content factually accurate and bug-free? |
-| **Completeness** | 0.25 | Does it fully address the assigned domain task? |
+| **Correctness** | 0.35 | Is the content factually accurate and bug-free? |
+| **Completeness** | 0.20 | Does it fully address the assigned domain task? |
 | **Consistency** | 0.20 | Does it align with the other bundle? No contradictions? |
-| **Clarity** | 0.15 | Is the output well-structured and unambiguous? |
+| **Clarity** | 0.10 | Is the output well-structured and unambiguous? |
+| **Adversarial** | 0.15 | Actively attempted to break it — what flaws were found? |
+
+### Adversarial Scoring Guide (AXIS 5 — READ CAREFULLY)
+
+The adversarial axis requires you to **actively try to find failures**, not passively evaluate quality. Before scoring:
+
+1. **Fuzz the claims** — Take each key claim and ask: "Under what conditions is this wrong?"
+2. **Probe edge cases** — Does the output handle empty input? Null values? Scale limits? Off-by-one?
+3. **Check silent failures** — Are there code paths or logic branches that could silently return wrong results?
+4. **Test internal consistency** — Do the numbers add up? Do referenced files/functions actually exist?
+5. **Stress the assumptions** — What assumptions does the bundle make that might not hold in production?
+
+Adversarial score interpretation:
+- **9-10**: Deeply tried to find flaws, found none — strong adversarial validation
+- **7-8**: Found only minor issues that are acknowledged in the bundle
+- **5-6**: Found issues the bundle didn't address — moderate concern
+- **3-4**: Found significant flaws or silent failures the bundle ignored
+- **1-2**: Bundle has fundamental unacknowledged failure modes
+- **0**: Bundle is provably incorrect or dangerous
+
+Report adversarial findings in the `adversarial_findings` field of your output.
 
 ### Scoring Guide
 
@@ -40,7 +61,8 @@ Score each bundle on these 4 axes (0-10 each):
 ### Weighted Total Calculation
 
 ```
-weighted_total = (correctness × 0.40) + (completeness × 0.25) + (consistency × 0.20) + (clarity × 0.15)
+weighted_total = (correctness × 0.35) + (completeness × 0.20) + (consistency × 0.20)
+              + (clarity × 0.10) + (adversarial × 0.15)
 ```
 
 ## CONSENSUS TIERS
@@ -97,6 +119,7 @@ When reviewing the two bundles, check for:
       "completeness": <0-10>,
       "consistency": <0-10>,
       "clarity": <0-10>,
+      "adversarial": <0-10>,
       "weighted_total": <0.0-10.0>
     },
     "bundle_b": {
@@ -104,8 +127,13 @@ When reviewing the two bundles, check for:
       "completeness": <0-10>,
       "consistency": <0-10>,
       "clarity": <0-10>,
+      "adversarial": <0-10>,
       "weighted_total": <0.0-10.0>
     }
+  },
+  "adversarial_findings": {
+    "bundle_a": ["<flaw or edge case found>", "<silent failure identified>"],
+    "bundle_b": ["<flaw or edge case found>"]
   },
   "consensus_tier": "CONSENSUS | MAJORITY | CONFLICT | UNIQUE",
   "consensus_score": <0.0-1.0>,
@@ -118,7 +146,12 @@ When reviewing the two bundles, check for:
     }
   ],
   "dissent_notes": "<if MAJORITY tier, explain the disagreement>",
-  "recommendation": "<1-2 sentence final recommendation>"
+  "recommendation": "<1-2 sentence final recommendation>",
+  "meta_review_quality": {
+    "reviewer_confidence": <0.0-1.0>,
+    "adversarial_depth": "surface | moderate | deep",
+    "review_wall_clock_ms": <integer>
+  }
 }
 ```
 
