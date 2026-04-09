@@ -17,7 +17,7 @@ This document shows a realistic example of what a completed SS-100 swarm run pro
 
 ┌─ MISSION PARAMETERS ────────────────────────────────────────────────────────┐
 │                                                                              │
-│  Configuration:  SS-100 (100 agents, 5 domains, max depth 2)                │
+│  Configuration:  SS-100 (89 agents, 5 domains, max depth 3)                 │
 │  Session ID:     swarm-2024-04-08-22-34-a7f3                                │
 │  Task:           Refactor the authentication module to use JWT tokens       │
 │  Repository:     ~/projects/webapp-auth                                     │
@@ -33,7 +33,8 @@ This document shows a realistic example of what a completed SS-100 swarm run pro
 │  Model Config:                                                               │
 │    • Nexus (L0):           claude-sonnet-4                                   │
 │    • Commanders (L1):      claude-sonnet-4                                   │
-│    • Workers (L2):         claude-haiku-4                                    │
+│    • Squad Leads (L2):     claude-haiku-4                                    │
+│    • Workers (L3):         claude-haiku-4                                    │
 │                                                                              │
 └──────────────────────────────────────────────────────────────────────────────┘
 
@@ -79,28 +80,41 @@ Phase 2: Commander Spawn (5 domains)
 ─────────────────────────────────────────────────────────────────────────────
 
 ═══════════════════════════════════════════════════════════════════════════════
-Phase 3: Worker Spawn (100 workers, SS-100 — no Squad Lead layer)
+Phase 3: Squad Lead Spawn
 ═══════════════════════════════════════════════════════════════════════════════
-⚙️  Spawning 100 workers directly across 5 Commanders...
-✓ Architecture:    20 workers spawned (CMD-ARCH → W-ARCH-01 through W-ARCH-20)
-✓ Implementation:  25 workers spawned (CMD-IMPL → W-IMPL-01 through W-IMPL-25)
-✓ Testing:         20 workers spawned (CMD-TEST → W-TEST-01 through W-TEST-20)
-✓ Documentation:   18 workers spawned (CMD-DOCS → W-DOCS-01 through W-DOCS-18)
-✓ Integration:     17 workers spawned (CMD-INTG → W-INTG-01 through W-INTG-17)
+⚙️  Spawning 20 Squad Leads across 5 domains...
+✓ Architecture:    4 Squad Leads (SQ-ARCH-01 through SQ-ARCH-04)
+✓ Implementation:  5 Squad Leads (SQ-IMPL-01 through SQ-IMPL-05)
+✓ Testing:         4 Squad Leads (SQ-TEST-01 through SQ-TEST-04)
+✓ Documentation:   4 Squad Leads (SQ-DOCS-01 through SQ-DOCS-04)
+✓ Integration:     3 Squad Leads (SQ-INTG-01 through SQ-INTG-03)
                                                            [Elapsed: 4.7s]
 
 ─────────────────────────────────────────────────────────────────────────────
 
 ═══════════════════════════════════════════════════════════════════════════════
-Phase 4: Worker Execution
+Phase 4: Worker Spawn (100 workers)
+═══════════════════════════════════════════════════════════════════════════════
+⚙️  Spawning 100 workers across 20 Squad Leads...
+✓ Architecture:    20 workers spawned
+✓ Implementation:  25 workers spawned
+✓ Testing:         20 workers spawned
+✓ Documentation:   18 workers spawned
+✓ Integration:     17 workers spawned
+                                                           [Elapsed: 6.1s]
+
+─────────────────────────────────────────────────────────────────────────────
+
+═══════════════════════════════════════════════════════════════════════════════
+Phase 5: Worker Execution
 ═══════════════════════════════════════════════════════════════════════════════
 ⏳ Workers investigating codebase and generating Result Atoms...
 
 [████████████████████████████████████████████████████████████] 100/100
 
 ✓ 97 workers completed successfully
-⚠️  2 workers timed out (W-IMPL-14, W-TEST-09) → marked partial by Commanders
-⚠️  1 worker failed (W-DOCS-07) → task redistributed to spare worker
+⚠️  2 workers timed out (W-IMPL-14, W-TEST-09) → recovered by squad leads
+⚠️  1 worker failed (W-DOCS-07) → task redistributed
 • 342 Result Atoms generated
 • 287 evidence files referenced
                                                            [Elapsed: 142.8s]
@@ -108,9 +122,28 @@ Phase 4: Worker Execution
 ─────────────────────────────────────────────────────────────────────────────
 
 ═══════════════════════════════════════════════════════════════════════════════
-Phase 5: Commander Domain Merge (L1 Consensus)
+Phase 6: Squad Lead Merge (L2 Consensus)
 ═══════════════════════════════════════════════════════════════════════════════
-⚙️  5 Commanders applying consensus formula and direct worker merge...
+⚙️  20 Squad Leads performing local consensus...
+
+✓ SQ-ARCH-01: 17 atoms → 12 merged (5 CONSENSUS, 6 MAJORITY, 1 CONFLICT)
+✓ SQ-ARCH-02: 21 atoms → 14 merged (8 CONSENSUS, 5 MAJORITY, 1 CONFLICT)
+✓ SQ-ARCH-03: 18 atoms → 13 merged (7 CONSENSUS, 5 MAJORITY, 1 CONFLICT)
+✓ SQ-ARCH-04: 16 atoms → 11 merged (6 CONSENSUS, 4 MAJORITY, 1 CONFLICT)
+✓ SQ-IMPL-01: 22 atoms → 16 merged (9 CONSENSUS, 6 MAJORITY, 1 CONFLICT)
+  ... (15 more squads)
+
+• 342 atoms → 187 merged atom-sets
+• Deduplication boost applied: 23 content-hash matches
+• 18 conflicts preserved for Commander review
+                                                           [Elapsed: 28.4s]
+
+─────────────────────────────────────────────────────────────────────────────
+
+═══════════════════════════════════════════════════════════════════════════════
+Phase 7: Commander Domain Merge (L1 Consensus)
+═══════════════════════════════════════════════════════════════════════════════
+⚙️  5 Commanders applying consensus formula and cross-squad merge...
 
 ✓ CMD-ARCH: 50 atoms → 42 final (consensus score: 0.87, CONSENSUS tier)
 ✓ CMD-IMPL: 71 atoms → 48 final (consensus score: 0.81, CONSENSUS tier)
@@ -118,7 +151,7 @@ Phase 5: Commander Domain Merge (L1 Consensus)
 ✓ CMD-DOCS: 52 atoms → 35 final (consensus score: 0.68, MAJORITY tier)
 ✓ CMD-INTG: 48 atoms → 37 final (consensus score: 0.79, CONSENSUS tier)
 
-• 342 atoms → 200 domain-merged atoms
+• 187 atoms → 200 domain-merged atoms
 • 12 conflicts resolved via trimmed mean
 • 3 conflicts escalated to Nexus (token expiry policy, hashing algorithm, token storage location)
                                                            [Elapsed: 34.2s]
@@ -126,12 +159,12 @@ Phase 5: Commander Domain Merge (L1 Consensus)
 ─────────────────────────────────────────────────────────────────────────────
 
 ═══════════════════════════════════════════════════════════════════════════════
-Phase 6: Nexus Synthesis (L0 Final Merge)
+Phase 8: Nexus Synthesis (L0 Final Merge)
 ═══════════════════════════════════════════════════════════════════════════════
 ⚙️  Nexus performing cross-domain synthesis + shadow scoring...
 
 ✓ Cross-domain conflicts resolved (3/3)
-✓ Shadow Score validation: 80% GREEN (12% minor gaps)
+✓ Shadow Score validation: 13% Minor (2 sealed criteria failed)
 ✓ Gap Report generated: 5 gaps identified (2 🔴 blocking)
 ✓ Final report synthesized with attribution and confidence intervals
 
@@ -163,10 +196,11 @@ Phase 6: Nexus Synthesis (L0 Final Merge)
 └──────────────────────────────────────────────────────────────────────────────┘
 
 Phase Breakdown:
-[██▓▓░░░░] Phase 0-3: Setup     (18.4s,  7%)
-[████████] Phase 4:   Execution (142.8s, 52%)
-[█████▓░░] Phase 5:   L1 Merge  (34.2s, 13%)
-[███▓░░░░] Phase 6:   Synthesis (18.7s,  7%)
+[██▓▓▓▓░░] Phase 0-4: Setup     (24.5s,  9%)
+[████████] Phase 5:   Execution (142.8s, 52%)
+[████▓▓░░] Phase 6:   L2 Merge  (28.4s, 10%)
+[█████▓░░] Phase 7:   L1 Merge  (34.2s, 13%)
+[███▓░░░░] Phase 8:   Synthesis (18.7s,  7%)
 [███░░░░░] Overhead             (23.4s,  9%)
 ```
 
@@ -178,7 +212,7 @@ Phase Breakdown:
 
 **Consensus Tier:** ✅ CONSENSUS (score: 0.87)  
 **Confidence:** 0.87 (High)  
-**Agents:** 42 workers across 1 Commander  
+**Agents:** 42 workers across 4 Squad Leads  
 **Evidence Files:** 38/42 atoms cited evidence (90%)
 
 #### Summary
@@ -632,7 +666,7 @@ During the swarm run, 3 conflicts were escalated to the Nexus for final arbitrat
 
 ## Shadow Score Report
 
-The Nexus applied 15 sealed quality criteria to validate the swarm output. **Shadow Score: 80% GREEN (12% gaps detected, Minor severity).**
+The Nexus applied 15 sealed quality criteria to validate the swarm output. **Shadow Score: 13% Minor (2 of 15 sealed criteria failed).**
 
 ```
 ┌─ SHADOW CRITERIA SCORECARD ──────────────────────────────────────────────┐
@@ -656,7 +690,7 @@ The Nexus applied 15 sealed quality criteria to validate the swarm output. **Sha
 │  15. Audit trail for token operations              ❌ FAIL   Not impl    │
 │                                                                           │
 │  ──────────────────────────────────────────────────────────────────────  │
-│  PASS: 10/15  │  WARN: 3/15  │  FAIL: 2/15     │   SCORE: 80% 🟢       │
+│  PASS: 10/15  │  WARN: 3/15  │  FAIL: 2/15     │   SHADOW SCORE: 13% 🟢 │
 │                                                                           │
 └───────────────────────────────────────────────────────────────────────────┘
 
@@ -799,7 +833,7 @@ The Integration domain mentioned "store access token in memory (not localStorage
 ```
 ┌─ AGENT STATISTICS ───────────────────────────────────────────────────────┐
 │                                                                           │
-│  Total Agents Spawned:     123                                           │
+│  Total Agents Spawned:     126                                           │
 │                                                                           │
 │  By Layer:                                                                │
 │    • L0 (Nexus):           1                                              │
@@ -808,7 +842,7 @@ The Integration domain mentioned "store access token in memory (not localStorage
 │    • L3 (Workers):         100                                            │
 │                                                                           │
 │  Completion Status:                                                       │
-│    ✅ Completed:           117  (95.1%)                                   │
+│    ✅ Completed:           120  (95.2%)                                   │
 │    ⏱️  Timed Out:          3    (2.4%)  → recovered by squad leads       │
 │    ❌ Failed:              1    (0.8%)  → task redistributed             │
 │    🔄 Retried:             2    (1.6%)  → succeeded on retry             │

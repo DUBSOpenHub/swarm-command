@@ -427,7 +427,7 @@ The median is robust against a single bad review dragging down a good bundle (or
 
 ## Consensus Flow Example
 
-Consider a task "Refactor authentication module" being processed by SS-100 (100 agents):
+Consider a task "Refactor authentication module" being processed by SS-100 (89 agents):
 
 ### Stage 1: Workers
 - 72 workers each produce a Result Atom with self-score and confidence

@@ -68,12 +68,19 @@ jobs:
 
           scale_patterns = {
               scale: re.compile(
-                  rf"(?i)\b{re.escape(scale)}\b[^\n]{{0,120}}?([~≈]?\s*\d{{1,4}})"
+                  rf"(?ix)\b{re.escape(scale)}\b[^\n]{{0,80}}?"
+                  r"(?:"
+                  r"\(\s*([~≈]?\s*\d{1,4})\s*agents?\b[^\n)]*\)"
+                  r"|"
+                  r"\|\s*([~≈]\s*\d{1,4})\s*\|"
+                  r"|"
+                  r"([~≈]\s*\d{1,4})\s+agents\b"
+                  r")"
               )
               for scale in expected
           }
           approx_agents_pattern = re.compile(r"(?i)(?:~|≈)\s*(\d{1,4})\s+agents\b")
-          total_agents_pattern = re.compile(r"(?i)\btotal\b[^\n]{{0,40}}?([~≈]?\s*\d{1,4})[^\n]{{0,20}}?\bagents\b")
+          total_agents_pattern = re.compile(r"(?i)\btotal\b[^\n]{0,20}?([~≈]?\s*\d{1,4})\s+agents\b")
 
           for path in md_files:
               for line_number, line in enumerate(path.read_text().splitlines(), 1):
@@ -81,7 +88,8 @@ jobs:
                       match = pattern.search(line)
                       if not match:
                           continue
-                      value = int(re.search(r"\d+", match.group(1)).group())
+                      raw_value = next(group for group in match.groups() if group)
+                      value = int(re.search(r"\d+", raw_value).group())
                       seen_scales[scale] += 1
                       if value != expected[scale]:
                           issues.append(
@@ -91,16 +99,18 @@ jobs:
                           hits.append(f"✅ {path}:{line_number} matches {scale} → ~{value}")
 
                   if "agents" in line.lower():
-                      for pattern_name, pattern in (
-                          ("approximate", approx_agents_pattern),
-                          ("total", total_agents_pattern),
-                      ):
-                          for match in pattern.finditer(line):
-                              value = int(re.search(r"\d+", match.group(1)).group())
-                              if value not in expected_values:
-                                  issues.append(
-                                      f"❌ {path}:{line_number} has unexpected {pattern_name} agent count ~{value}: {line.strip()}"
-                                  )
+                      for match in approx_agents_pattern.finditer(line):
+                          value = int(re.search(r"\d+", match.group(1)).group())
+                          if value not in expected_values:
+                              issues.append(
+                                  f"❌ {path}:{line_number} has unexpected agent count {value}: {line.strip()}"
+                              )
+                      for match in total_agents_pattern.finditer(line):
+                          value = int(re.search(r"\d+", match.group(1)).group())
+                          if value not in expected_values:
+                              issues.append(
+                                  f"❌ {path}:{line_number} has unexpected total agent count {value}: {line.strip()}"
+                              )
 
           for scale, count in seen_scales.items():
               if count == 0:

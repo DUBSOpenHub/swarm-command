@@ -139,8 +139,8 @@ L0: Nexus (1)           depth=0, can_launch=true
 L1: Commanders (5)      depth=1, can_launch=true
 L2: Squad Leads (50)    depth=2, can_launch=true   → spawn workers
 L3: Workers (250)        depth=3, can_launch=false  → LEAF
-L4: Reviewers (10)       depth=1, can_launch=false  → LEAF
-    Shadow scoring         Nexus-internal (sealed criteria, no agents spawned)
+    Reviewers (10)       depth=1, can_launch=false  → LEAF (spawned by Nexus)
+    Shadow scoring       Nexus-internal (sealed criteria, no agents spawned)
 Total: ~316
 ```
 

@@ -52,7 +52,7 @@ For SS-50: 2-3 domains. For SS-100: all 5 domains. For SS-250: all 5.
 Generate sealed acceptance criteria BEFORE commanders execute:
 - Generate 10 binary pass/fail acceptance criteria from the task spec
 - Categories: `happy_path`, `edge_case`, `error_handling`, `completeness`
-- Compute SHA-256 commitment hash to detect accidental criteria drift
+- Compute SHA-256 tamper hash and lock the sealed envelope
 - NEVER share criteria with any agent — held in Nexus memory only
 - SS-50: 6 criteria. SS-100: 8 criteria. SS-250: 10 criteria.
 
@@ -105,7 +105,7 @@ As soon as ANY 2 Commanders return, launch cross-reviewers for that pair:
 
 Validate commander bundles against sealed acceptance criteria generated in Phase 1.5:
 - Sealed criteria were generated before commanders executed (never shared with any agent)
-- Verify commitment hash to confirm criteria weren't accidentally altered during execution
+- Verify tamper hash to confirm criteria weren't modified
 - Run each criterion as binary pass/fail against each bundle
 - Compute Shadow Score: `(failures / total) × 100`
 - Interpretation: 0% ✅ Perfect, 1-15% 🟢 Minor, 16-30% 🟡 Moderate, 31-50% 🟠 Significant, >50% 🔴 Critical
