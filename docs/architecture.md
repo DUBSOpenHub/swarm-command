@@ -260,17 +260,17 @@ For maximum insight diversity, models from different families are paired within 
 
 ---
 
-## Sub-Linear Scaling
+## Parallel Execution Design
+
+The architecture is designed for concurrent execution at scale. Wall-clock time grows slower than agent count because the expensive work runs in parallel:
 
 ```text
 Agents     Wall-Clock     Ratio vs SS-50
   50         ~30s           1.0×
  100         ~42s           1.4×
  250         ~65s           2.2×
- 500         ~85s           2.8×
-1000        ~110s           3.7×
-
-Scaling exponent ≈ 0.45 (vs 1.0 for linear)
 ```
 
-Sub-linear scaling comes from one idea: the expensive part is parallel, not serial. The main serial bottlenecks are Nexus decomposition, canary verification, and final synthesis.
+These are design targets, not measured benchmarks. Actual performance depends on task decomposability and platform concurrency limits.
+
+The main serial bottlenecks are Nexus decomposition (~2s), canary verification (~3s), and final synthesis (~10s). Everything else overlaps via hierarchical fan-out.

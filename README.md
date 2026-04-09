@@ -28,7 +28,7 @@
 - **Need one answer from many perspectives?** It fans your task out across a layered swarm.
 - **Need confidence, not vibes?** It uses cross-review + consensus scoring.
 - **Need hidden quality checks?** It validates bundles with sealed acceptance criteria.
-- **Need speed at scale?** It grows sub-linearly: **5× more agents ≈ 2.2× more wall-clock time**.
+- **Need speed at scale?** Designed for parallel execution — agents work simultaneously, not sequentially.
 - **Need zero setup?** No servers, no API keys, no build step.
 
 If your task spans **architecture + implementation + testing + docs + integration**, this is exactly what Swarm Command is built for.
@@ -122,7 +122,7 @@ These systems are complementary — not competitors.
 - 👻 **Shadow Score** — [Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2 conformance. Sealed acceptance criteria generated before commanders execute, validated after, hardened on failure.
 - 🛡️ **Depth Guard** — 5 laws + 3-layer enforcement prevent runaway agent spawning
 - ⚡ **Circuit breaker** — 3-state FSM with 5-level recovery escalation
-- 📉 **Sub-linear scaling** — 5× more agents ≈ 2.2× more wall-clock time (α ≈ 0.45)
+- 📉 **Parallel by design** — agents execute concurrently with hierarchical fan-out and pipeline overlap
 - 📦 **Zero infrastructure** — no servers, no API keys, no build step
 
 ---

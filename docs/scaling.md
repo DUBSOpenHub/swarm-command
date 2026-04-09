@@ -178,24 +178,24 @@ Time:  ~65–90s wall-clock
 
 ---
 
-## Sub-Linear Scaling Proof
+## Parallel Execution Design
+
+Wall-clock time grows slower than agent count because the expensive work runs in parallel:
 
 ```text
 Agents     Wall-Clock     Ratio vs SS-50
   50         ~30s           1.0×
  100         ~42s           1.4×
  250         ~65s           2.2×
-
-Scaling exponent ≈ 0.45 (vs 1.0 for linear)
 ```
 
-Sub-linear scaling happens because most of the expensive work runs in parallel. The serial bottlenecks are limited to:
+These are design targets, not measured benchmarks. The serial bottlenecks are limited to:
 
 - Nexus decomposition: ~2s
 - Canary verification: ~3s
 - Final synthesis: ~10s
 
-Everything else overlaps.
+Everything else overlaps via hierarchical fan-out and pipeline overlap.
 
 ---
 
