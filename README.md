@@ -79,7 +79,7 @@ swarm command "Map this repo, explain how the major systems fit together, and li
 
 **Swarm Command** is a multi-model swarm orchestration skill for the [Copilot CLI](https://docs.github.com/copilot/concepts/agents/about-copilot-cli) that launches **50 to 250+ AI agents** across **16 different models** to solve complex tasks through hierarchical fan-out, cross-family review, and consensus-gated synthesis.
 
-Give it a task — architecture, refactoring, testing, docs, or integration — and it decomposes the mission into domains, dispatches commanders, squad leads, and workers, validates outputs against sealed acceptance criteria, and synthesizes a final answer from collective intelligence instead of single-model intuition.
+Give it a task — architecture, refactoring, testing, docs, or integration — and it decomposes the mission into domains, dispatches Commanders, Squad Leads, and Workers, validates outputs against sealed acceptance criteria, and synthesizes a final answer from collective intelligence instead of single-model intuition.
 
 ### 💬 The Problem
 
@@ -340,16 +340,9 @@ mkdir -p ~/.copilot/skills/swarm-command ~/.copilot/agents && \
 **Verify integrity (optional):**
 
 ```bash
-# macOS
 shasum -a 256 ~/.copilot/skills/swarm-command/SKILL.md
 shasum -a 256 ~/.copilot/agents/swarm-command.agent.md
-
-# Linux
-sha256sum ~/.copilot/skills/swarm-command/SKILL.md
-sha256sum ~/.copilot/agents/swarm-command.agent.md
 ```
-
-> Compare the output against the checksums published on the [latest release page](https://github.com/DUBSOpenHub/swarm-command/releases/latest).
 
 > 💡 **Security note:** We recommend [inspecting quickstart.sh](https://github.com/DUBSOpenHub/swarm-command/blob/main/quickstart.sh) before piping to bash. You can also use the manual install above instead.
 
@@ -567,12 +560,12 @@ swarm-command/
 │   ├── commander.md                    # Commander prompt template
 │   ├── worker.md                       # Worker prompt template
 │   ├── reviewer.md                     # Cross-reviewer prompt template
-│   └── squad-lead.md                   # Squad lead prompt template
+│   └── squad-lead.md                   # Squad Lead prompt template
 ├── protocols/
 │   ├── depth-guard.md                  # 5 Laws + 3-layer enforcement
 │   ├── circuit-breaker.md              # 3-state FSM + 5-level recovery
 │   ├── context-capsule.md              # JSON schemas for data structures
-│   └── meta-reviewer.md                # Meta-review protocol
+│   └── meta-reviewer.md               # Reviewer quality gate protocol
 └── docs/
     ├── architecture.md                 # Architecture overview
     ├── architecture-diagrams.md        # Mermaid diagrams

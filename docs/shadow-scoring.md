@@ -17,7 +17,7 @@ The core insight: **What you measure, agents optimize for. What you don't measur
 | Level | Requirement | Swarm Command |
 |---|---|---|
 | **L1** | Compute + report Shadow Score | ✅ Implemented |
-| **L2** | L1 + sealed-envelope isolation + tamper hash | ✅ Implemented |
+| **L2** | L1 + sealed-envelope isolation + commitment hash | ✅ Implemented |
 | L3 | L2 + hardening loop + velocity tracking | Partial (hardening loop ✅, velocity tracking not yet) |
 
 **Swarm Command implements Shadow Score Spec L2 conformance.**
@@ -56,7 +56,7 @@ The Nexus generates sealed acceptance criteria from the task specification:
 
 1. Analyze the task decomposition and generate 10 binary pass/fail acceptance criteria
 2. Distribute criteria across 4 categories: `happy_path`, `edge_case`, `error_handling`, `completeness`
-3. Compute a SHA-256 tamper hash of the sealed criteria
+3. Compute a SHA-256 commitment hash of the sealed criteria
 4. Store the sealed envelope in Nexus memory — **never shared with any agent**
 
 ```json
@@ -92,7 +92,7 @@ Commanders, Squad Leads, Workers, and Reviewers execute normally. **They never s
 
 After commanders complete and cross-review finishes:
 
-1. **Verify tamper hash** — Confirm the sealed criteria haven't been modified since Phase 1.5
+1. **Verify commitment hash** — Confirm the sealed criteria haven't drifted since Phase 1.5
 2. **Run each sealed criterion** against each Commander bundle as a binary pass/fail
 3. **Compute Shadow Score:** `(failures / total) × 100`
 4. **Classify** using the interpretation scale
@@ -202,7 +202,7 @@ The Shadow Score Spec is designed for code-producing agents where sealed tests a
 | Test runner execution | Nexus evaluates criteria against bundle content |
 | Test pass/fail | Binary assertion pass/fail |
 | Test suite | Criteria set across 4 categories |
-| CI environment | Nexus memory (sealed, tamper-hashed) |
+| CI environment | Nexus memory (sealed, commitment-hashed) |
 
 The math is identical: `(failures / total) × 100`. The isolation is identical: agents never see criteria. The hardening is identical: only failure messages shared. The adaptation is in *what* gets tested — acceptance criteria instead of code assertions.
 
@@ -240,3 +240,24 @@ Set `enabled: false` to disable shadow scoring entirely (e.g., for cost-sensitiv
 | **SS-50** | 6 (reduced) | Disabled | Shadow Score computed but no fix cycle |
 | **SS-100** | 8 | 1 cycle if > 15% | Moderate hardening |
 | **SS-250** | 10 (full) | 1 cycle if > 15% | Full hardening |
+
+---
+
+## Transparency Note — What the Hash Does and Doesn't Provide
+
+The SHA-256 commitment hash in the sealed-envelope protocol serves as a **self-discipline mechanism**, not a cryptographic security boundary.
+
+### What it provides
+
+- **Commitment device:** The Nexus commits to specific acceptance criteria *before* commanders execute, preventing unconscious criteria drift during validation.
+- **Drift detection:** If the criteria are accidentally modified between Phase 1.5 (generation) and Phase 6 (validation), the hash mismatch surfaces the error immediately.
+- **Audit trail:** The recorded hash creates a verifiable record that criteria were locked before execution began.
+
+### What it does NOT provide
+
+- **Cross-domain tamper resistance:** The Nexus generates the criteria, holds them in its own context, computes the hash, and validates against it — all within the same LLM session. There is no separate trust domain, so the hash provides zero protection against an adversarial or compromised Nexus.
+- **Cryptographic security guarantees:** In a traditional sealed-envelope protocol, the seal is held by an independent party. Here, the same agent is both sealer and validator. The "sealed envelope" is a useful metaphor for the *workflow pattern*, not a literal security boundary.
+
+### Why we keep it
+
+Even without cross-domain guarantees, the commitment hash is valuable. It enforces a strict temporal separation between criteria generation and criteria evaluation. Without it, the Nexus could unconsciously shift its acceptance bar after seeing commander outputs — a subtle form of confirmation bias. The hash makes that impossible by turning any drift into an explicit, detectable mismatch.
