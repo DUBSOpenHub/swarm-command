@@ -116,6 +116,98 @@ score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage
 - Conflict penalty is capped at 0.10 (prevents single conflict from dominating)
 - Final score bounded [0.0, 1.0]
 
+---
+
+### Confidence
+
+**Operational Definition**: `confidence` is the geometric mean of individual atom confidence scores propagated through each consensus stage. In **Stage 1**, each worker emits a per-atom `confidence` value (0.0–1.0), computed as roughly the mean of three sub-scores: `evidence_quality`, `task_clarity`, and `output_completeness` (see `confidence_breakdown` in the Result Atom schema). In **Stage 2**, the Squad Lead computes `merged_confidence = (c₁ × c₂ × … × cₙ)^(1/n)` across grouped atoms, with two boosting rules: unanimous agreement multiplies by 1.2 (`min(1.0, conf × 1.2)`), and content-hash deduplication applies `min(1.0, conf × (1 + 0.1 × duplicate_count))`. In **Stage 3**, the Commander applies a trimmed mean across squad-level confidence values (dropping the highest and lowest), then feeds the result into the consensus formula. In **Stage 4**, the Nexus uses median-of-3 judging across reviewer-weighted totals, where confidence is already baked into each bundle's score.
+
+**Input Data**: Worker-emitted `confidence` floats (0.0–1.0), the three `confidence_breakdown` sub-scores, duplicate counts from content-hash deduplication, and the agreement tier (CONSENSUS / MAJORITY / CONFLICT) at each merge stage.
+
+**Computation Example** (Stage 2, 4 workers on one sub-task):
+
+```
+Worker confidences: W-01=0.92, W-02=0.85, W-03=0.78, W-04=0.88
+Three agree (MAJORITY). Geometric mean of majority atoms:
+  geo_mean = (0.92 × 0.85 × 0.88)^(1/3)
+           = (0.6882)^(0.3333)
+           ≈ 0.883
+W-02 and W-04 are content-hash duplicates (duplicate_count=1):
+  boosted = min(1.0, 0.883 × (1 + 0.1 × 1))
+          = min(1.0, 0.883 × 1.1)
+          = min(1.0, 0.971)
+          = 0.971
+Merged confidence for this sub-task: 0.971
+```
+
+**Edge Cases**:
+- **0.0**: All workers reported zero confidence. The atom is de-prioritized but not discarded — it still flows to the Commander and may be rescued if cross-review scores are strong.
+- **1.0**: Perfect confidence, only reachable via deduplication boosting (e.g., 5 identical atoms). Clamped by `min(1.0, …)` — never exceeds 1.0.
+- **Clamping**: Both the 1.2× consensus boost and the deduplication boost use `min(1.0, …)` to enforce the upper bound.
+
+**Impact on Final Score**: Coefficient **0.40** — the single largest weight in the formula. A swing from 0.5 to 1.0 in confidence shifts the final score by +0.20.
+
+---
+
+### Evidence
+
+**Operational Definition**: `evidence` measures the proportion of atoms that cite at least one evidence file. In **Stage 1**, each worker includes an `evidence` array in its Result Atom listing file paths it examined (e.g., `["src/auth.ts", "tests/auth.test.ts"]`). In **Stage 2**, the Squad Lead counts atoms with `len(evidence) ≥ 1` after merging. In **Stage 3**, the Commander aggregates across all squad-level atom-sets: `evidence = (atoms with ≥1 evidence file) / (total atoms)`. Deduplication does not affect the count — merged atoms retain the union of their evidence arrays. In **Stage 4**, evidence is already embedded in the per-bundle score; the Nexus uses it indirectly through the consensus formula output.
+
+**Input Data**: The `evidence` array from each worker's Result Atom (list of file paths or URLs the worker inspected), and the total atom count after Squad Lead deduplication.
+
+**Computation Example** (Stage 3, Commander collecting from 3 Squad Leads):
+
+```
+SQ-01 merged atoms: 4 atoms, 3 have evidence → ratio 3/4
+SQ-02 merged atoms: 5 atoms, 5 have evidence → ratio 5/5
+SQ-03 merged atoms: 3 atoms, 1 has evidence  → ratio 1/3
+
+Commander-level totals:
+  atoms_with_evidence = 3 + 5 + 1 = 9
+  total_atoms         = 4 + 5 + 3 = 12
+
+  evidence = 9 / 12 = 0.75
+```
+
+**Edge Cases**:
+- **0.0**: No atom cited any evidence file. This is a strong quality red flag. Combined with the 0.30 coefficient, the score loses up to 0.30 points. A UNIQUE-tier result with evidence 0.0 is automatically discarded (requires evidence ≥ 7/10 to keep).
+- **1.0**: Every atom has at least one evidence file — ideal state indicating all results are grounded in source material.
+- **Normalization**: The ratio is naturally bounded [0.0, 1.0]. No additional clamping is applied. Empty `evidence` arrays (`[]`) count as zero; `null` or missing fields are treated as empty.
+
+**Impact on Final Score**: Coefficient **0.30** — the second-largest weight. A fully-evidenced result (1.0) vs. zero-evidence (0.0) produces a 0.30-point swing. Evidence also gates UNIQUE-tier acceptance (≥ 7/10 required).
+
+---
+
+### Conflict Rate
+
+**Operational Definition**: `conflict_rate` quantifies unresolved disagreement as a fraction of total atoms. In **Stage 2**, the Squad Lead classifies each sub-task group into CONSENSUS, MAJORITY, or CONFLICT. Atoms in the CONFLICT tier (no majority agreement) are tagged with a conflict flag and forwarded unresolved. In **Stage 3**, the Commander counts atoms still carrying the CONFLICT flag after its own trimmed-mean resolution attempt: `conflict_rate = unresolved_conflicts / total_atoms`. Unlike the positive terms, conflict_rate is applied as a **penalty**: `−min(0.10, conflict_rate × 0.10)`. In **Stage 4**, CONFLICT-tier items are escalated to the Nexus for final arbitration, which may re-dispatch to a single reviewer for tiebreaking.
+
+**Input Data**: The CONFLICT flag set during Stage 2 local merge, the count of atoms that remain unresolved after Commander merge, and the total atom count in the Commander's domain.
+
+**Computation Example** (Stage 3, Commander with 15 atoms):
+
+```
+Total atoms across all squads: 15
+Resolved at Squad Lead level (CONSENSUS or MAJORITY): 12
+Forwarded as CONFLICT: 3
+Commander resolves 1 via trimmed mean, 2 remain unresolved.
+
+  conflict_rate = 2 / 15 = 0.133
+
+Penalty = min(0.10, 0.133 × 0.10)
+        = min(0.10, 0.0133)
+        = 0.0133
+
+Score impact: −0.0133 (subtracted from the positive terms)
+```
+
+**Edge Cases**:
+- **0.0**: Zero unresolved conflicts — all atoms reached CONSENSUS or MAJORITY. No penalty applied. This is the ideal state.
+- **1.0**: Every atom is unresolved (catastrophic disagreement). The penalty is capped: `min(0.10, 1.0 × 0.10) = 0.10`. Even total conflict only subtracts 0.10 from the score.
+- **Cap behavior**: The `min(0.10, …)` cap is critical — it prevents a single domain's conflict from dominating the final score. Even with `conflict_rate = 1.0`, the maximum penalty is 0.10 points.
+
+**Impact on Final Score**: Penalty capped at **−0.10**. The penalty scales linearly (`conflict_rate × 0.10`) up to the cap. In practice, a conflict_rate above 0.50 (penalty = 0.05) triggers CONFLICT-tier classification (score < 0.50), which escalates the bundle to Nexus arbitration rather than auto-acceptance.
+
 ### Consensus Tiers
 
 | Tier | Condition | Action |
