@@ -339,6 +339,25 @@ swarm command ss-250 "Read every service, every pipeline, every config — gener
 
 ---
 
+## 📋 Example Output
+
+See what a completed swarm run looks like → [Example Output](docs/example-output.md)
+
+```text
+[NEXUS] Booting SS-100 swarm...
+[NEXUS] Sealing acceptance criteria (8 checks)
+[CMD-ARCH] Mapping auth boundaries and module ownership
+[CMD-IMPL] Tracing token issuance, refresh, and revocation flows
+[CMD-TEST] Enumerating missing happy-path, edge-case, and failure-path tests
+[CMD-DOCS] Drafting operator-facing docs and examples
+[CMD-INTG] Checking rollout risks across API, web, DB, and monitoring
+[REVIEW] Cross-family review mesh started
+[SHADOW] 1 criterion failed on first pass → hardening cycle triggered
+✅ Final bundle ready in 47s
+```
+
+---
+
 ## 📦 Install
 
 ### Instant Install (no clone needed) ⚡
@@ -554,6 +573,7 @@ swarm-command/
 ├── quickstart.sh                       # One-line installer
 ├── .github/
 │   ├── copilot-instructions.md         # AI agent instructions for this repo
+│   ├── workflows/ci.yml                # CI validation (YAML parse + SKILL.md parity)
 │   └── skills/swarm-command/SKILL.md   # Skill discovery path
 ├── agents/
 │   └── swarm-command.agent.md          # Standalone agent version
@@ -572,6 +592,7 @@ swarm-command/
     ├── architecture.md                 # Architecture overview
     ├── architecture-diagrams.md        # Mermaid diagrams
     ├── consensus.md                    # Consensus algorithm deep dive
+    ├── example-output.md               # Sample completed run output
     ├── learning-path.md                # Recommended reading order
     ├── scaling.md                      # Scale chooser + cost estimates
     ├── shadow-scoring.md               # Shadow scoring protocol

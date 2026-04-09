@@ -21,6 +21,7 @@ Thank you for your interest in contributing to Swarm Command! This project is a 
 
 Before opening a PR, ensure:
 
+- [ ] CI workflow passes (YAML lint + SKILL.md diff)
 - [ ] All templates have complete DEPTH LOCK blocks for leaf agents
 - [ ] `catalog.yml` references are valid
 - [ ] YAML parses cleanly (`config.yml`, `catalog.yml`)
@@ -30,7 +31,9 @@ Before opening a PR, ensure:
   - `skills/swarm-command/SKILL.md`
   - `.github/skills/swarm-command/SKILL.md`
 - [ ] Agent counts match across all files (SS-50: ~52, SS-100: ~89, SS-250: ~316)
+- [ ] Agent counts verified via `grep -r "~52\|~89\|~316" .`
 - [ ] Shadow scoring references use Shadow Score Spec format (no separate shadow validator agents)
+- [ ] docs/example-output.md reflects current output format (if output format changed)
 
 ## Non-Negotiables
 
