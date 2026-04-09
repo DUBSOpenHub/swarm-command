@@ -1,7 +1,3 @@
-Agent completed. agent_id: r3-ss50, agent_type: general-purpose, status: completed, description: CMD-A SS-50 use cases, elapsed: 176s, total_turns: 0, model: claude-opus-4.6, duration: 169s
-
----
-
 # 🐝 Swarm Command SS-50: The 10 Best Use Cases
 
 *~52 agents · 3 commanders · 45 workers · ~30 seconds · $1.50–$3.50*

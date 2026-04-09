@@ -39,5 +39,5 @@ Before opening a PR:
 - Ensure all templates have complete DEPTH LOCK blocks for leaf agents
 - Ensure `catalog.yml` references are valid
 - Ensure YAML parses (`config.yml`, `catalog.yml`)
-- Verify depth guard audit checklist passes (protocols/depth-guard.md §9.4)
+- Verify depth guard audit checklist passes (protocols/depth-guard.md)
 - Verify all JSON schemas in protocols/context-capsule.md are valid draft-07

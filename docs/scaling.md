@@ -83,7 +83,7 @@ Time:  ~45s wall-clock
 | Domains covered | 3 of 5 (auto-selected by task type) |
 | Squad Leads per Commander | — (not used) |
 | Workers per Commander | 15 |
-| Reviewers | 8 (4 pairs) |
+| Reviewers | 8 reviewers (8 cross-family pairs) |
 | Shadow scoring | 8 sealed criteria, hardening at >15% |
 | Cost ceiling | $10.00 |
 | Timeout cascade | 75/50/35/25s |
@@ -124,7 +124,7 @@ Time:  ~65-90s wall-clock
 | Domains covered | All 5 (architecture, implementation, testing, docs, integration) |
 | Squad Leads per Commander | 10 |
 | Workers per Squad Lead | 5 |
-| Reviewers | 10 (5 cross-family pairs) |
+| Reviewers | 10 Reviewers forming 8 cross-family pairs (2 reviewers participate in 2 pairs each) |
 | Shadow scoring | 10 sealed criteria, hardening at >15% (Shadow Score Spec L2) |
 | Cost ceiling | $20.00 |
 | Timeout cascade | 90/60/40/30s |

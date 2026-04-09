@@ -45,7 +45,7 @@ Split the task into up to 5 domains:
 - **Documentation** — Docs, comments, examples
 - **Integration** — Cross-cutting concerns, glue code
 
-For SS-50: 2-3 domains. For SS-100: 3 domains. For SS-250: all 5.
+For SS-50: 2-3 domains. For SS-100: all 5 domains. For SS-250: all 5.
 
 ## Phase 1.5 — Sealed Criteria Generation (Shadow Score Spec L2)
 

@@ -80,7 +80,7 @@ Decompose the task into exactly 5 domains:
 | **Documentation** | CMD-DOCS | Docs, comments, examples, guides, README updates |
 | **Integration** | CMD-INTG | Cross-cutting concerns, glue code, API contracts, deployment |
 
-For smaller scales (SS-50), select the 2–3 most relevant domains. For SS-100, select 3. For SS-250, use all 5.
+For smaller scales (SS-50), select the 2–3 most relevant domains. For SS-100, select all 5. For SS-250, use all 5.
 
 ---
 
@@ -631,7 +631,7 @@ Transitions: failure_count > threshold → OPEN. cooldown_expired → HALF-OPEN.
 Monitor continuously during execution:
 
 1. **Commander failure**: If 3+ of 5 Commanders fail → STOP all spawning → return partial results from successful Commanders
-2. **Wall-clock timeout**: If wall-clock exceeds 90s (SS-250) / 60s (SS-100) / 45s (SS-50) → STOP → return whatever is complete
+2. **Wall-clock timeout**: If wall-clock exceeds 90s (SS-250) / 75s (SS-100) / 60s (SS-50) → STOP → return whatever is complete
 3. **Cost ceiling**: If estimated cost approaches $20 (SS-250) / $10 (SS-100) / $5 (SS-50) → STOP → return partial results
 4. **Recovery escalation**: Retry → Simplify → Model Swap → Scope Reduce → Graceful Degrade
 
