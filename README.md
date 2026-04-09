@@ -125,14 +125,6 @@ These systems are complementary — not competitors.
 - 📉 **Sub-linear scaling** — 5× more agents ≈ 2.2× more wall-clock time (α ≈ 0.45)
 - 📦 **Zero infrastructure** — no servers, no API keys, no build step
 
-### 🗒️ Field Notes
-
-> **“Three sealed judges scored the design 44–46/50. Shadow scoring still caught critical arithmetic errors.”**
-> That failure mode is why Swarm Command treats hidden validation as a first-class system, not a nice-to-have.
-
-> **“5× more agents only costs ~2.2× more wall-clock time.”**
-> The architecture is built for parallelism first, then convergence.
-
 ---
 
 ## 🧠 30-Second Architecture
