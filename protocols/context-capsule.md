@@ -15,11 +15,16 @@ Context Capsules are the structured JSON packages that carry information between
   L1  Context Capsule    ─── 2K tokens ───►  Bundle           ◄── 1K tokens
                  │                                    ▲
   L2  Shard              ─── 512 tokens ──►  Atom Set         ◄── 512 tokens
-                 │                                    ▲
+                 │   (SS-250 only ─────────────────────────────────────────)
   L3  Micro-Brief        ─── 128 tokens ──►  Atom             ◄── 256 tokens
                  │                                    ▲
   L4  Review Capsule     ─── 1K tokens ───►  Score Card       ◄── 512 tokens
 ```
+
+> **Scale note:** L3 (Micro-Brief / Worker) and the Shard→L2 hop only exist at **SS-250**
+> (max_depth=3, Commander → Squad Lead → Worker). At **SS-50/SS-100** (max_depth=2),
+> Commanders spawn Workers directly at L2 using Shards — there is no Squad Lead layer
+> and no Micro-Brief schema.
 
 ### Compression Rules
 
@@ -79,6 +84,7 @@ Sent from Nexus to each Commander. Contains the domain-specific task and constra
     },
     "depth_config": {
       "type": "object",
+      "description": "Depth control for this agent. max_depth=2 for SS-50/SS-100 (Commander → Worker); max_depth=3 for SS-250 (Commander → Squad Lead → Worker).",
       "required": ["current_depth", "max_depth", "can_launch"],
       "properties": {
         "current_depth": { "type": "integer", "minimum": 0, "maximum": 4 },
@@ -180,7 +186,7 @@ Sent from Nexus to each Commander. Contains the domain-specific task and constra
 
 ## Schema 2: Shard (L1 → L2)
 
-Sent from Commander to each Squad Lead. Compressed subset of the Context Capsule.
+Sent from Commander to each child agent. At **SS-250** the child is a Squad Lead; at **SS-50/SS-100** the child is a Worker directly (no Squad Lead layer). In both cases the Shard is the context carrier.
 
 **Max size: 512 tokens serialized**
 
@@ -214,6 +220,7 @@ Sent from Commander to each Squad Lead. Compressed subset of the Context Capsule
     },
     "depth_config": {
       "type": "object",
+      "description": "SS-250: current_depth=2, max_depth=3, can_launch=true (Squad Lead spawning Workers). SS-50/SS-100: current_depth=2, max_depth=2, can_launch=false (Worker leaf node).",
       "required": ["current_depth", "max_depth", "can_launch"],
       "properties": {
         "current_depth": { "type": "integer", "minimum": 1, "maximum": 4 },
@@ -225,7 +232,7 @@ Sent from Commander to each Squad Lead. Compressed subset of the Context Capsule
 }
 ```
 
-### Example
+### Example (SS-250 — Commander → Squad Lead)
 
 ```json
 {
@@ -243,7 +250,9 @@ Sent from Commander to each Squad Lead. Compressed subset of the Context Capsule
 
 ---
 
-## Schema 3: Micro-Brief (L2 → L3)
+## Schema 3: Micro-Brief (L2 → L3) — SS-250 only
+
+> **Applicability:** This schema is used **only at SS-250** (max_depth=3), where Squad Leads exist at L2 and spawn Workers at L3. At SS-50/SS-100, Workers are spawned directly by Commanders using Shards (Schema 2) — there is no Micro-Brief layer.
 
 Sent from Squad Lead to each Worker. The most compressed context — a single atomic instruction.
 

@@ -340,9 +340,16 @@ mkdir -p ~/.copilot/skills/swarm-command ~/.copilot/agents && \
 **Verify integrity (optional):**
 
 ```bash
+# macOS
 shasum -a 256 ~/.copilot/skills/swarm-command/SKILL.md
 shasum -a 256 ~/.copilot/agents/swarm-command.agent.md
+
+# Linux
+sha256sum ~/.copilot/skills/swarm-command/SKILL.md
+sha256sum ~/.copilot/agents/swarm-command.agent.md
 ```
+
+> Compare the output against the checksums published on the [latest release page](https://github.com/DUBSOpenHub/swarm-command/releases/latest).
 
 > 💡 **Security note:** We recommend [inspecting quickstart.sh](https://github.com/DUBSOpenHub/swarm-command/blob/main/quickstart.sh) before piping to bash. You can also use the manual install above instead.
 
@@ -564,7 +571,8 @@ swarm-command/
 ├── protocols/
 │   ├── depth-guard.md                  # 5 Laws + 3-layer enforcement
 │   ├── circuit-breaker.md              # 3-state FSM + 5-level recovery
-│   └── context-capsule.md              # JSON schemas for data structures
+│   ├── context-capsule.md              # JSON schemas for data structures
+│   └── meta-reviewer.md                # Meta-review protocol
 └── docs/
     ├── architecture.md                 # Architecture overview
     ├── architecture-diagrams.md        # Mermaid diagrams

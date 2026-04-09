@@ -40,8 +40,12 @@ jobs:
               raise SystemExit('No JSON blocks found')
           for i, block in enumerate(blocks, 1):
               try:
-                  json.loads(block)
-                  print(f'✅ JSON block {i} valid')
+                  parsed = json.loads(block)
               except json.JSONDecodeError as e:
-                  print(f'⚠️  JSON block {i} skipped (contains placeholders): {e}')
+                  raise SystemExit(f'Invalid JSON in block {i}: {e}')
+              if not isinstance(parsed, dict):
+                  raise SystemExit(f'JSON block {i} must be a top-level object')
+              if '\$schema' in parsed and 'type' not in parsed:
+                  raise SystemExit(f'JSON schema block {i} must define a top-level type')
+              print(f'✅ JSON block {i} valid')
           "
