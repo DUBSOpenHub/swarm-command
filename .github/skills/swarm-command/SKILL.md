@@ -201,6 +201,12 @@ Launch Commanders in PARALLEL using the `task` tool:
 
 ### Scale-Specific Deployment
 
+**Commander pool (10 models — draw in order, alternate Claude↔GPT for diversity):**
+```
+claude-opus-4.6, claude-opus-4.5, claude-opus-4.6-1m, claude-sonnet-4.6, claude-sonnet-4.5,
+claude-sonnet-4, gpt-5.4, gpt-5.2, gpt-5.1, goldeneye
+```
+
 **SS-50 (2-3 Commanders):**
 ```
 Commander 1: agent_type="general-purpose", model="claude-sonnet-4.6"
@@ -215,13 +221,13 @@ Commander 2: agent_type="general-purpose", model="gpt-5.4"
 Commander 3: agent_type="general-purpose", model="claude-sonnet-4.5"
 ```
 
-**SS-250 (5 Commanders):**
+**SS-250 (5 Commanders — drawn from commander pool of 10):**
 ```
-Commander 1 (ARCH): agent_type="general-purpose", model="claude-sonnet-4.6"
+Commander 1 (ARCH): agent_type="general-purpose", model="claude-opus-4.6"
 Commander 2 (IMPL): agent_type="general-purpose", model="gpt-5.4"
-Commander 3 (TEST): agent_type="general-purpose", model="claude-sonnet-4.5"
+Commander 3 (TEST): agent_type="general-purpose", model="claude-sonnet-4.6"
 Commander 4 (DOCS): agent_type="general-purpose", model="gpt-5.2"
-Commander 5 (INTG): agent_type="general-purpose", model="claude-opus-4.6"
+Commander 5 (INTG): agent_type="general-purpose", model="claude-sonnet-4.5"
 ```
 
 ### Commander Prompt Construction
@@ -279,11 +285,11 @@ Show deployment progress:
 🐝 PHASE 3 — COMMANDER DEPLOYMENT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  CMD-ARCH  ▸ claude-sonnet-4.6  ▸ Architecture    ✅ deployed
-  CMD-IMPL  ▸ gpt-5.4           ▸ Implementation  ✅ deployed
-  CMD-TEST  ▸ claude-sonnet-4.5  ▸ Testing         ✅ deployed
-  CMD-DOCS  ▸ gpt-5.2           ▸ Documentation   ✅ deployed
-  CMD-INTG  ▸ claude-opus-4.6   ▸ Integration     ✅ deployed
+  CMD-ARCH  ▸ claude-opus-4.6    ▸ Architecture    ✅ deployed
+  CMD-IMPL  ▸ gpt-5.4            ▸ Implementation  ✅ deployed
+  CMD-TEST  ▸ claude-sonnet-4.6  ▸ Testing         ✅ deployed
+  CMD-DOCS  ▸ gpt-5.2            ▸ Documentation   ✅ deployed
+  CMD-INTG  ▸ claude-sonnet-4.5  ▸ Integration     ✅ deployed
 
   Commanders active: 5/5
   Squad Leads spawning...
@@ -342,15 +348,18 @@ Track:
 
 Pair bundles from different domains for cross-review:
 
-| Pair | Bundle A | Bundle B | Reviewer Model |
+| Pair | Bundle A | Bundle B | Reviewer Models |
 |---|---|---|---|
-| 1 | CMD-ARCH | CMD-IMPL | claude-sonnet-4.6 + gpt-5.4 |
-| 2 | CMD-TEST | CMD-DOCS | claude-opus-4.5 + gpt-5.2 |
-| 3 | CMD-ARCH | CMD-INTG | claude-sonnet-4.5 + gpt-5.1 |
-| 4 | CMD-IMPL | CMD-TEST | claude-haiku-4.5 + gpt-5.4-mini |
-| 5 | CMD-DOCS | CMD-INTG | goldeneye + gpt-4.1 |
+| 1 | CMD-ARCH | CMD-IMPL | claude-opus-4.6 ↔ gpt-5.4 |
+| 2 | CMD-TEST | CMD-DOCS | claude-opus-4.5 ↔ gpt-5.2 |
+| 3 | CMD-ARCH | CMD-INTG | claude-opus-4.6-1m ↔ gpt-5.1 |
+| 4 | CMD-IMPL | CMD-TEST | claude-sonnet-4.6 ↔ gpt-5.3-codex |
+| 5 | CMD-DOCS | CMD-INTG | claude-sonnet-4.5 ↔ gpt-5.2-codex |
+| 6 | CMD-ARCH | CMD-TEST | claude-sonnet-4 ↔ gpt-5.4-mini |
+| 7 | CMD-IMPL | CMD-DOCS | claude-haiku-4.5 ↔ gpt-5-mini |
+| 8 | CMD-TEST | CMD-INTG | goldeneye ↔ gpt-4.1 |
 
-For SS-50/SS-100: Use 3-4 review pairs based on available bundles.
+For SS-50/SS-100: Use 3-4 review pairs based on available bundles. For SS-250: Use all 8 cross-family pairs (10 reviewer slots filled by cycling through pairs).
 
 ### Reviewer Prompt
 
@@ -370,11 +379,11 @@ Show review progress:
 🐝 PHASE 5 — CROSS-REVIEW (pipeline overlap)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  REV-01  ▸ ARCH × IMPL    ▸ claude-sonnet-4.6  ✅ CONSENSUS (0.84)
-  REV-02  ▸ TEST × DOCS    ▸ gpt-5.4            ✅ CONSENSUS (0.79)
-  REV-03  ▸ ARCH × INTG    ▸ claude-sonnet-4.5  ⏳ scoring...
-  REV-04  ▸ IMPL × TEST    ▸ gpt-5.2            ✅ MAJORITY (0.62)
-  REV-05  ▸ DOCS × INTG    ▸ gpt-5.1            ✅ CONSENSUS (0.77)
+  REV-01  ▸ ARCH × IMPL    ▸ claude-opus-4.6 ↔ gpt-5.4            ✅ CONSENSUS (0.84)
+  REV-02  ▸ TEST × DOCS    ▸ claude-opus-4.5 ↔ gpt-5.2            ✅ CONSENSUS (0.79)
+  REV-03  ▸ ARCH × INTG    ▸ claude-opus-4.6-1m ↔ gpt-5.1         ⏳ scoring...
+  REV-04  ▸ IMPL × TEST    ▸ claude-sonnet-4.6 ↔ gpt-5.3-codex    ✅ MAJORITY (0.62)
+  REV-05  ▸ DOCS × INTG    ▸ claude-sonnet-4.5 ↔ gpt-5.2-codex    ✅ CONSENSUS (0.77)
 
   Reviews complete: 4/5
   Average consensus score: 0.76
@@ -704,15 +713,14 @@ Apply these 7 critical optimizations:
 
 # MODEL ASSIGNMENT REFERENCE
 
-| Role | Primary | Alternate | Rule |
-|---|---|---|---|
-| Nexus (you) | claude-opus-4.6 | — | Always opus |
-| Commander | claude-sonnet-4.6 | gpt-5.4 | Alternate for diversity |
-| Squad Lead | claude-haiku-4.5 | gpt-5.4-mini | Alternate within commander |
-| Worker (Scout) | claude-haiku-4.5 | gpt-5.4-mini | Mix within pod |
-| Worker (Executor) | claude-haiku-4.5 | gpt-5.1 | GPT for build/test |
-| Reviewer | claude-sonnet-4.6 | gpt-5.4 | Cross-family pairs always |
-| Shadow Scoring | Nexus-internal | — | Nexus validates against sealed criteria (Shadow Score Spec L2) |
+| Role | Model Pool | Rule |
+|---|---|---|
+| Nexus (you) | `claude-opus-4.6` | Always opus — top reasoning model |
+| Commander (pool: 10) | `claude-opus-4.6`, `claude-opus-4.5`, `claude-opus-4.6-1m`, `claude-sonnet-4.6`, `claude-sonnet-4.5`, `claude-sonnet-4`, `gpt-5.4`, `gpt-5.2`, `gpt-5.1`, `goldeneye` | Draw in order; alternate Claude↔GPT for diversity |
+| Squad Lead | `claude-haiku-4.5`, `gpt-5.4-mini` | Alternate within commander for cross-family diversity |
+| Worker (pool: 6) | `claude-haiku-4.5`, `gpt-5.4-mini`, `gpt-5-mini`, `gpt-4.1`, `gpt-5.3-codex`, `gpt-5.2-codex` | Mix within pod; Codex variants for build/test tasks |
+| Reviewer (8 pairs) | `claude-opus-4.6`↔`gpt-5.4`, `claude-opus-4.5`↔`gpt-5.2`, `claude-opus-4.6-1m`↔`gpt-5.1`, `claude-sonnet-4.6`↔`gpt-5.3-codex`, `claude-sonnet-4.5`↔`gpt-5.2-codex`, `claude-sonnet-4`↔`gpt-5.4-mini`, `claude-haiku-4.5`↔`gpt-5-mini`, `goldeneye`↔`gpt-4.1` | Always cross-family pairs |
+| Shadow Scoring | Nexus-internal | Nexus validates against sealed criteria (Shadow Score Spec L2) |
 
 ---
 

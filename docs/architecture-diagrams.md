@@ -25,15 +25,15 @@ graph TB
     end
 
     subgraph L3["🐝 L3 — WORKERS (250 agents)"]
-        W1["Workers 1-50<br/>explore · Haiku"]
-        W2["Workers 51-100<br/>explore · Haiku"]
-        W3["Workers 101-150<br/>task · GPT-Mini"]
-        W4["Workers 151-200<br/>explore · Haiku"]
-        W5["Workers 201-250<br/>task · GPT-Mini"]
+        W1["Workers 1-50<br/>explore · Haiku/Mini"]
+        W2["Workers 51-100<br/>explore · Haiku/Mini"]
+        W3["Workers 101-150<br/>task · Codex/Mini"]
+        W4["Workers 151-200<br/>explore · Haiku/Mini"]
+        W5["Workers 201-250<br/>task · Codex/Mini"]
     end
 
     subgraph L4["🔍 L4 — REVIEWERS (10 agents)"]
-        REV["Cross-Review Mesh<br/>5 Claude↔GPT pairs<br/>general-purpose"]
+        REV["Cross-Review Mesh<br/>8 Claude↔GPT pairs<br/>general-purpose"]
     end
 
     subgraph SHADOW["👻 SHADOW SCORING (Nexus-internal, Shadow Score Spec L2)"]

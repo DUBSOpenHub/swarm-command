@@ -65,7 +65,7 @@ When a circuit breaker trips (enters OPEN state), escalate through these levels 
 |---|---|---|---|
 | **L1: Retry** | Re-send same prompt to same model | First failure of an agent | Wait 2s, retry identical prompt |
 | **L2: Simplify** | Reduce task complexity | Retry failed | Split the task in half, retry each half independently |
-| **L3: Model Swap** | Switch to a different model | Simplify failed | `haiku → sonnet`, `gpt-mini → gpt-5.1`, use a more capable model |
+| **L3: Model Swap** | Switch to a different model | Simplify failed | `haiku → sonnet`, `gpt-5.4-mini → gpt-5.4`, upgrade to a more capable model from the commander pool |
 | **L4: Scope Reduce** | Narrow file scope or skip sub-task | Model swap failed | Mark sub-task as "best-effort", reduce scope to core files only |
 | **L5: Graceful Degrade** | Return partial results with explicit gaps | Scope reduce failed | Emit `status: partial` with a detailed gap report |
 

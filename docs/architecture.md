@@ -65,7 +65,7 @@ The Nexus is the brain of the swarm. It receives the user's task, decomposes it 
 | Property | Value |
 |---|---|
 | Agent type | `general-purpose` |
-| Model | Mixed: `claude-sonnet-4.6`, `gpt-5.4`, `gpt-5.2`, `claude-sonnet-4.5` (alternating) |
+| Model | Commander pool (10): `claude-opus-4.6`, `claude-opus-4.5`, `claude-opus-4.6-1m`, `claude-sonnet-4.6`, `claude-sonnet-4.5`, `claude-sonnet-4`, `gpt-5.4`, `gpt-5.2`, `gpt-5.1`, `goldeneye` (draw in order; alternate Claude↔GPT) |
 | Context budget | 64K tokens |
 | `can_launch` | `true` |
 | Max children | 10 Squad Leads each |
@@ -97,7 +97,7 @@ The Nexus is the brain of the swarm. It receives the user's task, decomposes it 
 | Property | Value |
 |---|---|
 | Agent type | `explore` or `task` |
-| Model | `claude-haiku-4.5` or `gpt-5.4-mini` (mixed within pod) |
+| Model | Worker pool (6): `claude-haiku-4.5`, `gpt-5.4-mini`, `gpt-5-mini`, `gpt-4.1`, `gpt-5.3-codex`, `gpt-5.2-codex` (mix within pod; Codex variants for build/test) |
 | Context budget | 8K tokens |
 | `can_launch` | `false` — **STRUCTURALLY ENFORCED** |
 | Responsibilities | Execute single atomic task, emit structured JSON atom |
@@ -197,11 +197,24 @@ For maximum insight diversity, models from different families are paired within 
 
 | Pod Role | Primary Model | Alternate Model | When to Alternate |
 |---|---|---|---|
-| Commander | claude-sonnet-4.6 | gpt-5.4 | Every other commander |
+| Commander | claude-opus-4.6 | gpt-5.4, gpt-5.2, gpt-5.1, goldeneye | Drawn from 10-model commander pool |
 | Squad Lead | claude-haiku-4.5 | gpt-5.4-mini | Alternate within same commander |
-| Scout Worker | claude-haiku-4.5 | gpt-5.4-mini | Mix within same pod |
-| Executor Worker | claude-haiku-4.5 | gpt-5.1 | Use GPT for build/test tasks |
-| Reviewer | claude-sonnet-4.6 | gpt-5.4 | Cross-family pairs (always) |
+| Scout Worker | claude-haiku-4.5 | gpt-5.4-mini, gpt-5-mini, gpt-4.1 | Mix within same pod |
+| Executor Worker | gpt-5.3-codex | gpt-5.2-codex | Use Codex variants for build/test tasks |
+| Reviewer | 8 cross-family pairs (see below) | — | Always cross-family |
+
+**Reviewer pairs (8 total):**
+
+| Pair | Claude model | GPT model |
+|---|---|---|
+| 1 | claude-opus-4.6 | gpt-5.4 |
+| 2 | claude-opus-4.5 | gpt-5.2 |
+| 3 | claude-opus-4.6-1m | gpt-5.1 |
+| 4 | claude-sonnet-4.6 | gpt-5.3-codex |
+| 5 | claude-sonnet-4.5 | gpt-5.2-codex |
+| 6 | claude-sonnet-4 | gpt-5.4-mini |
+| 7 | claude-haiku-4.5 | gpt-5-mini |
+| 8 | goldeneye | gpt-4.1 |
 
 ---
 

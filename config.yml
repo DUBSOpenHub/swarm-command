@@ -67,18 +67,28 @@ swarm_command:
   models:
     commander_pool:
       - claude-opus-4.6
+      - claude-opus-4.5
+      - claude-opus-4.6-1m
       - claude-sonnet-4.6
+      - claude-sonnet-4.5
+      - claude-sonnet-4
       - gpt-5.4
       - gpt-5.2
-      - claude-sonnet-4.5
+      - gpt-5.1
+      - goldeneye
     worker_pool:
       - claude-haiku-4.5
       - gpt-5.4-mini
       - gpt-5-mini
       - gpt-4.1
+      - gpt-5.3-codex
+      - gpt-5.2-codex
     reviewer_pairs:
-      - [claude-sonnet-4.6, gpt-5.4]
+      - [claude-opus-4.6, gpt-5.4]
       - [claude-opus-4.5, gpt-5.2]
-      - [claude-sonnet-4.5, gpt-5.1]
-      - [claude-haiku-4.5, gpt-5.4-mini]
+      - [claude-opus-4.6-1m, gpt-5.1]
+      - [claude-sonnet-4.6, gpt-5.3-codex]
+      - [claude-sonnet-4.5, gpt-5.2-codex]
+      - [claude-sonnet-4, gpt-5.4-mini]
+      - [claude-haiku-4.5, gpt-5-mini]
       - [goldeneye, gpt-4.1]

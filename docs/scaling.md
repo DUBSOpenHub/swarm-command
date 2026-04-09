@@ -23,11 +23,11 @@ Default: **SS-100**. Use `swarm command ss-250` for full or `swarm command ss-50
 Best for: Single-file refactors, focused investigations, quick code analysis.
 
 ```
-L0: 1 Nexus (opus)
-L1: 3 Commanders (sonnet)
+L0: 1 Nexus (claude-opus-4.6)
+L1: 3 Commanders (commander pool — 10 models)
 L2: — (no Squad Leads at this scale)
-L3: 45 Workers (haiku/mini)  — 15 per commander
-L4: 3 Reviewers (sonnet)
+L3: 45 Workers (worker pool — 6 models)  — 15 per commander
+L4: 3 Reviewers (cross-family pairs)
 ──────────────────────────
 Total: ~52 agents
 Cost:  $1.50 – $3.50
@@ -63,11 +63,11 @@ Time:  ~30s wall-clock
 Best for: Multi-file features, module-level tasks, thorough code reviews.
 
 ```
-L0: 1 Nexus (opus)
-L1: 5 Commanders (sonnet)
+L0: 1 Nexus (claude-opus-4.6)
+L1: 5 Commanders (commander pool — 10 models)
 L2: — (no Squad Leads at this scale)
-L3: 75 Workers (haiku/mini)  — 15 per commander
-L4: 8 Reviewers (sonnet)
+L3: 75 Workers (worker pool — 6 models)  — 15 per commander
+L4: 8 Reviewers (cross-family pairs)
     Shadow Scoring (Nexus-internal, sealed criteria)
 ──────────────────────────
 Total: ~89 agents
@@ -104,11 +104,11 @@ Time:  ~45s wall-clock
 Best for: Repo-wide refactors, full feature implementation, comprehensive audits.
 
 ```
-L0: 1 Nexus (opus)
-L1: 5 Commanders (sonnet)
-L2: 50 Squad Leads (haiku)   — 10 per commander
-L3: 250 Workers (haiku/mini) — 5 per squad lead
-L4: 10 Reviewers (sonnet)
+L0: 1 Nexus (claude-opus-4.6)
+L1: 5 Commanders (commander pool — 10 models)
+L2: 50 Squad Leads (claude-haiku-4.5 | gpt-5.4-mini)  — 10 per commander
+L3: 250 Workers (worker pool — 6 models)               — 5 per squad lead
+L4: 10 Reviewers (8 cross-family pairs)
     Shadow Scoring (Nexus-internal, sealed criteria)
 ──────────────────────────
 Total: ~316 agents
@@ -142,11 +142,11 @@ Time:  ~65-90s wall-clock
 
 | Layer | Agents | Model | Tokens In (avg) | Tokens Out (avg) | Cost |
 |---|---|---|---|---|---|
-| Nexus (L0) | 1 | opus | 50K | 8K | $1.35 |
-| Commanders (L1) | 5 | sonnet | 30K × 5 | 4K × 5 | $0.75 |
-| Squad Leads (L2) | 50 | haiku | 8K × 50 | 2K × 50 | $0.72 |
-| Workers (L3) | 250 | haiku/mini | 2K × 250 | 0.5K × 250 | $0.90 |
-| Reviewers (L4) | 10 | sonnet | 10K × 10 | 2K × 10 | $0.60 |
+| Nexus (L0) | 1 | claude-opus-4.6 | 50K | 8K | $1.35 |
+| Commanders (L1) | 5 | commander pool | 30K × 5 | 4K × 5 | $0.75 |
+| Squad Leads (L2) | 50 | haiku / gpt-5.4-mini | 8K × 50 | 2K × 50 | $0.72 |
+| Workers (L3) | 250 | worker pool | 2K × 250 | 0.5K × 250 | $0.90 |
+| Reviewers (L4) | 10 | 8 cross-family pairs | 10K × 10 | 2K × 10 | $0.60 |
 | **Total** | **316** | | | | **$4.32** (optimistic) |
 
 ---
