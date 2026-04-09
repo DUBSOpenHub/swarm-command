@@ -17,6 +17,13 @@
 >    ```
 > 3. When Copilot opens, type: `swarm command`
 >
+> Prefer to inspect the installer before piping it to bash:
+> ```bash
+> curl -fsSL https://raw.githubusercontent.com/DUBSOpenHub/swarm-command/main/quickstart.sh -o quickstart.sh
+> less quickstart.sh
+> bash quickstart.sh
+> ```
+>
 > *Requires an active [Copilot subscription](https://github.com/features/copilot/plans).*
 
 ---
@@ -344,6 +351,24 @@ mkdir -p ~/.copilot/skills/swarm-command ~/.copilot/agents && \
     -o ~/.copilot/agents/swarm-command.agent.md && \
   echo "✅ Swarm Command installed — open Copilot CLI and type: swarm command"
 ```
+
+Verify the downloads before you use them:
+
+```bash
+# Linux
+sha256sum ~/.copilot/skills/swarm-command/SKILL.md
+# expected: 53e3a766a764c26be2d74c588c87a3783d307251a7d32d25378f681ed6c3cbb6
+sha256sum ~/.copilot/agents/swarm-command.agent.md
+# expected: b2ca830c6c35630f2b61bcc0332723a38e04b4079c73631f055f38109833d773
+
+# macOS
+shasum -a 256 ~/.copilot/skills/swarm-command/SKILL.md
+# expected: 53e3a766a764c26be2d74c588c87a3783d307251a7d32d25378f681ed6c3cbb6
+shasum -a 256 ~/.copilot/agents/swarm-command.agent.md
+# expected: b2ca830c6c35630f2b61bcc0332723a38e04b4079c73631f055f38109833d773
+```
+
+If the hashes do not match, delete the files and re-download them before use.
 
 ### Clone & Explore
 

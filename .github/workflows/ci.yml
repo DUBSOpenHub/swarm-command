@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install validation dependencies
+        run: python3 -m pip install --disable-pip-version-check --quiet pyyaml
+
+      - name: Validate YAML files
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml
+
+          for path in ("config.yml", "catalog.yml"):
+              with Path(path).open() as handle:
+                  yaml.safe_load(handle)
+              print(f"Validated {path}")
+          PY
+
+      - name: Ensure SKILL.md copies are identical
+        run: diff -u skills/swarm-command/SKILL.md .github/skills/swarm-command/SKILL.md
+
+      - name: Validate JSON blocks in context capsule protocol
+        run: |
+          python3 - <<'PY'
+          import json
+          import re
+          from pathlib import Path
+
+          content = Path("protocols/context-capsule.md").read_text()
+          blocks = re.findall(r"```json\n(.*?)\n```", content, re.S)
+
+          if not blocks:
+              raise SystemExit("No JSON blocks found in protocols/context-capsule.md")
+
+          for index, block in enumerate(blocks, start=1):
+              data = json.loads(block)
+              if not isinstance(data, dict):
+                  raise SystemExit(f"JSON block {index} is not an object")
+              if "$schema" in data and "type" not in data:
+                  raise SystemExit(f"Schema block {index} is missing a top-level type")
+              print(f"Validated JSON block {index}")
+          PY
