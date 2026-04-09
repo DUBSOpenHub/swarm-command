@@ -109,14 +109,14 @@ These systems are complementary — not competitors.
 
 | If you need to... | Use | Why |
 |---|---|---|
-| Solve **one complex task** with layered consensus inside your current Copilot CLI session | **Swarm Command** | Best when you want decomposition, cross-model review, shadow validation, and one synthesized answer |
-| Run **parallel coding workstreams** across terminals or branches | **Stampede** | Best when the goal is execution throughput across independent task lanes |
-| Run a **many-model tournament** to pressure-test ideas and rank options | **Havoc Hackathon** | Best when you want competitive ideation, elimination rounds, and judged synthesis |
+| Solve **one complex task** with layered consensus inside your current Copilot CLI session | [**Swarm Command**](https://github.com/DUBSOpenHub/swarm-command) | Best when you want decomposition, cross-model review, shadow validation, and one synthesized answer |
+| Run **parallel coding workstreams** across terminals or branches | [**Stampede**](https://github.com/DUBSOpenHub/terminal-stampede) | Best when the goal is execution throughput across independent task lanes |
+| Run a **many-model tournament** to pressure-test ideas and rank options | [**Havoc Hackathon**](https://github.com/DUBSOpenHub/havoc-hackathon) | Best when you want competitive ideation, elimination rounds, and judged synthesis |
 
 **Rule of thumb:**
-- Choose **Swarm Command** for **consensus execution**.
-- Choose **Stampede** for **parallel implementation**.
-- Choose **Havoc** for **idea tournaments and comparative judging**.
+- Choose [**Swarm Command**](https://github.com/DUBSOpenHub/swarm-command) for **consensus execution**.
+- Choose [**Stampede**](https://github.com/DUBSOpenHub/terminal-stampede) for **parallel implementation**.
+- Choose [**Havoc**](https://github.com/DUBSOpenHub/havoc-hackathon) for **idea tournaments and comparative judging**.
 
 ---
 
