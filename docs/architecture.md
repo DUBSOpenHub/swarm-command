@@ -20,7 +20,7 @@ Nexus
   ↓
 Commanders
   ↓
-Squad Leads
+Squad Leads (SS-250 only)
   ↓
 Workers
   ↓
@@ -28,6 +28,8 @@ Reviewers + Shadow Score
   ↓
 Final synthesis
 ```
+
+> **Note:** At SS-50 and SS-100, the Squad Lead layer is skipped — Commanders spawn Workers directly (depth 2). The full 4-tier spawn chain (Nexus → Commander → Squad Lead → Worker) only applies at SS-250.
 
 **Read this doc when:** you want the system model.
 **Jump to:** [architecture diagrams](architecture-diagrams.md) for visuals, [consensus](consensus.md) for merge mechanics, and [scaling](scaling.md) for deployment choices.

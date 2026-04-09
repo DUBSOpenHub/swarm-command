@@ -47,7 +47,7 @@ The Commander reads `depth_budget.squads_allocated` and uses it in place of the 
 |---|---|---|
 | **Law 1** | Only `general-purpose` agents may spawn children | Structural: `explore` and `task` agents lack the `task` tool |
 | **Law 2** | `explore` and `task` agents are structurally leaf nodes | Structural: Agent type definition prevents spawning |
-| **Law 3** | Maximum spawn depth = 3 (Nexus[0] → Commander[1] → Squad Lead[2] → Worker[3]). Workers are leaf nodes at depth 3. | Config: `depth_config.max_depth = 3` in every capsule |
+| **Law 3** | Maximum spawn depth varies by scale: 3 for SS-250 (Nexus[0] → Commander[1] → Squad Lead[2] → Worker[3]), 2 for SS-50/SS-100 (Nexus[0] → Commander[1] → Worker[2], no squad leads). Workers are always leaf nodes at the deepest level. | Config: `depth_config.max_depth` set per scale (2 or 3) in every capsule |
 | **Law 4** | Each spawner is limited to a declared max children count | Config: Commanders ≤ 10 squad leads, Squad Leads ≤ 5 workers |
 | **Law 5** | Workers MUST be told "DO NOT use the task tool" | Prompt: Explicit instruction in every worker prompt |
 
@@ -58,11 +58,18 @@ The Commander reads `depth_budget.squads_allocated` and uses it in place of the 
 The **parent** computes `can_launch` for every child it spawns. The child never determines this for itself. This is the foundational principle — parent-controlled spawning.
 
 ```
-Nexus spawns Commander:     can_launch = true   (Commanders spawn Squad Leads)
-Commander spawns Squad Lead: can_launch = true   (Squad Leads spawn Workers)
-Squad Lead spawns Worker:    can_launch = false  (Workers are leaf nodes)
-Nexus spawns Reviewer:       can_launch = false  (Reviewers don't spawn)
-Nexus spawns Shadow:         N/A — Shadow scoring is Nexus-internal (Shadow Score Spec L2)
+SS-250 (3-layer spawn chain):
+  Nexus spawns Commander:     can_launch = true   (Commanders spawn Squad Leads)
+  Commander spawns Squad Lead: can_launch = true   (Squad Leads spawn Workers)
+  Squad Lead spawns Worker:    can_launch = false  (Workers are leaf nodes at depth 3)
+
+SS-50 / SS-100 (2-layer spawn chain — no squad leads):
+  Nexus spawns Commander:     can_launch = true   (Commanders spawn Workers directly)
+  Commander spawns Worker:     can_launch = false  (Workers are leaf nodes at depth 2)
+
+All scales:
+  Nexus spawns Reviewer:       can_launch = false  (Reviewers don't spawn)
+  Nexus spawns Shadow:         N/A — Shadow scoring is Nexus-internal (Shadow Score Spec L2)
 ```
 
 **Rule: If `can_launch = false`, the agent's prompt MUST contain the DEPTH LOCK block:**
@@ -108,10 +115,9 @@ You are a LEAF NODE. This instruction is non-negotiable.
 
 ```
 L0: Nexus (1)           depth=0, can_launch=true
-L1: Commanders (3)      depth=1, can_launch=true
-L2: — (no Squad Leads at this scale)
-L3: Workers (45)         depth=3, can_launch=false  → LEAF (15 per commander)
-L4: Reviewers (3)        depth=1, can_launch=false  → LEAF
+L1: Commanders (3)      depth=1, can_launch=true   → spawn workers directly (no squad leads)
+L2: Workers (45)        depth=2, can_launch=false   → LEAF (15 per commander)
+    Reviewers (3)        depth=1, can_launch=false   → LEAF (spawned by Nexus)
 Total: ~52
 ```
 
@@ -119,11 +125,10 @@ Total: ~52
 
 ```
 L0: Nexus (1)           depth=0, can_launch=true
-L1: Commanders (5)      depth=1, can_launch=true
-L2: — (no Squad Leads at this scale)
-L3: Workers (75)         depth=3, can_launch=false  → LEAF (15 per commander)
-L4: Reviewers (8)        depth=1, can_launch=false  → LEAF
-    Shadow scoring         Nexus-internal (sealed criteria, no agents spawned)
+L1: Commanders (5)      depth=1, can_launch=true   → spawn workers directly (no squad leads)
+L2: Workers (75)        depth=2, can_launch=false   → LEAF (15 per commander)
+    Reviewers (8)        depth=1, can_launch=false   → LEAF (spawned by Nexus)
+    Shadow scoring       Nexus-internal (sealed criteria, no agents spawned)
 Total: ~89
 ```
 
@@ -147,14 +152,15 @@ Total: ~316
 
 Before deploying any swarm, verify ALL items:
 
-- [ ] Nexus prompt sets `max_depth = 3` in all capsules sent to Commanders
-- [ ] Commander prompts include Squad Lead spawning rules with depth_config
-- [ ] Squad Lead prompts specify worker agent types as `explore` or `task` only
+- [ ] Nexus prompt sets `max_depth` per scale (3 for SS-250, 2 for SS-50/SS-100) in all capsules
+- [ ] SS-250: Commander prompts include Squad Lead spawning rules with depth_config
+- [ ] SS-50/SS-100: Commander prompts include direct Worker spawning rules (no squad leads)
+- [ ] Squad Lead prompts (SS-250 only) specify worker agent types as `explore` or `task` only
 - [ ] All worker prompts contain the complete DEPTH LOCK block
 - [ ] All reviewer prompts contain the complete DEPTH LOCK block
 - [ ] Shadow scoring is Nexus-internal — no shadow validator agents spawned (Shadow Score Spec L2)
-- [ ] No agent at depth 2+ has `can_launch = true` (only Squad Leads at depth 2 may, for spawning workers)
-- [ ] No `general-purpose` agent is spawned at the worker level (depth 3)
+- [ ] No agent at max depth has `can_launch = true` (workers are always leaf nodes)
+- [ ] No `general-purpose` agent is spawned at the worker level (depth 2 for SS-50/SS-100, depth 3 for SS-250)
 - [ ] Commander max children ≤ 10
 - [ ] Squad Lead max children ≤ 5
 - [ ] Total agent count does not exceed scale ceiling
@@ -168,7 +174,7 @@ Before deploying any swarm, verify ALL items:
 | 1 | **Recursive self-spawning** | Infinite agent explosion | Use `can_launch = false` on leaf nodes |
 | 2 | **Child decides depth** | Child can lie or miscalculate | Parent precomputes `can_launch` for each child |
 | 3 | **Explore agents spawning** | Type violation | Enforce agent type = `explore`/`task` for workers |
-| 4 | **Depth=0 workers** | Nexus drowns in 250 atoms | Always use Commander + Squad Lead intermediaries |
+| 4 | **Depth=0 workers** | Nexus drowns in 250 atoms | Use Commander (+ Squad Lead at SS-250) intermediaries |
 | 5 | **Unrestricted fan-out** | Exceeds concurrent agent limits | Max 10 children per spawner |
 
 ---
@@ -177,9 +183,10 @@ Before deploying any swarm, verify ALL items:
 
 The skill implements depth guard enforcement at every spawning point:
 
-1. **Nexus level**: Sets `depth_config` in every Context Capsule with `current_depth=1, max_depth=3, can_launch=true`
-2. **Commander level**: Passes Shards to Squad Leads with `current_depth=2, max_depth=3, can_launch=true`
-3. **Squad Lead level**: Passes Micro-Briefs to Workers with `can_launch=false` and DEPTH LOCK in prompt
-4. **Reviewer level**: Spawned by Nexus with `can_launch=false` and DEPTH LOCK in prompt
+1. **Nexus level**: Sets `depth_config` in every Context Capsule with `current_depth=1, max_depth=<scale_max>, can_launch=true`
+2. **Commander level (SS-250)**: Passes Shards to Squad Leads with `current_depth=2, max_depth=3, can_launch=true`
+3. **Commander level (SS-50/SS-100)**: Passes Micro-Briefs directly to Workers with `can_launch=false` and DEPTH LOCK in prompt (no squad leads at these scales)
+4. **Squad Lead level (SS-250 only)**: Passes Micro-Briefs to Workers with `can_launch=false` and DEPTH LOCK in prompt
+5. **Reviewer level**: Spawned by Nexus with `can_launch=false` and DEPTH LOCK in prompt
 
 No agent at any level can bypass these controls because they are enforced at the parent level, the agent type level, and the prompt level simultaneously.
