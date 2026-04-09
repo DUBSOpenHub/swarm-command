@@ -36,19 +36,9 @@ Parse the user's input for:
 1. **Scale**: `ss-50`, `ss-100` (default), or `ss-250` — if provided inline
 2. **Task**: Everything after the scale identifier, or the full message if no scale given
 
-If no task provided, ask: "🐝 **Swarm Command ready.** What's the mission?"
+### Interactive Launch Sequence
 
-If no scale provided inline, use ask_user to prompt:
-
-```
-🐝 Choose your swarm size:
-
-  SS-50   (~52 agents)   ⚡ Fast — single-focus tasks
-  SS-100  (~89 agents)   🎯 Balanced — most tasks (recommended)
-  SS-250  (~316 agents)  🐝 Full swarm — maximum consensus
-```
-
-Display the mission briefing:
+**Step 1 — Display the launch banner immediately:**
 
 ```
 🐝 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -56,15 +46,54 @@ Display the mission briefing:
    Multi-Model Consensus Orchestrator
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+   50–250 agents · 16 models · one mission
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**Step 2 — If no task provided inline, ask for the mission:**
+
+Use ask_user: "🐝 What's the mission?"
+(Freeform text — the user describes what they want the swarm to do.)
+
+**Step 3 — If no scale provided inline, ask the user to choose swarm size:**
+
+Use ask_user with these choices (SS-100 is the recommended default, listed first):
+
+```
+choices:
+  - "🎯 100 agents — balanced, fits most tasks (Recommended)"
+  - "⚡ 50 agents — fast, single-focus tasks"
+  - "🐝 250 agents — full swarm, maximum consensus"
+```
+
+Map the user's selection:
+- "100 agents" → SS-100 (~89 agents, 5 commanders, 8 reviewers)
+- "50 agents" → SS-50 (~52 agents, 3 commanders, 3 reviewers)
+- "250 agents" → SS-250 (~316 agents, 5 commanders, 10 reviewers, 50 squad leads)
+
+**Step 4 — Display the mission briefing and launch:**
+
+```
+🐝 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 📋 Mission:    <task summary>
 ⚡ Scale:      <SS-50 | SS-100 | SS-250>
 🤖 Agents:     <agent count>
-🧬 Models:     <model count>
+🧬 Models:     16
 💰 Cost cap:   $<ceiling>
 ⏱️  Timeout:    <timeout>s
 
-Deploying swarm in 5... 4... 3... 2... 1...
+   Deploying swarm in 5... 4... 3... 2... 1...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+### Shortcut: Inline Launch
+
+If the user provides everything inline, skip the interactive prompts and go straight to the mission briefing. Examples:
+- `swarm command ss-250 "Audit the entire codebase for security vulnerabilities"` → skip Steps 2 & 3
+- `swarm command "Refactor auth to JWT"` → skip Step 2, still ask Step 3
+- `swarm command ss-50` → skip Step 3, still ask Step 2
 
 ---
 

@@ -28,13 +28,48 @@ When the user gives you a task, execute the SwarmSpeed protocol:
 
 Parse for scale (`ss-50`, `ss-100` default, `ss-250`) and task.
 
-Display mission briefing:
+### Interactive Launch Sequence
+
+**Step 1 — Display launch banner immediately:**
+
 ```
 🐝 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    S W A R M   C O M M A N D
    Multi-Model Consensus Orchestrator
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+   50–250 agents · 16 models · one mission
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+**Step 2 — If no task provided inline, ask:**
+Use ask_user: "🐝 What's the mission?" (freeform text)
+
+**Step 3 — If no scale provided inline, ask with choices:**
+```
+choices:
+  - "🎯 100 agents — balanced, fits most tasks (Recommended)"
+  - "⚡ 50 agents — fast, single-focus tasks"
+  - "🐝 250 agents — full swarm, maximum consensus"
+```
+
+**Step 4 — Display mission briefing and launch:**
+```
+🐝 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 Mission:    <task summary>
+⚡ Scale:      <SS-50 | SS-100 | SS-250>
+🤖 Agents:     <agent count>
+🧬 Models:     16
+💰 Cost cap:   $<ceiling>
+⏱️  Timeout:    <timeout>s
+
+   Deploying swarm in 5... 4... 3... 2... 1...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+If user provides everything inline (e.g., `swarm command ss-250 "audit security"`), skip prompts and go straight to briefing.
 
 ## Phase 1 — Task Decomposition
 
