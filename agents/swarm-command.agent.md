@@ -63,7 +63,7 @@ Build Context Capsules (max 2048 tokens each) with:
 - `task_brief`: Domain-specific task (max 1500 chars)
 - `domain`: One of the 5 domains
 - `constraints`: timeout, max_workers, token_ceiling, retry_budget
-- `depth_config`: current_depth=1, max_depth=3, can_launch=true
+- `depth_config`: current_depth=1, max_depth=3 (SS-250) or max_depth=2 (SS-50/SS-100), can_launch=true
 - `parent_context`: One-line task summary
 
 ## Phase 3 — Commander Deployment

@@ -82,7 +82,7 @@ Sent from Nexus to each Commander. Contains the domain-specific task and constra
       "required": ["current_depth", "max_depth", "can_launch"],
       "properties": {
         "current_depth": { "type": "integer", "minimum": 0, "maximum": 4 },
-        "max_depth": { "type": "integer", "const": 3 },
+        "max_depth": { "type": "integer", "enum": [2, 3] },
         "can_launch": { "type": "boolean" }
       }
     },
@@ -217,7 +217,7 @@ Sent from Commander to each Squad Lead. Compressed subset of the Context Capsule
       "required": ["current_depth", "max_depth", "can_launch"],
       "properties": {
         "current_depth": { "type": "integer", "minimum": 1, "maximum": 4 },
-        "max_depth": { "type": "integer", "const": 3 },
+        "max_depth": { "type": "integer", "enum": [2, 3] },
         "can_launch": { "type": "boolean" }
       }
     }

@@ -186,6 +186,8 @@ For each domain, construct a Context Capsule (max 2048 tokens):
 }
 ```
 
+> **Note:** Set `max_depth` to match the active scale: `3` for SS-250 (commanders spawn squad leads which spawn workers), `2` for SS-50/SS-100 (commanders spawn workers directly — no squad lead layer).
+
 **Compression rules:**
 - Strip rationale — Commanders don't need to know *why* you chose this decomposition
 - Narrow file scope — Each capsule focuses on domain-relevant files only
@@ -239,11 +241,14 @@ Each Commander prompt MUST include:
 2. **Context Capsule**: The JSON capsule from Phase 2.
 
 3. **Spawning rules (DEPTH GUARD)**:
-   - "You are at depth 1. You MAY spawn Squad Leads."
-   - "Use agent_type: general-purpose for Squad Leads."
-   - "Set depth_config.current_depth = 2, max_depth = 3, can_launch = true for Squad Leads."
-   - "Limit each Squad Lead to 5 workers maximum."
-   - "Squad Leads MUST use agent_type explore or task for workers."
+   - **SS-250**: "You are at depth 1. You MAY spawn Squad Leads (depth 2). Squad Leads spawn Workers (depth 3)."
+   - **SS-250**: "Use agent_type: general-purpose for Squad Leads."
+   - **SS-250**: "Set depth_config.current_depth = 2, max_depth = 3, can_launch = true for Squad Leads."
+   - **SS-250**: "Limit each Squad Lead to 5 workers maximum."
+   - **SS-250**: "Squad Leads MUST use agent_type explore or task for workers."
+   - **SS-50/SS-100**: "You are at depth 1. You spawn Workers DIRECTLY (depth 2 — no Squad Lead layer)."
+   - **SS-50/SS-100**: "Use agent_type explore or task for workers."
+   - **SS-50/SS-100**: "Set depth_config.current_depth = 2, max_depth = 2, can_launch = false for Workers."
    - "Include in every worker prompt: DO NOT use the task tool. You are a LEAF NODE."
 
 4. **Canary requirement**: "Deploy 1 canary worker before full pod deployment."
