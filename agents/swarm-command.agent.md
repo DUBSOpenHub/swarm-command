@@ -97,7 +97,7 @@ Track Commander progress. Apply circuit breaker if 3+ fail:
 As soon as ANY 2 Commanders return, launch cross-reviewers for that pair:
 - `agent_type: "general-purpose"` with `can_launch = false`
 - DEPTH LOCK in prompt (reviewers don't spawn)
-- 4-axis scoring: Correctness (0.40), Completeness (0.25), Consistency (0.20), Clarity (0.15)
+- 4-axis scoring: Correctness, Completeness, Clarity, Consensus Alignment (0-10 each)
 - Consensus tiers: CONSENSUS (≥70%) / MAJORITY (≥50%) / CONFLICT (<50%)
 - Cross-family model pairs for reviewer diversity
 

@@ -250,7 +250,7 @@ Each Commander prompt MUST include:
 
 5. **Output format**: Strict JSON Bundle schema with bundle_id, domain, status, summary, atoms_merged, conflicts, content, confidence, wall_clock_s.
 
-6. **Circuit breaker**: "If more than 40% of squad leads fail, STOP and report failure."
+6. **Circuit breaker**: "If more than 50% of squad leads fail, STOP and report failure."
 
 ### Squad Lead Instructions (embedded in Commander prompt)
 
@@ -368,7 +368,7 @@ Each reviewer is launched as `agent_type: "general-purpose"` with `can_launch = 
 The reviewer prompt includes:
 1. **DEPTH LOCK** — "DO NOT use the task tool. You are a reviewer, not a builder."
 2. **Both bundle JSONs** — Full content of both bundles
-3. **4-axis scoring rubric** — Correctness (0.40), Completeness (0.25), Consistency (0.20), Clarity (0.15)
+3. **4-axis scoring rubric** — Correctness, Completeness, Clarity, Consensus Alignment (0-10 each)
 4. **Consensus tier classification** — CONSENSUS (≥70%) / MAJORITY (≥50%) / CONFLICT (<50%) / UNIQUE
 5. **Consensus formula**: `score = 0.40×confidence + 0.30×evidence + 0.15×scope + 0.15×coverage − min(0.10, conflict_rate×0.10)`
 6. **Strict JSON output** — review_id, scores, consensus_tier, consensus_score, conflicts, recommendation

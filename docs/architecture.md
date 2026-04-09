@@ -229,7 +229,7 @@ T+0s     T+2s       T+5s         T+12s       T+45s      T+65s    T+80s   T+90s
 
 1. **Conflicts bubble up** — disagreements survive until a higher layer resolves them
 2. **Confidence is geometric mean** — `(c₁ × c₂ × ... × cₙ)^(1/n)`
-3. **Failed atoms are replaced once** — retry budget = 1
+3. **Failed atoms are replaced** — If a worker fails, the Squad Lead may re-launch ONE replacement (using its own retry budget of 1). Workers have retry budget = 0.
 4. **Deduplication is content-hash based** — identical atoms merge and confidence rises
 
 ---

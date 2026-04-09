@@ -14,10 +14,8 @@ Cross-reviewers can fail in subtle ways that look like normal output:
 |---|---|---|
 | **Score inflation** | All reviewers score 8+, even weak bundles | Weak bundles pass consensus gate |
 | **Score deflation** | All reviewers score ≤5, even strong bundles | Good work quarantined |
-| **Adversarial shallowness** | Adversarial axis always scores 7-9, no findings reported | Flaws pass undetected |
 | **Reviewer drift** | Two reviewers of the same bundle pair differ by >3 on same axis | Consensus tier unreliable |
 | **Rubber-stamping** | Reviewer scores match confidence from bundle exactly | Reviewer not adding value |
-| **Empty adversarial findings** | `adversarial_findings` is empty despite low adversarial score | Invalid self-contradiction |
 
 ---
 
@@ -44,20 +42,7 @@ For each scoring axis A:
 | 0.60 – 0.79 | Marginal | Attach IRR warning to bundle, Nexus notes discrepancy |
 | < 0.60 | Poor | Flag bundle for Nexus arbitration — reviewer scores too inconsistent to trust |
 
-### Step 2 — Adversarial Depth Check
-
-For each reviewer output, check:
-
-1. Is `adversarial` score < 7 AND `adversarial_findings` is empty?
-   → **Invalid** — score cannot be low without reported findings. Force `adversarial = 5` and log the correction.
-
-2. Is `adversarial` score ≥ 8 AND `adversarial_findings` is empty?
-   → **Shallow review** — reviewer claims thorough adversarial check but found nothing AND reported nothing. Flag as `adversarial_depth: "surface"`.
-
-3. Are `adversarial_findings` non-empty and substantive?
-   → Mark `adversarial_depth: "deep"` — findings are real, reviewer did the work.
-
-### Step 3 — Score Distribution Analysis
+### Step 2 — Score Distribution Analysis
 
 Compute distribution statistics across all reviewer weighted_total scores:
 
@@ -73,7 +58,7 @@ std_dev = standard_deviation(all weighted_totals)
 | `std_dev < 0.5` | Herding detected | Reviewers converged — may indicate groupthink; add 0.05 uncertainty to confidence |
 | `std_dev > 3.5` | Wild variance | Reviewers deeply disagree; escalate all MAJORITY-tier to CONFLICT |
 
-### Step 4 — Rubber-Stamp Detection
+### Step 3 — Rubber-Stamp Detection
 
 For each reviewer, compare their weighted_total to the bundle's own `confidence` field:
 
@@ -100,14 +85,10 @@ The Nexus records meta-review results in its internal state (never exposed to re
         "axis_ranges": {
           "correctness": <range>,
           "completeness": <range>,
-          "consistency": <range>,
           "clarity": <range>,
-          "adversarial": <range>
+          "consensus_alignment": <range>
         }
       }
-    },
-    "adversarial_depth_by_reviewer": {
-      "<reviewer_id>": "surface | moderate | deep"
     },
     "score_distribution": {
       "mean": <float>,
@@ -119,7 +100,7 @@ The Nexus records meta-review results in its internal state (never exposed to re
     "rubber_stamp_suspects": ["<bundle_id>"],
     "corrections_applied": [
       {
-        "type": "adversarial_score_forced | deflation_multiplier | inflation_multiplier | consensus_escalation",
+        "type": "deflation_multiplier | inflation_multiplier | consensus_escalation",
         "reviewer_id": "<reviewer_id>",
         "bundle_id": "<bundle_id>",
         "original_value": <any>,
@@ -146,7 +127,6 @@ Before proceeding to Phase 7, check:
 | ≥ 3 bundles have IRR < 0.60 | Nexus re-dispatches 2 tiebreaker reviewers for those bundles |
 | ≥ 2 reviewers flagged as rubber-stamps | Those reviewer scores are excluded from consensus |
 | Score inflation corrected by >10% | Log in Final Report under "Quality Flags" |
-| All adversarial findings are empty | Add "Shadow Gap: adversarial review not performed" to Final Report |
 
 ---
 
@@ -174,8 +154,7 @@ Set `enabled: false` to skip meta-review (not recommended for SS-250).
 | # | Anti-Pattern | Detection Method |
 |---|---|---|
 | 1 | **Reviewer collusion / herding** | IRR std_dev < 0.5 |
-| 2 | **Adversarial axis as rubber stamp** | Empty findings + high score |
-| 3 | **Score mirroring from bundle confidence** | Rubber-stamp delta < 0.05 |
-| 4 | **Systematic optimism bias** | Mean score > 8.5 |
-| 5 | **Systematic pessimism bias** | Mean score < 3.5 |
-| 6 | **IRR collapse on hard bundles** | Per-bundle IRR < 0.60 |
+| 2 | **Score mirroring from bundle confidence** | Rubber-stamp delta < 0.05 |
+| 3 | **Systematic optimism bias** | Mean score > 8.5 |
+| 4 | **Systematic pessimism bias** | Mean score < 3.5 |
+| 5 | **IRR collapse on hard bundles** | Per-bundle IRR < 0.60 |

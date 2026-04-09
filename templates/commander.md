@@ -211,7 +211,7 @@ Your final output MUST be valid JSON matching this schema:
 - If a squad lead times out, do NOT retry — mark as partial and proceed
 
 ## CIRCUIT BREAKER
-If more than 40% of your squad leads fail, STOP launching new ones.
+If more than 50% of your squad leads fail, STOP launching new ones.
 Report status "failed" with diagnostics to Nexus immediately.
 
 ## DOMAIN ASSIGNMENTS (reference)

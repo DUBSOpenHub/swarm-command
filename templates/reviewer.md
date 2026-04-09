@@ -17,37 +17,16 @@ Evaluate both bundles against the 4-axis scoring rubric. Classify consensus tier
 {{BUNDLE_A_JSON}}
 {{BUNDLE_B_JSON}}
 
-## SCORING RUBRIC — 5-Axis Adversarial Scoring
+## SCORING RUBRIC — 4-Axis Scoring
 
-Score each bundle on these 5 axes (0-10 each). **The Adversarial axis is mandatory — you MUST actively hunt for flaws, not just rate quality.**
+Score each bundle on these 4 axes (0-10 each):
 
-| Axis | Weight | Description |
-|---|---|---|
-| **Correctness** | 0.35 | Is the content factually accurate and bug-free? |
-| **Completeness** | 0.20 | Does it fully address the assigned domain task? |
-| **Consistency** | 0.20 | Does it align with the other bundle? No contradictions? |
-| **Clarity** | 0.10 | Is the output well-structured and unambiguous? |
-| **Adversarial** | 0.15 | Actively attempted to break it — what flaws were found? |
-
-### Adversarial Scoring Guide (AXIS 5 — READ CAREFULLY)
-
-The adversarial axis requires you to **actively try to find failures**, not passively evaluate quality. Before scoring:
-
-1. **Fuzz the claims** — Take each key claim and ask: "Under what conditions is this wrong?"
-2. **Probe edge cases** — Does the output handle empty input? Null values? Scale limits? Off-by-one?
-3. **Check silent failures** — Are there code paths or logic branches that could silently return wrong results?
-4. **Test internal consistency** — Do the numbers add up? Do referenced files/functions actually exist?
-5. **Stress the assumptions** — What assumptions does the bundle make that might not hold in production?
-
-Adversarial score interpretation:
-- **9-10**: Deeply tried to find flaws, found none — strong adversarial validation
-- **7-8**: Found only minor issues that are acknowledged in the bundle
-- **5-6**: Found issues the bundle didn't address — moderate concern
-- **3-4**: Found significant flaws or silent failures the bundle ignored
-- **1-2**: Bundle has fundamental unacknowledged failure modes
-- **0**: Bundle is provably incorrect or dangerous
-
-Report adversarial findings in the `adversarial_findings` field of your output.
+| Axis | Description |
+|---|---|
+| **Correctness** | Is the content factually accurate and bug-free? |
+| **Completeness** | Does it fully address the assigned domain task? |
+| **Clarity** | Is the output well-structured and unambiguous? |
+| **Consensus Alignment** | Does it align with the other bundle? No contradictions? |
 
 ### Scoring Guide
 
@@ -58,11 +37,10 @@ Report adversarial findings in the `adversarial_findings` field of your output.
 - **1-2**: Poor — major errors or fundamental misunderstanding
 - **0**: Failed — bundle returned status "failed" or is unparseable
 
-### Weighted Total Calculation
+### Total Calculation
 
 ```
-weighted_total = (correctness × 0.35) + (completeness × 0.20) + (consistency × 0.20)
-              + (clarity × 0.10) + (adversarial × 0.15)
+weighted_total = (correctness + completeness + clarity + consensus_alignment) / 4
 ```
 
 ## CONSENSUS TIERS
@@ -82,7 +60,7 @@ Agreement percentage = 1 − (|weighted_total_A − weighted_total_B| / 10)
 
 Example: If A scores 8.2 and B scores 7.1, agreement = 1 − (1.1/10) = 89% → CONSENSUS
 
-## CONSENSUS SCORING FORMULA
+## CONSENSUS SCORING FORMULA (Nexus reference — computed by the Nexus, not by reviewers)
 
 ```
 score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage − min(0.10, conflict_rate × 0.10)
@@ -95,7 +73,7 @@ Where:
 - `coverage` = (unique aspects addressed) / (total aspects identified)
 - `conflict_rate` = unresolved_conflicts / total_atoms
 
-Positive coefficients sum to 1.0. Score bounded [0.0, 1.0].
+Positive coefficients sum to 1.0. Score bounded [0.0, 1.0]. Reviewers supply per-axis scores; the Nexus applies this formula during Phase 7 synthesis.
 
 ## CONFLICT DETECTION
 
@@ -117,23 +95,17 @@ When reviewing the two bundles, check for:
     "bundle_a": {
       "correctness": <0-10>,
       "completeness": <0-10>,
-      "consistency": <0-10>,
       "clarity": <0-10>,
-      "adversarial": <0-10>,
+      "consensus_alignment": <0-10>,
       "weighted_total": <0.0-10.0>
     },
     "bundle_b": {
       "correctness": <0-10>,
       "completeness": <0-10>,
-      "consistency": <0-10>,
       "clarity": <0-10>,
-      "adversarial": <0-10>,
+      "consensus_alignment": <0-10>,
       "weighted_total": <0.0-10.0>
     }
-  },
-  "adversarial_findings": {
-    "bundle_a": ["<flaw or edge case found>", "<silent failure identified>"],
-    "bundle_b": ["<flaw or edge case found>"]
   },
   "consensus_tier": "CONSENSUS | MAJORITY | CONFLICT | UNIQUE",
   "consensus_score": <0.0-1.0>,
@@ -149,7 +121,7 @@ When reviewing the two bundles, check for:
   "recommendation": "<1-2 sentence final recommendation>",
   "meta_review_quality": {
     "reviewer_confidence": <0.0-1.0>,
-    "adversarial_depth": "surface | moderate | deep",
+    "review_depth": "surface | moderate | deep",
     "review_wall_clock_ms": <integer>
   }
 }

@@ -32,7 +32,7 @@ Context Capsules are the structured JSON packages that carry information between
 
 1. **Conflicts bubble up** — If two atoms disagree, both are preserved with a `conflict` flag until a higher layer resolves
 2. **Confidence is geometric mean** — Merged confidence = (c₁ × c₂ × ... × cₙ)^(1/n)
-3. **Failed atoms are replaced** — If a worker returns `status: failed`, Squad Lead re-dispatches once (retry budget = 1)
+3. **Failed atoms are replaced** — If a worker returns `status: failed`, the Squad Lead may re-launch ONE replacement worker (using its own retry budget of 1). Workers themselves have retry budget = 0.
 4. **Deduplication is content-hash based** — Identical atoms from different workers are merged, confidence boosted
 
 ---

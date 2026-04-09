@@ -75,9 +75,9 @@ The HALF-OPEN probe MUST:
 | Layer | Agents | Threshold to OPEN | Cooldown | Probe Size |
 |---|---|---|---|---|
 | **Nexus (L0)** | Monitors 5 Commanders | 3/5 commanders fail (60%) | 10s | 1 commander re-dispatch |
-| **Commander (L1)** | Monitors 10 Squad Leads | 4/10 squad leads fail (40%) | 5s | 1 squad lead re-dispatch |
-| **Squad Lead (L2)** | Monitors 5 Workers | 3/5 workers fail (60%) | 3s | 1 canary worker |
-| **Reviewer (L4)** | Monitors review mesh | 2/5 reviews fail (40%) | 5s | 1 review re-dispatch |
+| **Commander (L1)** | Monitors 10 Squad Leads | 5/10 squad leads fail (50%) | 5s | 1 squad lead re-dispatch |
+| **Squad Lead (L2)** | Monitors 5 Workers | 3/5 workers fail (50%) | 3s | 1 canary worker |
+| **Reviewer (L4)** | Monitors review mesh | 3/5 reviews fail (50%) | 5s | 1 review re-dispatch |
 
 ### Failure Definitions
 
@@ -160,7 +160,7 @@ Six resource guards running at all times during a swarm deployment:
 | **Timeout Guard** | Per-layer cascade (90/60/40/30s) | Kill agent, return timeout atom |
 | **Token Ceiling** | 128K/64K/32K/8K per layer | Truncate output, preserve JSON structure |
 | **Output Size Cap** | 4K/1K/512/256 tokens per layer | Truncate, preserve JSON structure |
-| **Retry Budget** | Max 1 retry per agent at each layer | Skip on second failure |
+| **Retry Budget** | Workers: 0 (no retries). Squad Leads: 1 (re-launch one replacement worker). | Skip on budget exhaustion |
 | **Concurrent Agent Cap** | Max 50 agents launching simultaneously | Queue remaining, launch as slots free |
 | **Cost Ceiling** | $20 hard cap per run (SS-250) | Kill all agents, emit partial results |
 
@@ -200,7 +200,7 @@ After launching all 5 Commanders:
 ```
 After launching Squad Leads:
   - Track: squads_completed, squads_failed
-  - If squads_failed >= 4 (of 10): CIRCUIT OPEN
+  - If squads_failed >= 5 (of 10): CIRCUIT OPEN
     → Stop launching more squad leads
     → Merge results from successful squads
     → Report status: "partial" with failed squad IDs
@@ -225,14 +225,13 @@ During a swarm deployment, the following metrics should be tracked:
 
 | Metric | Source | Alert Threshold |
 |---|---|---|
-| Agent failure rate | All layers | > 40% at any layer |
+| Agent failure rate | All layers | > threshold per layer (60% commanders, 50% workers) |
 | Wall-clock time | Nexus | > 90s total |
 | Estimated cost | Token counters | > $16 (80% of cap) |
 | Circuit breaker state | Each layer | Any layer enters OPEN |
 | Timeout count | All layers | > 5 timeouts total |
 | Unparseable output count | All layers | > 3 unparseable outputs |
 | Recovery strategy invocations | HALF-OPEN probes | > 2 recovery cycles at same layer |
-| Adversarial findings count | Reviewer layer | > 3 adversarial findings across reviewer pairs |
 | Depth budget utilization | Commander layer | > 90% of allocated squads used |
 
 ### Telemetry Aggregation (Nexus-Level)
@@ -252,7 +251,6 @@ At run completion, the Nexus MUST emit a `run_telemetry` block in the Final Repo
     "estimated_cost_usd": <number>,
     "circuit_breaker_trips": <integer>,
     "recovery_strategies_used": ["<strategy1>", "<strategy2>"],
-    "adversarial_findings_total": <integer>,
     "depth_budget_utilization": <0.0-1.0>,
     "shadow_score_final": <0-100>,
     "consensus_tier_distribution": {

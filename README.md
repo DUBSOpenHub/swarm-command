@@ -587,7 +587,8 @@ swarm-command/
 ├── protocols/
 │   ├── depth-guard.md                  # 5 Laws + 3-layer enforcement
 │   ├── circuit-breaker.md              # 3-state FSM + 5-level recovery
-│   └── context-capsule.md              # JSON schemas for data structures
+│   ├── context-capsule.md              # JSON schemas for data structures
+│   └── meta-reviewer.md               # Reviewer quality gate protocol
 └── docs/
     ├── architecture.md                 # Architecture overview
     ├── architecture-diagrams.md        # Mermaid diagrams

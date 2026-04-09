@@ -51,6 +51,7 @@ Swarm Command ships one Copilot CLI skill and one standalone agent. The **skill*
 | `protocols/depth-guard.md` | Skill (reference) | Depth Guard protocol |
 | `protocols/circuit-breaker.md` | Skill (reference) | Circuit Breaker protocol |
 | `protocols/context-capsule.md` | Skill (reference) | Context Capsule schemas |
+| `protocols/meta-reviewer.md` | Skill (reference) | Reviewer quality gate protocol |
 | `.github/workflows/ci.yml` | CI | CI validation (YAML + SKILL.md parity) |
 | `config.yml` | Both | Shared configuration |
 | `catalog.yml` | Meta | Skill metadata for discovery |
