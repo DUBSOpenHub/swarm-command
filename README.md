@@ -17,13 +17,6 @@
 >    ```
 > 3. When Copilot opens, type: `swarm command`
 >
-> Prefer to inspect the installer before piping it to bash:
-> ```bash
-> curl -fsSL https://raw.githubusercontent.com/DUBSOpenHub/swarm-command/main/quickstart.sh -o quickstart.sh
-> less quickstart.sh
-> bash quickstart.sh
-> ```
->
 > *Requires an active [Copilot subscription](https://github.com/features/copilot/plans).*
 
 ---
@@ -339,25 +332,6 @@ swarm command ss-250 "Read every service, every pipeline, every config — gener
 
 ---
 
-## 📋 Example Output
-
-See what a completed swarm run looks like → [Example Output](docs/example-output.md)
-
-```text
-[NEXUS] Booting SS-100 swarm...
-[NEXUS] Sealing acceptance criteria (8 checks)
-[CMD-ARCH] Mapping auth boundaries and module ownership
-[CMD-IMPL] Tracing token issuance, refresh, and revocation flows
-[CMD-TEST] Enumerating missing happy-path, edge-case, and failure-path tests
-[CMD-DOCS] Drafting operator-facing docs and examples
-[CMD-INTG] Checking rollout risks across API, web, DB, and monitoring
-[REVIEW] Cross-family review mesh started
-[SHADOW] 1 criterion failed on first pass → hardening cycle triggered
-✅ Final bundle ready in 47s
-```
-
----
-
 ## 📦 Install
 
 ### Instant Install (no clone needed) ⚡
@@ -371,23 +345,14 @@ mkdir -p ~/.copilot/skills/swarm-command ~/.copilot/agents && \
   echo "✅ Swarm Command installed — open Copilot CLI and type: swarm command"
 ```
 
-Verify the downloads before you use them:
+**Verify integrity (optional):**
 
 ```bash
-# Linux
-sha256sum ~/.copilot/skills/swarm-command/SKILL.md
-# expected: 53e3a766a764c26be2d74c588c87a3783d307251a7d32d25378f681ed6c3cbb6
-sha256sum ~/.copilot/agents/swarm-command.agent.md
-# expected: b2ca830c6c35630f2b61bcc0332723a38e04b4079c73631f055f38109833d773
-
-# macOS
 shasum -a 256 ~/.copilot/skills/swarm-command/SKILL.md
-# expected: 53e3a766a764c26be2d74c588c87a3783d307251a7d32d25378f681ed6c3cbb6
 shasum -a 256 ~/.copilot/agents/swarm-command.agent.md
-# expected: b2ca830c6c35630f2b61bcc0332723a38e04b4079c73631f055f38109833d773
 ```
 
-If the hashes do not match, delete the files and re-download them before use.
+> 💡 **Security note:** We recommend [inspecting quickstart.sh](https://github.com/DUBSOpenHub/swarm-command/blob/main/quickstart.sh) before piping to bash. You can also use the manual install above instead.
 
 ### Clone & Explore
 
@@ -465,6 +430,26 @@ That failure drove the big ideas that now define this repo:
 - **Cross-family review** so agreement means more than “the same model said it twice”
 
 In other words: Swarm Command is not just a big swarm. It is a swarm that learned from its own failure modes.
+
+---
+
+## 📋 Example Output
+
+See what a completed swarm run looks like → **[Example Output](docs/example-output.md)**
+
+```
+🐝 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   S W A R M   C O M P L E T E
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## Results Summary
+- Domains completed: 5/5
+- Consensus tier: CONSENSUS (4) · MAJORITY (1)
+- Overall confidence: 0.77
+- Agents deployed: 123
+- Wall-clock time: 4m 32s
+- Shadow Score: 80% GREEN (10 pass · 3 warn · 2 fail)
+```
 
 ---
 
@@ -573,7 +558,7 @@ swarm-command/
 ├── quickstart.sh                       # One-line installer
 ├── .github/
 │   ├── copilot-instructions.md         # AI agent instructions for this repo
-│   ├── workflows/ci.yml                # CI validation (YAML parse + SKILL.md parity)
+│   ├── workflows/ci.yml               # CI: YAML lint + SKILL.md sync check
 │   └── skills/swarm-command/SKILL.md   # Skill discovery path
 ├── agents/
 │   └── swarm-command.agent.md          # Standalone agent version
@@ -587,13 +572,12 @@ swarm-command/
 ├── protocols/
 │   ├── depth-guard.md                  # 5 Laws + 3-layer enforcement
 │   ├── circuit-breaker.md              # 3-state FSM + 5-level recovery
-│   ├── context-capsule.md              # JSON schemas for data structures
-│   └── meta-reviewer.md               # Reviewer quality gate protocol
+│   └── context-capsule.md              # JSON schemas for data structures
 └── docs/
     ├── architecture.md                 # Architecture overview
     ├── architecture-diagrams.md        # Mermaid diagrams
     ├── consensus.md                    # Consensus algorithm deep dive
-    ├── example-output.md               # Sample completed run output
+    ├── example-output.md               # Sample completed swarm run output
     ├── learning-path.md                # Recommended reading order
     ├── scaling.md                      # Scale chooser + cost estimates
     ├── shadow-scoring.md               # Shadow scoring protocol
