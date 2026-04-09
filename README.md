@@ -1,8 +1,6 @@
 # 🐝 Swarm Command
 
-**Multi-model consensus swarm orchestration. Launch 50–250+ AI agents. 16 models. Shadow Score Spec L2. One command.**
-
-*"The swarm is smarter than any single model."* 🐝
+**Multi-model consensus swarm orchestration for the Copilot CLI. Launch 50–250+ AI agents across 16 models with Shadow Score Spec L2 validation — from one command.**
 
 [![GitHub](https://img.shields.io/badge/GitHub-Copilot_CLI-blue?logo=github)](https://github.com/features/copilot)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -10,46 +8,157 @@
 
 > ### ⚡ One Command. That's It.
 >
-> **Never used the CLI before? No problem.** Follow these 3 steps:
+> **Never used the CLI before? No problem.**
 >
-> **1. Open your terminal**
-> - 🍎 **Mac:** Press `⌘ + Space`, type **Terminal**, hit Enter
-> - 🪟 **Windows:** Press `Win + X`, choose **Terminal** or **PowerShell**
-> - 🐧 **Linux:** Press `Ctrl + Alt + T`
+> 1. Open your terminal
+> 2. Paste this:
+>    ```bash
+>    curl -fsSL https://raw.githubusercontent.com/DUBSOpenHub/swarm-command/main/quickstart.sh | bash
+>    ```
+> 3. When Copilot opens, type: `swarm command`
 >
-> **2. Paste this line and press Enter:**
-> ```bash
-> curl -fsSL https://raw.githubusercontent.com/DUBSOpenHub/swarm-command/main/quickstart.sh | bash
-> ```
-> *Already have the CLI? No worries — this detects it and skips straight to adding the skill.*
->
-> **3. When Copilot opens, type:** `swarm command`
->
-> That's it — unleash the swarm! 🐝
->
-> *Requires an active [Copilot subscription](https://github.com/features/copilot/plans). [Get one here →](https://github.com/features/copilot/plans)*
+> *Requires an active [Copilot subscription](https://github.com/features/copilot/plans).*
+
+---
+
+## 🚀 30-Second Overview
+
+**Swarm Command** is for tasks that are too big, risky, or cross-cutting for one model:
+
+- **Need one answer from many perspectives?** It fans your task out across a layered swarm.
+- **Need confidence, not vibes?** It uses cross-review + consensus scoring.
+- **Need hidden quality checks?** It validates bundles with sealed acceptance criteria.
+- **Need speed at scale?** It grows sub-linearly: **5× more agents ≈ 2.2× more wall-clock time**.
+- **Need zero setup?** No servers, no API keys, no build step.
+
+If your task spans **architecture + implementation + testing + docs + integration**, this is exactly what Swarm Command is built for.
+
+---
+
+## 🎬 Quick Demo
+
+### Representative CLI transcript
+
+```text
+$ copilot
+
+> swarm command ss-100 "Document the auth system, add missing tests, and flag rollout risks"
+
+[NEXUS] Booting SS-100 swarm...
+[NEXUS] Sealing acceptance criteria (8 checks)
+[CMD-ARCH] Mapping auth boundaries and module ownership
+[CMD-IMPL] Tracing token issuance, refresh, and revocation flows
+[CMD-TEST] Enumerating missing happy-path, edge-case, and failure-path tests
+[CMD-DOCS] Drafting operator-facing docs and examples
+[CMD-INTG] Checking rollout risks across API, web, DB, and monitoring
+[REVIEW] Cross-family review mesh started
+[SHADOW] 1 criterion failed on first pass → hardening cycle triggered
+[SHADOW] Re-validated bundle: 0 critical failures remaining
+
+✅ Final bundle ready in 47s
+
+Top outputs:
+1. Auth architecture brief with module boundaries
+2. Ranked test-gap list with highest-risk paths first
+3. Rollout checklist covering cookies, refresh tokens, and observability
+4. Updated docs outline for onboarding + operations
+
+Consensus: CONSENSUS on 3/4 major findings
+Shadow Score: 12.5% → hardened and accepted
+```
+
+**Good first prompt:**
+
+```text
+swarm command "Map this repo, explain how the major systems fit together, and list the 5 highest-risk gaps"
+```
 
 ---
 
 ## 🤔 What Is This?
 
-**Swarm Command** is a multi-model swarm orchestration skill for the [Copilot CLI](https://docs.github.com/copilot/concepts/agents/about-copilot-cli) that launches **50 to 250+ AI agents** across **16 different models** to solve complex tasks through hierarchical fan-out, cross-family review, and consensus-gated synthesis. Give it any task — architecture, refactoring, testing, documentation — and it decomposes it into 5 domains, dispatches commanders, squad leads, and workers in a 5-layer hierarchy, cross-reviews with model-diverse pairs, validates outputs against sealed acceptance criteria ([Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2), and synthesizes the final output from collective intelligence.
+**Swarm Command** is a multi-model swarm orchestration skill for the [Copilot CLI](https://docs.github.com/copilot/concepts/agents/about-copilot-cli) that launches **50 to 250+ AI agents** across **16 different models** to solve complex tasks through hierarchical fan-out, cross-family review, and consensus-gated synthesis.
+
+Give it a task — architecture, refactoring, testing, docs, or integration — and it decomposes the mission into domains, dispatches commanders, squad leads, and workers, validates outputs against sealed acceptance criteria, and synthesizes a final answer from collective intelligence instead of single-model intuition.
 
 ### 💬 The Problem
 
-You ask one AI model and get one perspective. Maybe it's great, maybe it's mediocre — you have no way to know. Worse, complex tasks that span architecture, implementation, testing, docs, and integration overwhelm a single context window. Swarm Command splits your task across hundreds of specialized agents, each doing one atomic thing well, then merges their work through a rigorous consensus pipeline with independent quality validation.
+One model gives you **one perspective**.
 
-### ⚡ What Makes It Different
+For small tasks, that's perfect. For high-stakes tasks, it's fragile:
+
+- the model may miss cross-cutting risks,
+- the task may exceed one context window,
+- the output may sound confident without being complete,
+- and you have no independent check that the answer actually satisfies the mission.
+
+Swarm Command solves that by turning one request into a **structured swarm process**: split, parallelize, review, validate, converge.
+
+---
+
+## 🥊 Swarm Command vs. Stampede vs. Havoc
+
+These systems are complementary — not competitors.
+
+| If you need to... | Use | Why |
+|---|---|---|
+| Solve **one complex task** with layered consensus inside your current Copilot CLI session | **Swarm Command** | Best when you want decomposition, cross-model review, shadow validation, and one synthesized answer |
+| Run **parallel coding workstreams** across terminals or branches | **Stampede** | Best when the goal is execution throughput across independent task lanes |
+| Run a **many-model tournament** to pressure-test ideas and rank options | **Havoc Hackathon** | Best when you want competitive ideation, elimination rounds, and judged synthesis |
+
+**Rule of thumb:**
+- Choose **Swarm Command** for **consensus execution**.
+- Choose **Stampede** for **parallel implementation**.
+- Choose **Havoc** for **idea tournaments and comparative judging**.
+
+---
+
+## ⚡ What Makes It Different
 
 - 🐝 **True swarm** — 50 to 250+ agents, not 3–5
 - 🏗️ **5-layer hierarchy** — Nexus → Commander → Squad Lead → Worker → Reviewer
 - 🔀 **Cross-model diversity** — Claude + GPT families mixed within every pod
 - 🗳️ **Consensus scoring** — 4-stage gate-then-rank with CONSENSUS / MAJORITY / CONFLICT tiers
 - 👻 **Shadow Score** — [Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2 conformance. Sealed acceptance criteria generated before commanders execute, validated after, hardened on failure.
-- 🛡️ **Depth Guard** — 5 Laws + 3-layer enforcement prevent runaway agent spawning
+- 🛡️ **Depth Guard** — 5 laws + 3-layer enforcement prevent runaway agent spawning
 - ⚡ **Circuit breaker** — 3-state FSM with 5-level recovery escalation
 - 📉 **Sub-linear scaling** — 5× more agents ≈ 2.2× more wall-clock time (α ≈ 0.45)
 - 📦 **Zero infrastructure** — no servers, no API keys, no build step
+
+### 🗒️ Field Notes
+
+> **“Three sealed judges scored the design 44–46/50. Shadow scoring still caught critical arithmetic errors.”**
+> That failure mode is why Swarm Command treats hidden validation as a first-class system, not a nice-to-have.
+
+> **“5× more agents only costs ~2.2× more wall-clock time.”**
+> The architecture is built for parallelism first, then convergence.
+
+---
+
+## 🧠 30-Second Architecture
+
+Before the full diagrams, here's the mental model:
+
+1. **Nexus** reads the mission and splits it into domains.
+2. **Commanders** own each domain and dispatch sub-work.
+3. **Workers** do tiny atomic tasks in parallel.
+4. **Reviewers + Shadow Score** decide what survives into the final answer.
+
+```text
+You ask one question
+        ↓
+Nexus decomposes the mission
+        ↓
+Commanders split by domain
+        ↓
+Workers execute atomic tasks in parallel
+        ↓
+Reviewers score + Shadow Score validates
+        ↓
+Nexus emits one final bundle
+```
+
+If you want the visual deep dive, jump to [docs/architecture.md](docs/architecture.md) or [docs/architecture-diagrams.md](docs/architecture-diagrams.md).
 
 ---
 
@@ -124,17 +233,28 @@ T+0s     T+2s       T+5s         T+12s       T+45s      T+65s    T+80s   T+90s
 
 ## 📊 Scaling Variants
 
-| Scale | Agents | Commanders | Workers | Reviewers | Wall-Clock |
-|-------|--------|------------|---------|-----------|------------|
-| **SS-50** | ~52 | 3 | 45 | 3 | ~30s |
-| **SS-100** | ~89 | 5 | 75 | 8 | ~45s |
-| **SS-250** | ~316 | 5 | 250 | 10 | ~65–90s |
+| Scale | Agents | Commanders | Workers | Reviewers | Best For | Wall-Clock |
+|---|---|---|---|---|---|---|
+| **SS-50** | ~52 | 3 | 45 | 3 | Fast bounded tasks | ~30s |
+| **SS-100** | ~89 | 5 | 75 | 8 | Multi-file features and reviews | ~45s |
+| **SS-250** | ~316 | 5 | 250 | 10 | Repo-wide or high-stakes work | ~65–90s |
 
-> Agent counts include ALL deployed agents across all layers (Nexus + Commanders + Squad Leads + Workers + Reviewers).
+### 10-Second Decision Tree
+
+```text
+Do you need a fast second opinion on 1–2 files?
+→ SS-50
+
+Do you need a serious answer for a multi-file feature or subsystem?
+→ SS-100
+
+Do you need repo-wide coverage, compliance-grade review, or maximum consensus?
+→ SS-250
+```
 
 Default is **SS-100**. Say `swarm command ss-250` for full deployment or `swarm command ss-50` for quick tasks.
 
-See [docs/scaling.md](docs/scaling.md) for detailed scaling configuration.
+See [docs/scaling.md](docs/scaling.md) for cost breakdowns, chooser guidance, and a deeper decision matrix.
 
 ---
 
@@ -145,176 +265,70 @@ Curated highlights — see [docs/use-cases.md](docs/use-cases.md) for the full g
 ### SS-50 — Fast Expert Panels (~30s)
 
 **🔥 Stack Trace Whisperer**
-```
+```text
 swarm command ss-50 "Diagnose this error — 3 most likely root causes with fixes: [paste error]"
 ```
-> 45 workers split into runtime, dependency, and logic panels. Returns ranked diagnoses with confidence scores in ~30 seconds.
+> Three fast expert panels race on runtime, dependency, and logic hypotheses. You get ranked diagnoses, not a single guess.
 
-**🔍 "Explain Like I Own It"**
-```
+**🔍 Explain Like I Own It**
+```text
 swarm command ss-50 "I just inherited this codebase. Explain src/core/ — what does each piece do, where are the landmines?"
 ```
-> Maps architecture, identifies patterns, hunts for tech debt — your 30-second onboarding brief.
+> Great for onboarding: architecture map, event flow, and hidden footguns in one brief.
 
 **⚡ Performance Profiler's Shortcut**
-```
+```text
 swarm command ss-50 "Find the performance bottlenecks in this file with optimized versions: [paste hot-path file]"
 ```
-> Finds O(n²) loops, sequential awaits, and GC pressure points. Returns before/after code with expected improvement.
+> Ideal when you need a prioritized hit list before opening a profiler.
 
 ### SS-100 — Full Swarm, Default Scale (~45s)
 
 **🔐 Zero-Downtime Auth Rewrite**
-```
+```text
 swarm command "Migrate our session auth to JWT + refresh tokens across API, web app, DB, and tests"
 ```
-> 5 commanders cover architecture, implementation, testing, docs, integration. Returns rollout plan + patches + risk analysis.
+> Architecture, implementation, testing, docs, and rollout risk all get separate ownership before synthesis.
 
 **🏗️ Legacy Service Extraction**
-```
+```text
 swarm command "Extract the billing module from our monolith into a service with minimal downtime"
 ```
-> Maps bounded context, generates anti-corruption layer, creates contract tests, writes 18-phase deployment sequence.
+> Produces migration phases, interface boundaries, contract tests, and rollback paths.
 
 **📱 Offline Sync Feature**
-```
+```text
 swarm command "Design offline-first sync for our field app: local cache, conflict resolution, API changes, UX, and tests"
 ```
-> Covers data model, UX states, conflict semantics, testing, and integration. Returns sync strategy + conflict policies.
+> Covers data model, UX states, conflict semantics, and integration testing in parallel.
 
 ### SS-250 — Maximum Intelligence (~65–90s)
 
 **🛡️ Zero-Day Security Sweep**
-```
+```text
 swarm command ss-250 "Full security audit: every file, every dependency, every injection surface — CVSS-scored vulnerability report"
 ```
-> 250 workers scan every file (SAST), every dependency (CVE), every secret (entropy), every auth flow (bypass). Returns prioritized findings with auto-remediation PRs.
+> Best for broad-surface analysis where missing even one category matters.
 
 **⚖️ Compliance Fortress**
-```
+```text
 swarm command ss-250 "Audit for GDPR, HIPAA, SOC2, PCI-DSS compliance — every gap, every control, remediation tickets"
 ```
-> 4 frameworks × 200+ controls. Each worker owns one control check. Returns board-ready risk summary with remediation tickets.
+> Turns a giant policy problem into parallel control checks with one synthesized risk summary.
 
 **🗺️ Living Runbook Generator**
-```
+```text
 swarm command ss-250 "Read every service, every pipeline, every config — generate the complete operations manual"
 ```
-> Derives documentation from actual code and infra. Produces runbooks with failure modes, recovery procedures, and dependency maps. Accurate by construction.
-
-### 🎨 Creative Uses
-
-**🎭 Red-Team Jury** (SS-250)
-```
-swarm command ss-250 "Here's our public announcement. Find ways it can be misread, exploited, or quoted out of context."
-```
-
-**🌍 Global Cringe Detector** (SS-100)
-```
-swarm command "Generate 30 product name candidates. Screen for pronunciation issues and negative associations across regions."
-```
-
-**🏛️ Boardroom Simulation** (SS-50)
-```
-swarm command ss-50 "Act as CFO, CISO, Head of Sales, Support Lead, and Skeptical Customer. Evaluate this plan. Converge on minimum-regret strategy."
-```
+> Excellent when tribal knowledge has to become documentation fast.
 
 ### ❌ When NOT to Swarm
 
-- **"What's the CLI flag for X?"** → Just ask a single agent
+- **"What's the CLI flag for X?"** → Ask a single agent
 - **Rename one variable** → Manual edit or single agent
-- **Prod is down, seconds matter** → DRI-led runbook, not consensus
-- **Writing a single-voice email** → One agent in a persona
-- **Step-through debugging** → Sequential by nature
-
----
-
-## 👻 Shadow Scoring
-
-Swarm Command implements **[Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2 conformance** — sealed acceptance criteria generated before commanders execute, validated after, hardened on failure.
-
-**Formula:** `Shadow Score = (sealed_failures / sealed_total) × 100`
-
-| Shadow Score | Level | Action |
-|---|---|---|
-| 0% | ✅ Perfect | All sealed criteria passed |
-| 1–15% | 🟢 Minor | Proceed normally |
-| 16–30% | 🟡 Moderate | Attach Gap Report, warn |
-| 31–50% | 🟠 Significant | Quarantine bundle, hardening cycle |
-| > 50% | 🔴 Critical | Reject bundle from synthesis |
-
-**Sealed-Envelope Protocol:**
-1. **Phase 1.5** — Nexus generates sealed acceptance criteria from the task (hidden from all agents)
-2. **Phases 2–5** — Commanders execute without knowledge of sealed criteria
-3. **Phase 6** — Validate outputs against sealed criteria, compute Shadow Score, produce Gap Report
-4. **Hardening** — If score > 15%, share failure messages only (not criteria) for one fix cycle
-
----
-
-## 🗳️ Consensus Algorithm
-
-A 4-stage consensus pipeline that merges the best work from hundreds of agents:
-
-1. **Worker Self-Score** — Each worker emits confidence + self-score with its atom
-2. **Squad Lead Local Merge** — Groups atoms by sub-task, classifies as CONSENSUS/MAJORITY/CONFLICT
-3. **Commander Domain Merge** — Trimmed mean across squads, applies consensus formula
-4. **Nexus Cross-Domain Synthesis** — Median-of-3 judging, final arbitration
-
-**Consensus Formula:**
-```
-score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage − min(0.10, conflict_rate × 0.10)
-```
-
-**Consensus Tiers:**
-
-| Tier | Condition | Action |
-|------|-----------|--------|
-| **CONSENSUS** | ≥ 70% agreement | Auto-accept |
-| **MAJORITY** | ≥ 50% agreement | Accept with dissent note |
-| **CONFLICT** | < 50% agreement | Nexus arbitration |
-| **UNIQUE** | No overlap | Keep if evidence ≥ 7/10 |
-
----
-
-## ⚙️ Configuration
-
-All tunables live in `config.yml`. Key settings:
-
-```yaml
-consensus:
-  threshold_consensus: 0.70
-  threshold_majority: 0.50
-
-depth_guard:
-  max_spawn_depth: 3
-  max_workers_per_squad_lead: 5
-
-circuit_breaker:
-  timeout_cascade: [90, 60, 40, 30]  # seconds per layer
-
-shadow_scoring:
-  enabled: true
-  spec_version: "1.0.0"
-  conformance_level: "L2"
-  sealed_criteria_count: 10
-  hardening:
-    enabled: true
-    threshold: 15
-```
-
-See [docs/scaling.md](docs/scaling.md) for full scaling configuration and cost estimates.
-
----
-
-## 🤖 Models Used
-
-| Role | Models |
-|------|--------|
-| **Nexus** | claude-opus-4.6 |
-| **Commanders** (pool: 10) | claude-opus-4.6, claude-opus-4.5, claude-opus-4.6-1m, claude-sonnet-4.6, claude-sonnet-4.5, claude-sonnet-4, gpt-5.4, gpt-5.2, gpt-5.1, goldeneye |
-| **Squad Leads** | claude-haiku-4.5, gpt-5.4-mini |
-| **Workers** (pool: 6) | claude-haiku-4.5, gpt-5.4-mini, gpt-5-mini, gpt-4.1, gpt-5.3-codex, gpt-5.2-codex |
-| **Reviewers** (8 pairs) | claude-opus-4.6↔gpt-5.4, claude-opus-4.5↔gpt-5.2, claude-opus-4.6-1m↔gpt-5.1, claude-sonnet-4.6↔gpt-5.3-codex, claude-sonnet-4.5↔gpt-5.2-codex, claude-sonnet-4↔gpt-5.4-mini, claude-haiku-4.5↔gpt-5-mini, goldeneye↔gpt-4.1 |
+- **Prod is down and seconds matter** → Follow the human runbook first
+- **Writing a single-voice email** → One persona is better than a committee
+- **Step-through debugging** → Sequential work beats consensus here
 
 ---
 
@@ -341,11 +355,171 @@ chmod +x quickstart.sh && ./quickstart.sh
 
 ---
 
+## 🧭 Reading Order / Learning Path
+
+If you're new, read in this order:
+
+1. **This README** — what it is, when to use it, and how to run it
+2. [**docs/learning-path.md**](docs/learning-path.md) — beginner, operator, and architect reading tracks
+3. [**docs/architecture.md**](docs/architecture.md) — the conceptual system model
+4. [**docs/scaling.md**](docs/scaling.md) — which scale to choose and what it costs
+5. [**docs/use-cases.md**](docs/use-cases.md) — vivid prompts and expected outcomes
+6. [**docs/consensus.md**](docs/consensus.md) + [**docs/shadow-scoring.md**](docs/shadow-scoring.md) — the deep mechanics
+
+### Fast paths
+
+- **I just want to try it:** README → install → quick demo
+- **I want to operate it well:** README → learning path → scaling → use cases
+- **I want to understand the design:** README → architecture → consensus → shadow scoring
+
+---
+
+## ❓ FAQ
+
+### Do I need API keys or infrastructure?
+No. Swarm Command runs through your active Copilot subscription. No separate servers, queues, or key management required.
+
+### When should I use SS-50, SS-100, or SS-250?
+Use **SS-50** for bounded, fast tasks. Use **SS-100** for most real software work. Use **SS-250** when the task is repo-wide, high-stakes, or needs maximum coverage and consensus.
+
+### Why mix Claude and GPT models?
+Because diversity helps. Different model families catch different failure modes. Swarm Command intentionally mixes them so agreement means more than self-consistency.
+
+### What happens when agents disagree?
+Disagreement is preserved, scored, and escalated. Squad Leads and Commanders mark results as **CONSENSUS**, **MAJORITY**, **CONFLICT**, or **UNIQUE**, then Nexus arbitrates the unresolved pieces.
+
+### What is Shadow Score in one sentence?
+It is a hidden acceptance test: criteria are generated before execution, kept sealed from the swarm, then used to validate outputs afterward.
+
+### Will this write code automatically?
+It can produce plans, analyses, patches, documentation, tests, and rollout guidance depending on how you invoke it — but the point is not blind automation. The point is **reviewable, consensus-backed output**.
+
+### When should I avoid using it?
+Avoid it for tiny edits, urgent incident response where every second matters, or tasks that need one strong voice rather than many perspectives.
+
+---
+
+## 🛠️ How It Was Built
+
+Swarm Command came out of a simple question: **what if one Copilot CLI session could behave less like one assistant and more like a disciplined organization?**
+
+The design evolved from **SwarmSpeed 250** experiments into a layered system with:
+
+- a single **Nexus** orchestrator,
+- domain-owning **Commanders**,
+- decomposing **Squad Leads**,
+- leaf-node **Workers**,
+- and independent **Reviewers**.
+
+The turning point was a self-analysis run later documented in [docs/shadow-scoring.md](docs/shadow-scoring.md): sealed judges rated a design highly **even though it contained critical arithmetic errors**. That exposed a core truth of multi-agent systems: **review alone is not validation**.
+
+That failure drove the big ideas that now define this repo:
+
+- **Shadow scoring** so hidden criteria can catch what the swarm forgot to optimize for
+- **Depth Guard** so recursion never turns into agent explosion
+- **Token compression** so higher-level intent survives while lower layers stay cheap
+- **Cross-family review** so agreement means more than “the same model said it twice”
+
+In other words: Swarm Command is not just a big swarm. It is a swarm that learned from its own failure modes.
+
+---
+
+## 👻 Shadow Scoring
+
+Swarm Command implements **[Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2 conformance** — sealed acceptance criteria generated before commanders execute, validated after, hardened on failure.
+
+**Formula:** `Shadow Score = (sealed_failures / sealed_total) × 100`
+
+| Shadow Score | Level | Action |
+|---|---|---|
+| 0% | ✅ Perfect | All sealed criteria passed |
+| 1–15% | 🟢 Minor | Proceed normally |
+| 16–30% | 🟡 Moderate | Attach Gap Report, warn |
+| 31–50% | 🟠 Significant | Quarantine bundle, hardening cycle |
+| > 50% | 🔴 Critical | Reject bundle from synthesis |
+
+**Sealed-envelope protocol:**
+1. **Phase 1.5** — Nexus generates sealed acceptance criteria from the task
+2. **Phases 2–5** — Commanders execute without seeing those criteria
+3. **Phase 6** — Validate outputs, compute Shadow Score, produce Gap Report
+4. **Hardening** — If score > 15%, share failure messages only for one fix cycle
+
+See [docs/shadow-scoring.md](docs/shadow-scoring.md) for the full protocol.
+
+---
+
+## 🗳️ Consensus Algorithm
+
+A 4-stage consensus pipeline merges the best work from hundreds of agents:
+
+1. **Worker Self-Score** — Each worker emits confidence + self-score with its atom
+2. **Squad Lead Local Merge** — Groups atoms by sub-task, classifies as CONSENSUS / MAJORITY / CONFLICT
+3. **Commander Domain Merge** — Trimmed mean across squads, applies the consensus formula
+4. **Nexus Cross-Domain Synthesis** — Median-of-3 judging and final arbitration
+
+**Consensus formula:**
+```text
+score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage − min(0.10, conflict_rate × 0.10)
+```
+
+| Tier | Condition | Action |
+|---|---|---|
+| **CONSENSUS** | ≥ 70% agreement | Auto-accept |
+| **MAJORITY** | ≥ 50% agreement | Accept with dissent note |
+| **CONFLICT** | < 50% agreement | Nexus arbitration |
+| **UNIQUE** | No overlap | Keep if evidence ≥ 7/10 |
+
+See [docs/consensus.md](docs/consensus.md) for the full mechanics.
+
+---
+
+## ⚙️ Configuration
+
+All tunables live in `config.yml`. Key settings:
+
+```yaml
+consensus:
+  threshold_consensus: 0.70
+  threshold_majority: 0.50
+
+depth_guard:
+  max_spawn_depth: 3
+  max_workers_per_squad_lead: 5
+
+circuit_breaker:
+  timeout_cascade: [90, 60, 40, 30]
+
+shadow_scoring:
+  enabled: true
+  spec_version: "1.0.0"
+  conformance_level: "L2"
+  sealed_criteria_count: 10
+  hardening:
+    enabled: true
+    threshold: 15
+```
+
+See [docs/scaling.md](docs/scaling.md) for full scaling configuration and cost estimates.
+
+---
+
+## 🤖 Models Used
+
+| Role | Models |
+|---|---|
+| **Nexus** | claude-opus-4.6 |
+| **Commanders** (pool: 10) | claude-opus-4.6, claude-opus-4.5, claude-opus-4.6-1m, claude-sonnet-4.6, claude-sonnet-4.5, claude-sonnet-4, gpt-5.4, gpt-5.2, gpt-5.1, goldeneye |
+| **Squad Leads** | claude-haiku-4.5, gpt-5.4-mini |
+| **Workers** (pool: 6) | claude-haiku-4.5, gpt-5.4-mini, gpt-5-mini, gpt-4.1, gpt-5.3-codex, gpt-5.2-codex |
+| **Reviewers** (8 pairs) | claude-opus-4.6↔gpt-5.4, claude-opus-4.5↔gpt-5.2, claude-opus-4.6-1m↔gpt-5.1, claude-sonnet-4.6↔gpt-5.3-codex, claude-sonnet-4.5↔gpt-5.2-codex, claude-sonnet-4↔gpt-5.4-mini, claude-haiku-4.5↔gpt-5-mini, goldeneye↔gpt-4.1 |
+
+---
+
 ## 📁 Repository Structure
 
-```
+```text
 swarm-command/
-├── README.md                           # This file
+├── README.md                           # Overview, install, quick demo, FAQ
 ├── AGENTS.md                           # Agent/skill descriptions
 ├── CONTRIBUTING.md                     # Contribution guidelines
 ├── catalog.yml                         # Skill metadata
@@ -355,25 +529,28 @@ swarm-command/
 ├── quickstart.sh                       # One-line installer
 ├── .github/
 │   ├── copilot-instructions.md         # AI agent instructions for this repo
-│   └── skills/swarm-command/SKILL.md   # Skill (GitHub discovery path)
+│   └── skills/swarm-command/SKILL.md   # Skill discovery path
 ├── agents/
 │   └── swarm-command.agent.md          # Standalone agent version
 ├── skills/swarm-command/
-│   └── SKILL.md                        # Core skill (the brain)
+│   └── SKILL.md                        # Core skill
 ├── templates/
 │   ├── commander.md                    # Commander prompt template
 │   ├── worker.md                       # Worker prompt template
-│   ├── reviewer.md                     # Cross-Reviewer prompt template
-│   └── squad-lead.md                   # Squad Lead prompt template
+│   ├── reviewer.md                     # Cross-reviewer prompt template
+│   └── squad-lead.md                   # Squad lead prompt template
 ├── protocols/
 │   ├── depth-guard.md                  # 5 Laws + 3-layer enforcement
 │   ├── circuit-breaker.md              # 3-state FSM + 5-level recovery
-│   └── context-capsule.md              # JSON schemas for all data structures
+│   └── context-capsule.md              # JSON schemas for data structures
 └── docs/
-    ├── architecture.md                 # Full architecture overview
+    ├── architecture.md                 # Architecture overview
+    ├── architecture-diagrams.md        # Mermaid diagrams
     ├── consensus.md                    # Consensus algorithm deep dive
-    ├── shadow-scoring.md               # Shadow scoring documentation
-    └── scaling.md                      # Scaling variants + cost estimates
+    ├── learning-path.md                # Recommended reading order
+    ├── scaling.md                      # Scale chooser + cost estimates
+    ├── shadow-scoring.md               # Shadow scoring protocol
+    └── use-cases.md                    # Expanded prompt gallery
 ```
 
 ---
@@ -386,10 +563,8 @@ swarm-command/
 
 ## 🛡️ Spec Conformance
 
-This project implements **[Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2** — sealed acceptance criteria generated before execution, validated after, hardened on failure. See [docs/shadow-scoring.md](docs/shadow-scoring.md) for implementation details.
+This project implements **[Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2** — sealed acceptance criteria generated before execution, validated after, hardened on failure.
 
 ---
 
 🐙 Created with 💜 by [@DUBSOpenHub](https://github.com/DUBSOpenHub) with the [GitHub Copilot CLI](https://docs.github.com/copilot).
-
-Let's build! 🚀✨

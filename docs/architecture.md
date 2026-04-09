@@ -1,6 +1,36 @@
 # Architecture
 
-Swarm Command implements a 5-layer hierarchical multi-agent architecture derived from the SwarmSpeed 250 protocol. This document covers the full architecture with layer descriptions, signal flow, and timing.
+Swarm Command implements a 5-layer hierarchical multi-agent architecture derived from the SwarmSpeed 250 protocol. This document explains the system at two levels: a fast mental model first, then the full layer-by-layer breakdown.
+
+---
+
+## 30-Second Overview
+
+If you only remember four things, remember these:
+
+1. **Nexus decomposes the mission** into domain-level work.
+2. **Commanders own domains** and turn them into smaller shards.
+3. **Workers stay atomic** — leaf nodes never spawn more agents.
+4. **Review + Shadow Score decide quality** before Nexus emits a final bundle.
+
+```text
+Mission
+  ↓
+Nexus
+  ↓
+Commanders
+  ↓
+Squad Leads
+  ↓
+Workers
+  ↓
+Reviewers + Shadow Score
+  ↓
+Final synthesis
+```
+
+**Read this doc when:** you want the system model.
+**Jump to:** [architecture diagrams](architecture-diagrams.md) for visuals, [consensus](consensus.md) for merge mechanics, and [scaling](scaling.md) for deployment choices.
 
 ---
 
@@ -41,7 +71,20 @@ Swarm Command implements a 5-layer hierarchical multi-agent architecture derived
 
 **Total agents for SS-250: ~316**
 
-> Agent counts include ALL deployed agents across all layers (Nexus + Commanders + Squad Leads + Workers + Reviewers).
+> Agent counts include all deployed agents across all layers: Nexus + Commanders + Squad Leads + Workers + Reviewers.
+
+---
+
+## Why This Shape Works
+
+| Design choice | What it buys you |
+|---|---|
+| **Single Nexus at the top** | One decomposition authority and one final synthesis point |
+| **Domain-owning Commanders** | Parallel workstreams without losing task ownership |
+| **Squad Leads between Commanders and Workers** | Controlled fan-out and better task compression |
+| **Leaf-node Workers** | Strict depth control and predictable cost |
+| **Independent Reviewers** | Scoring from outside the execution path |
+| **Nexus-internal Shadow Score** | Hidden validation without revealing the acceptance rubric |
 
 ---
 
@@ -58,14 +101,14 @@ Swarm Command implements a 5-layer hierarchical multi-agent architecture derived
 | Responsibilities | Task decomposition, commander assignment, reviewer dispatch, sealed criteria generation (Phase 1.5), shadow score validation (Phase 6), final synthesis, circuit breaker authority |
 | Spawns | 5 Commanders + 10 Reviewers |
 
-The Nexus is the brain of the swarm. It receives the user's task, decomposes it into 5 domains, creates Context Capsules for each Commander, monitors the swarm, and synthesizes the final output from all bundles and review scores.
+The Nexus is the brain of the swarm. It receives the user's task, decomposes it into domains, creates Context Capsules for each Commander, monitors the swarm, and synthesizes the final output from bundles plus review scores.
 
 ### L1 — Commanders (5 agents)
 
 | Property | Value |
 |---|---|
 | Agent type | `general-purpose` |
-| Model | Commander pool (10): `claude-opus-4.6`, `claude-opus-4.5`, `claude-opus-4.6-1m`, `claude-sonnet-4.6`, `claude-sonnet-4.5`, `claude-sonnet-4`, `gpt-5.4`, `gpt-5.2`, `gpt-5.1`, `goldeneye` (draw in order; alternate Claude↔GPT) |
+| Model | Commander pool (10): `claude-opus-4.6`, `claude-opus-4.5`, `claude-opus-4.6-1m`, `claude-sonnet-4.6`, `claude-sonnet-4.5`, `claude-sonnet-4`, `gpt-5.4`, `gpt-5.2`, `gpt-5.1`, `goldeneye` |
 | Context budget | 64K tokens |
 | `can_launch` | `true` |
 | Max children | 10 Squad Leads each |
@@ -97,10 +140,10 @@ The Nexus is the brain of the swarm. It receives the user's task, decomposes it 
 | Property | Value |
 |---|---|
 | Agent type | `explore` or `task` |
-| Model | Worker pool (6): `claude-haiku-4.5`, `gpt-5.4-mini`, `gpt-5-mini`, `gpt-4.1`, `gpt-5.3-codex`, `gpt-5.2-codex` (mix within pod; Codex variants for build/test) |
+| Model | Worker pool (6): `claude-haiku-4.5`, `gpt-5.4-mini`, `gpt-5-mini`, `gpt-4.1`, `gpt-5.3-codex`, `gpt-5.2-codex` |
 | Context budget | 8K tokens |
-| `can_launch` | `false` — **STRUCTURALLY ENFORCED** |
-| Responsibilities | Execute single atomic task, emit structured JSON atom |
+| `can_launch` | `false` — structurally enforced |
+| Responsibilities | Execute one atomic task, emit structured JSON atom |
 
 **Pod composition per Squad Lead:**
 
@@ -122,11 +165,11 @@ The Nexus is the brain of the swarm. It receives the user's task, decomposes it 
 
 ### Shadow Scoring ([Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2)
 
-Shadow scoring is Nexus-internal — no separate shadow validator agents are spawned. The Nexus generates sealed acceptance criteria in Phase 1.5 (before commanders execute) and validates commander outputs against them in Phase 6.
+Shadow scoring is Nexus-internal — no separate validator agents are spawned. The Nexus generates sealed acceptance criteria in Phase 1.5 and validates commander outputs against them in Phase 6.
 
 | Property | Value |
 |---|---|
-| Implementation | Nexus-internal (sealed-envelope protocol) |
+| Implementation | Nexus-internal sealed-envelope protocol |
 | Criteria | 10 binary pass/fail acceptance criteria |
 | Formula | `Shadow Score = (failures / total) × 100` |
 | Hardening | 1 cycle if score > 15% |
@@ -152,7 +195,7 @@ T+0s     T+2s       T+5s         T+12s       T+45s      T+65s    T+80s   T+90s
          (~12s)               (~33s)                  (~45s)
 ```
 
-**Key insight: Pipeline overlap.** Cross-reviewers start at T+45s before all workers complete. The review mesh begins as soon as the first two commander bundles arrive. This overlaps review with execution, saving ~20 seconds on the critical path.
+**Key insight: pipeline overlap.** Reviewers start before every worker is done. The review mesh begins as soon as the first commander pair completes, which removes review time from the critical path.
 
 ---
 
@@ -173,21 +216,21 @@ T+0s     T+2s       T+5s         T+12s       T+45s      T+65s    T+80s   T+90s
   L4  Review Capsule     ─── 1K tokens ───►  Score Card       ◄── 512 tokens
 ```
 
-**Compression ratio: 1024:1** — From 128K tokens at Nexus to 128 tokens at Worker level.
+**Compression ratio: 1024:1** — from 128K tokens at Nexus down to 128 tokens at Worker level.
 
 ### Compression Rules (Context Down)
 
-1. **Strip rationale at each layer** — Children don't need to know *why*, only *what*
-2. **File scope narrows monotonically** — A child's scope is always a subset of its parent's
-3. **Constraints tighten monotonically** — Timeouts and token limits can only decrease
-4. **Parent context is one sentence** — At most 50 tokens
+1. **Strip rationale at each layer** — children need the task, not the history
+2. **File scope narrows monotonically** — a child scope is always a subset of its parent
+3. **Constraints tighten monotonically** — timeouts and token caps can only decrease
+4. **Parent context stays short** — at most ~50 tokens of “why this matters”
 
 ### Aggregation Rules (Results Up)
 
-1. **Conflicts bubble up** — Disagreements preserved with both positions until higher layer resolves
-2. **Confidence is geometric mean** — (c₁ × c₂ × ... × cₙ)^(1/n)
-3. **Failed atoms are replaced** — Squad Lead re-dispatches once (retry budget = 1)
-4. **Deduplication is content-hash based** — Identical atoms merged, confidence boosted
+1. **Conflicts bubble up** — disagreements survive until a higher layer resolves them
+2. **Confidence is geometric mean** — `(c₁ × c₂ × ... × cₙ)^(1/n)`
+3. **Failed atoms are replaced once** — retry budget = 1
+4. **Deduplication is content-hash based** — identical atoms merge and confidence rises
 
 ---
 
@@ -195,42 +238,29 @@ T+0s     T+2s       T+5s         T+12s       T+45s      T+65s    T+80s   T+90s
 
 For maximum insight diversity, models from different families are paired within the same pod:
 
-| Pod Role | Primary Model | Alternate Model | When to Alternate |
+| Pod Role | Primary Model | Alternate Model | Why alternate |
 |---|---|---|---|
-| Commander | claude-opus-4.6 | gpt-5.4, gpt-5.2, gpt-5.1, goldeneye | Drawn from 10-model commander pool |
-| Squad Lead | claude-haiku-4.5 | gpt-5.4-mini | Alternate within same commander |
-| Scout Worker | claude-haiku-4.5 | gpt-5.4-mini, gpt-5-mini, gpt-4.1 | Mix within same pod |
-| Executor Worker | gpt-5.3-codex | gpt-5.2-codex | Use Codex variants for build/test tasks |
-| Reviewer | 8 cross-family pairs (see below) | — | Always cross-family |
-
-**Reviewer pairs (8 total):**
-
-| Pair | Claude model | GPT model |
-|---|---|---|
-| 1 | claude-opus-4.6 | gpt-5.4 |
-| 2 | claude-opus-4.5 | gpt-5.2 |
-| 3 | claude-opus-4.6-1m | gpt-5.1 |
-| 4 | claude-sonnet-4.6 | gpt-5.3-codex |
-| 5 | claude-sonnet-4.5 | gpt-5.2-codex |
-| 6 | claude-sonnet-4 | gpt-5.4-mini |
-| 7 | claude-haiku-4.5 | gpt-5-mini |
-| 8 | goldeneye | gpt-4.1 |
+| Commander | claude-opus-4.6 | gpt-5.4, gpt-5.2, gpt-5.1, goldeneye | Reduce same-family blind spots |
+| Squad Lead | claude-haiku-4.5 | gpt-5.4-mini | Keep fan-out cheap while mixing reasoning styles |
+| Scout Worker | claude-haiku-4.5 | gpt-5.4-mini, gpt-5-mini, gpt-4.1 | Increase search and interpretation diversity |
+| Executor Worker | gpt-5.3-codex | gpt-5.2-codex | Prefer code execution specialists for build/test |
+| Reviewer | 8 cross-family pairs | — | Final scoring should not be self-referential |
 
 ---
 
 ## Design Principles
 
-1. **Parent-controlled spawning** — The parent determines if a child `can_launch`; the child never decides for itself
-2. **Signal compression at every layer** — Context shrinks going down, results compress going up
-3. **Canary-before-swarm** — Deploy 1 canary worker per pod before full deployment
-4. **Fail parsably** — Every output is JSON Schema-validated; failures are structured, never silent
-5. **Pipeline overlap** — Cross-reviewers start as soon as the first commander pair completes
+1. **Parent-controlled spawning** — children never decide whether they can launch descendants
+2. **Signal compression at every layer** — context shrinks going down, results compress going up
+3. **Canary-before-swarm** — deploy one canary worker before the whole pod
+4. **Fail parsably** — structured outputs, structured failures, no silent collapse
+5. **Pipeline overlap** — review starts before total execution finishes
 
 ---
 
 ## Sub-Linear Scaling
 
-```
+```text
 Agents     Wall-Clock     Ratio vs SS-50
   50         ~30s           1.0×
  100         ~42s           1.4×
@@ -241,4 +271,4 @@ Agents     Wall-Clock     Ratio vs SS-50
 Scaling exponent ≈ 0.45 (vs 1.0 for linear)
 ```
 
-Sub-linear scaling comes from: parallel execution dominates. Only serial bottlenecks are Nexus decomposition (~2s), canary verification (~3s), and final synthesis (~10s).
+Sub-linear scaling comes from one idea: the expensive part is parallel, not serial. The main serial bottlenecks are Nexus decomposition, canary verification, and final synthesis.

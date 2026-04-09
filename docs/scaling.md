@@ -1,28 +1,59 @@
 # Scaling Variants
 
-Swarm Command supports 3 scaling configurations, from SS-50 (fast) to SS-250 (full consensus swarm). This document details each variant with full agent counts and deployment recommendations.
+Swarm Command supports three scaling configurations, from SS-50 (fast) to SS-250 (full consensus swarm). This document helps you choose the right scale quickly, then explains the details.
+
+---
+
+## 10-Second Chooser
+
+```text
+Need a fast second opinion on 1–2 files?
+→ SS-50
+
+Need a strong answer for a subsystem, feature, or review?
+→ SS-100
+
+Need repo-wide coverage, maximum consensus, or high-stakes analysis?
+→ SS-250
+```
+
+### Decision Tree
+
+```text
+Is the task bounded to 1–2 files or one very narrow question?
+├─ Yes → SS-50
+└─ No
+   │
+   ├─ Does it span a feature, module, or several files with real implementation risk?
+   │  ├─ Yes → SS-100
+   │  └─ No
+   │
+   └─ Does it touch many modules, policy/compliance, or require maximum coverage?
+      ├─ Yes → SS-250
+      └─ If unsure → start at SS-100 and scale up only when coverage matters more than speed
+```
 
 ---
 
 ## Scaling Overview
 
-| Scale | Total Agents | Commanders | Squad Leads | Workers | Reviewers | Wall-Clock |
-|---|---|---|---|---|---|---|
-| **SS-50** | ~52 | 3 | — | 45 | 3 | ~30s |
-| **SS-100** | ~89 | 5 | — | 75 | 8 | ~45s |
-| **SS-250** | ~316 | 5 | 50 | 250 | 10 | ~65–90s |
+| Scale | Total Agents | Commanders | Squad Leads | Workers | Reviewers | Best For | Wall-Clock |
+|---|---|---|---|---|---|---|---|
+| **SS-50** | ~52 | 3 | — | 45 | 3 | Fast bounded tasks | ~30s |
+| **SS-100** | ~89 | 5 | — | 75 | 8 | Default for real software work | ~45s |
+| **SS-250** | ~316 | 5 | 50 | 250 | 10 | Repo-wide or maximum-confidence work | ~65–90s |
 
-> Agent counts include ALL deployed agents across all layers (Nexus + Commanders + Squad Leads + Workers + Reviewers).
+> Agent counts include all deployed agents across all layers: Nexus + Commanders + Squad Leads + Workers + Reviewers.
 
-Default: **SS-100**. Use `swarm command ss-250` for full or `swarm command ss-50` for quick.
+Default: **SS-100**. Use `swarm command ss-250` for full deployment or `swarm command ss-50` for quick work.
 
 ---
 
 ## SS-50 — Starter
 
-Best for: Single-file refactors, focused investigations, quick code analysis.
+**Best for:** single-file refactors, focused investigations, quick code analysis, or doc updates for one component.
 
-```
+```text
 L0: 1 Nexus (claude-opus-4.6)
 L1: 3 Commanders (commander pool — 10 models)
 L2: — (no Squad Leads at this scale)
@@ -40,29 +71,28 @@ Time:  ~30s wall-clock
 |---|---|
 | Commanders | 3 |
 | Domains covered | 2–3 of 5 (auto-selected by task type) |
-| Squad Leads per Commander | — (not used) |
+| Squad Leads per Commander | — |
 | Workers per Commander | 15 |
 | Reviewers | 3 |
-| Shadow scoring | Disabled (score computed, no hardening) |
+| Shadow scoring | Score computed, no hardening loop |
 | Cost ceiling | $5.00 |
 | Timeout cascade | 60/40/30/20s |
 
-### When to Use SS-50
+### When SS-50 feels right
 
-- ✅ Single-file changes or analysis
-- ✅ Quick code search or investigation
-- ✅ Focused refactoring within one module
-- ✅ Documentation updates for a specific component
-- ❌ Multi-file features (use SS-100+)
-- ❌ Repo-wide refactors (use SS-250)
+- ✅ “Tell me what this stack trace most likely means”
+- ✅ “Review this one file for perf or security issues”
+- ✅ “Explain this subsystem quickly so I can get unstuck”
+- ✅ “Update docs for this single component”
+- ❌ Repo-wide or multi-module changes
 
 ---
 
 ## SS-100 — Standard (Default)
 
-Best for: Multi-file features, module-level tasks, thorough code reviews.
+**Best for:** multi-file features, module-level refactors, comprehensive reviews, and most day-to-day engineering tasks.
 
-```
+```text
 L0: 1 Nexus (claude-opus-4.6)
 L1: 5 Commanders (commander pool — 10 models)
 L2: — (no Squad Leads at this scale)
@@ -81,29 +111,28 @@ Time:  ~45s wall-clock
 |---|---|
 | Commanders | 5 |
 | Domains covered | 3 of 5 (auto-selected by task type) |
-| Squad Leads per Commander | — (not used) |
+| Squad Leads per Commander | — |
 | Workers per Commander | 15 |
 | Reviewers | 8 reviewers (8 cross-family pairs) |
 | Shadow scoring | 8 sealed criteria, hardening at >15% |
 | Cost ceiling | $10.00 |
 | Timeout cascade | 75/50/35/25s |
 
-### When to Use SS-100
+### When SS-100 feels right
 
 - ✅ Multi-file feature implementation
-- ✅ Module-level refactoring
-- ✅ Comprehensive test suite generation
-- ✅ API design and documentation
-- ❌ Repo-wide changes (use SS-250)
-- ❌ Quick lookups (use SS-50)
+- ✅ Module-level refactoring with tests and docs
+- ✅ Architecture review + implementation plan + rollout notes
+- ✅ API design, contract review, or comprehensive PR analysis
+- ❌ Tiny tasks where latency matters more than coverage
 
 ---
 
 ## SS-250 — Full Deployment
 
-Best for: Repo-wide refactors, full feature implementation, comprehensive audits.
+**Best for:** repo-wide refactors, full-feature implementation, comprehensive audits, and documentation or compliance overhauls where missing a category is expensive.
 
-```
+```text
 L0: 1 Nexus (claude-opus-4.6)
 L1: 5 Commanders (commander pool — 10 models)
 L2: 50 Squad Leads (claude-haiku-4.5 | gpt-5.4-mini)  — 10 per commander
@@ -113,7 +142,7 @@ L4: 10 Reviewers (8 cross-family pairs)
 ──────────────────────────
 Total: ~316 agents
 Cost:  $8.00 – $16.22
-Time:  ~65-90s wall-clock
+Time:  ~65–90s wall-clock
 ```
 
 ### SS-250 Configuration
@@ -121,22 +150,22 @@ Time:  ~65-90s wall-clock
 | Parameter | Value |
 |---|---|
 | Commanders | 5 |
-| Domains covered | All 5 (architecture, implementation, testing, docs, integration) |
+| Domains covered | All 5 |
 | Squad Leads per Commander | 10 |
 | Workers per Squad Lead | 5 |
-| Reviewers | 10 Reviewers forming 8 cross-family pairs (2 reviewers participate in 2 pairs each) |
-| Shadow scoring | 10 sealed criteria, hardening at >15% (Shadow Score Spec L2) |
+| Reviewers | 10 reviewers forming 8 cross-family pairs |
+| Shadow scoring | 10 sealed criteria, hardening at >15% |
 | Cost ceiling | $20.00 |
 | Timeout cascade | 90/60/40/30s |
 
-### When to Use SS-250
+### When SS-250 feels right
 
 - ✅ Repo-wide refactoring
-- ✅ Full feature implementation across all modules
-- ✅ Comprehensive security audit
+- ✅ Full feature implementation across many modules
+- ✅ Comprehensive security or compliance audit
 - ✅ Complete documentation overhaul
 - ✅ Multi-service architecture analysis
-- ❌ Simple tasks (overkill — use SS-50 or SS-100)
+- ❌ Simple tasks where the swarm would be mostly overhead
 
 ### SS-250 Cost Breakdown
 
@@ -153,7 +182,7 @@ Time:  ~65-90s wall-clock
 
 ## Sub-Linear Scaling Proof
 
-```
+```text
 Agents     Wall-Clock     Ratio vs SS-50
   50         ~30s           1.0×
  100         ~42s           1.4×
@@ -162,12 +191,13 @@ Agents     Wall-Clock     Ratio vs SS-50
 Scaling exponent ≈ 0.45 (vs 1.0 for linear)
 ```
 
-Sub-linear scaling comes from parallel execution dominance. Serial bottlenecks are limited to:
+Sub-linear scaling happens because most of the expensive work runs in parallel. The serial bottlenecks are limited to:
+
 - Nexus decomposition: ~2s
 - Canary verification: ~3s
 - Final synthesis: ~10s
 
-Everything else runs in parallel.
+Everything else overlaps.
 
 ---
 
@@ -175,13 +205,13 @@ Everything else runs in parallel.
 
 | # | Strategy | Impact | Description |
 |---|---|---|---|
-| 1 | Use `explore`/`task` workers | 60% cheaper | `explore` and `task` agents are significantly cheaper than `general-purpose` |
-| 2 | Haiku/Mini at L3 | 10× cheaper | Use cheapest/fastest models for atomic worker tasks |
-| 3 | Micro-brief compression | ~15% savings | Fewer input tokens at worker level = lower cost at scale |
-| 4 | Wave deployment | ~20% savings on failure | Catch bad tasks early before wasting all 250 agents |
-| 5 | Canary verification | ~5% savings on failure | 1 cheap canary prevents 49 expensive failures |
-| 6 | Timeout cascade | Cost protection | Kill slow agents instead of letting them burn tokens |
-| 7 | Cost ceiling | Absolute protection | $20 kill-switch prevents runaway bills |
+| 1 | Use `explore` / `task` workers | 60% cheaper | Worker types are significantly cheaper than `general-purpose` |
+| 2 | Haiku / Mini at L3 | 10× cheaper | Cheapest models handle the most atomic work |
+| 3 | Micro-brief compression | ~15% savings | Smaller inputs reduce per-agent cost at scale |
+| 4 | Wave deployment | ~20% savings on failure | Catch bad tasks before all 250 workers launch |
+| 5 | Canary verification | ~5% savings on failure | One cheap canary prevents many expensive failures |
+| 6 | Timeout cascade | Cost protection | Stop slow work before it burns budget |
+| 7 | Cost ceiling | Absolute protection | $20 hard cap prevents runaway bills |
 
 ### Cost by Model Mix
 
@@ -191,28 +221,23 @@ Everything else runs in parallel.
 | SS-100 | $8.00 | $6.50 | $5.50 | $3.50 |
 | SS-250 | $16.22 | $12.50 | $10.00 | $8.00 |
 
-Budget configuration uses 60% `explore` (cheapest) + 30% `task` + 10% `general-purpose`.
+Budget configuration uses **60% `explore` + 30% `task` + 10% `general-purpose`**.
 
 ---
 
 ## Choosing the Right Scale
 
-```
-Is your task about 1-2 files?
-  → SS-50
-
-Is your task about a module or feature (3-10 files)?
-  → SS-100
-
-Does your task span the entire repo or multiple modules?
-  → SS-250
-```
-
-### Decision Matrix
+### Quick matrix
 
 | Task Complexity | Files Touched | Domains Needed | Recommended Scale |
 |---|---|---|---|
-| Simple refactor | 1-2 | 1-2 | SS-50 |
-| Module feature | 3-10 | 2-3 | SS-100 |
-| Cross-module feature | 10-50 | 3-5 | SS-250 |
+| Simple refactor | 1–2 | 1–2 | SS-50 |
+| Module feature | 3–10 | 2–3 | SS-100 |
+| Cross-module feature | 10–50 | 3–5 | SS-250 |
 | Repo-wide migration | 50+ | 5 | SS-250 |
+
+### Practical advice
+
+- Start at **SS-100** when you want strong coverage but don't yet know whether you need maximum depth.
+- Drop to **SS-50** when latency is the main constraint.
+- Jump straight to **SS-250** when the cost of a missed class of issue is higher than the cost of waiting another 20–40 seconds.
