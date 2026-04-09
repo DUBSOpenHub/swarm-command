@@ -28,6 +28,27 @@
 
 ---
 
+## 🤔 What Is This?
+
+**Swarm Command** is a multi-model swarm orchestration skill for the [Copilot CLI](https://docs.github.com/copilot/concepts/agents/about-copilot-cli) that launches **50 to 250+ AI agents** across **16 different models** to solve complex tasks through hierarchical fan-out, cross-family review, and consensus-gated synthesis.
+
+Give it a task — architecture, refactoring, testing, docs, or integration — and it decomposes the mission into domains, dispatches commanders, squad leads, and workers, validates outputs against sealed acceptance criteria, and synthesizes a final answer from collective intelligence instead of single-model intuition.
+
+### 💬 The Problem
+
+One model gives you **one perspective**.
+
+For small tasks, that's perfect. For high-stakes tasks, it's fragile:
+
+- the model may miss cross-cutting risks,
+- the task may exceed one context window,
+- the output may sound confident without being complete,
+- and you have no independent check that the answer actually satisfies the mission.
+
+Swarm Command solves that by turning one request into a **structured swarm process**: split, parallelize, review, validate, converge.
+
+---
+
 ## 🚀 30-Second Overview
 
 **Swarm Command** is for tasks that are too big, risky, or cross-cutting for one model:
@@ -79,27 +100,6 @@ Shadow Score: 12.5% → hardened and accepted
 ```text
 swarm command "Map this repo, explain how the major systems fit together, and list the 5 highest-risk gaps"
 ```
-
----
-
-## 🤔 What Is This?
-
-**Swarm Command** is a multi-model swarm orchestration skill for the [Copilot CLI](https://docs.github.com/copilot/concepts/agents/about-copilot-cli) that launches **50 to 250+ AI agents** across **16 different models** to solve complex tasks through hierarchical fan-out, cross-family review, and consensus-gated synthesis.
-
-Give it a task — architecture, refactoring, testing, docs, or integration — and it decomposes the mission into domains, dispatches commanders, squad leads, and workers, validates outputs against sealed acceptance criteria, and synthesizes a final answer from collective intelligence instead of single-model intuition.
-
-### 💬 The Problem
-
-One model gives you **one perspective**.
-
-For small tasks, that's perfect. For high-stakes tasks, it's fragile:
-
-- the model may miss cross-cutting risks,
-- the task may exceed one context window,
-- the output may sound confident without being complete,
-- and you have no independent check that the answer actually satisfies the mission.
-
-Swarm Command solves that by turning one request into a **structured swarm process**: split, parallelize, review, validate, converge.
 
 ---
 
