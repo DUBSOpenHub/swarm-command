@@ -102,7 +102,7 @@ Generate sealed acceptance criteria from the task specification. These are the h
    - `error_handling` — Does the output address failure modes and error states?
    - `completeness` — Does the output cover all specified deliverables and sub-tasks?
 3. **Each criterion is a binary pass/fail assertion** — not a subjective score
-4. **Compute a tamper hash** — SHA-256 of the sealed criteria JSON, recorded before commanders launch
+4. **Compute a commitment hash** — SHA-256 of the sealed criteria JSON, recorded before commanders launch to detect accidental drift
 
 ### Sealed Criteria Format
 
@@ -135,7 +135,7 @@ Generate sealed acceptance criteria from the task specification. These are the h
 
 - **Sealed criteria are NEVER included in Commander prompts, Context Capsules, or any agent-facing content**
 - **Sealed criteria are held in Nexus memory only** — they exist nowhere agents can access
-- **The `sealed_hash` is recorded before Phase 3 begins** — any modification after commanders start invalidates the envelope
+- **The `sealed_hash` is recorded before Phase 3 begins** — any change after commanders start indicates accidental criteria drift
 - **Commanders, Squad Leads, Workers, and Reviewers never know sealed criteria exist**
 
 ### Scale Behavior
@@ -154,8 +154,8 @@ Show sealed envelope generation:
 
   Sealed criteria generated: 10
   Categories: happy_path (3) · edge_case (3) · error_handling (2) · completeness (2)
-  Sealed hash: sha256:a3f2...
-  Tamper protection: ✅ locked
+  Commitment hash: sha256:a3f2...
+  Commitment lock: ✅ sealed
 
   ⚠️ Criteria sealed — hidden from all agents until Phase 6.
 ```
@@ -407,7 +407,7 @@ Validate commander bundles against the sealed acceptance criteria generated in P
 ### Validation Process
 
 1. **Unseal the envelope** — Retrieve the sealed criteria from Nexus memory
-2. **Verify tamper hash** — Confirm `sealed_hash` matches the pre-Phase-3 recording. If mismatch → ABORT shadow scoring, flag as tampered.
+2. **Verify commitment hash** — Confirm `sealed_hash` matches the pre-Phase-3 recording. If mismatch → ABORT shadow scoring, flag as criteria drift.
 3. **Run each sealed criterion against each Commander bundle** — Each criterion is evaluated as binary PASS (0) or FAIL (1)
 4. **Compute Shadow Score per bundle:**
 
@@ -487,7 +487,7 @@ Show shadow scoring results:
 🐝 PHASE 6 — SHADOW SCORING (Shadow Score Spec L2)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  Sealed hash verified: ✅ sha256:a3f2... (tamper-proof)
+  Commitment hash verified: ✅ sha256:a3f2... (criteria stable)
 
   CMD-ARCH  ▸ sealed: 10 | passed: 9 | failed: 1  ▸ Shadow Score: 10.0% 🟢 Minor
   CMD-IMPL  ▸ sealed: 10 | passed: 8 | failed: 2  ▸ Shadow Score: 20.0% 🟡 Moderate → HARDENING
