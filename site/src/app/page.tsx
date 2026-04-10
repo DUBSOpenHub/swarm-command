@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 
 /* ═══════════════════════════════════════════════════════════
-   🐝 SWARM COMMAND — Landing Page
-   Value-focused, bee-themed, scannable.
+   🐝 SWARM COMMAND — Landing Page v2
+   250 agents · Collective intelligence · Bee-themed
    ═══════════════════════════════════════════════════════════ */
 
 // ── Animated counter (fires on scroll into view) ──
@@ -84,7 +84,16 @@ const SCALES: Record<
   },
 };
 
-// ── Particles seed (deterministic positions for SSR) ──
+// ── Commander data ──
+const COMMANDERS = [
+  { model: "Opus 4.6", family: "Claude" },
+  { model: "GPT-5.2", family: "OpenAI" },
+  { model: "Sonnet 4", family: "Claude" },
+  { model: "GPT-5.4", family: "OpenAI" },
+  { model: "Sonnet 4.5", family: "Claude" },
+];
+
+// ── Particles (deterministic positions for SSR) ──
 const PARTICLES = Array.from({ length: 28 }, (_, i) => ({
   left: `${(i * 19.3 + 5) % 95}%`,
   top: `${(i * 13.7 + 8) % 85}%`,
@@ -104,19 +113,17 @@ export default function Home() {
 
   useScrollReveal();
 
-  // Proof counters
+  const heroCounter = useCounter(250, 2500);
   const agentsStat = useCounter(750);
-  const modelsStat = useCounter(11);
+  const modelsStat = useCounter(16);
   const vulnsStat = useCounter(4);
 
-  // Nav background on scroll
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", h, { passive: true });
     return () => window.removeEventListener("scroll", h);
   }, []);
 
-  // Clipboard
   const copy = useCallback((text: string) => {
     navigator.clipboard.writeText(text).then(() => {
       setCopied(true);
@@ -158,11 +165,18 @@ export default function Home() {
 
         <div className="hero-content reveal">
           <span className="badge">🐝 Open Source · Copilot CLI</span>
+
+          <div className="hero-number-wrap" ref={heroCounter.ref}>
+            <span className="hero-big-number">{heroCounter.count}</span>
+            <span className="hero-number-label">AI Agents</span>
+          </div>
+
           <h1>
-            One command.
+            Launch up to <span className="text-amber">250 AI agents</span>
             <br />
-            <span className="text-amber">Collective intelligence.</span>
+            across 16 models. Find consensus no single model can.
           </h1>
+
           <div className="hero-props">
             <span className="prop">Multi-model consensus</span>
             <span className="prop-dot">·</span>
@@ -180,11 +194,11 @@ export default function Home() {
             </div>
             <pre className="terminal-body">
               <span className="cmd">
-                $ swarm command --scale 100 &quot;audit auth system&quot;
+                $ swarm command --scale 250 &quot;audit auth system&quot;
               </span>
               {"\n\n"}
               <span className="amber">
-                🐝 Hive activated · 89 agents · 11 models · 3 families
+                🐝 Hive activated · 250 agents · 16 models · 3 families
               </span>
               {"\n"}
               <span className="bar">
@@ -234,7 +248,9 @@ export default function Home() {
           <h2 className="section-title">How the hive works</h2>
           <div className="steps">
             <div className="step">
-              <div className="step-hex">1</div>
+              <div className="step-hex-wrap">
+                <div className="step-hex">1</div>
+              </div>
               <h3>Describe your task</h3>
               <p>
                 One command. Tell the swarm what you need — security audit, code
@@ -245,7 +261,9 @@ export default function Home() {
               <span>→</span>
             </div>
             <div className="step">
-              <div className="step-hex">2</div>
+              <div className="step-hex-wrap">
+                <div className="step-hex">2</div>
+              </div>
               <h3>The swarm fans out</h3>
               <p>
                 Agents from Claude, GPT, and Gemini families compete and
@@ -257,7 +275,9 @@ export default function Home() {
               <span>→</span>
             </div>
             <div className="step">
-              <div className="step-hex">3</div>
+              <div className="step-hex-wrap">
+                <div className="step-hex">3</div>
+              </div>
               <h3>Consensus delivers</h3>
               <p>
                 Only findings validated across model families survive. Shadow
@@ -274,8 +294,8 @@ export default function Home() {
         <div className="container">
           <h2 className="section-title">What makes the hive different</h2>
           <div className="value-cards">
-            <div className="value-card">
-              <span className="card-icon">🐝</span>
+            <div className="value-card hex-card">
+              <div className="card-icon-hex">🐝</div>
               <h3>Collective Intelligence</h3>
               <p>
                 16 models, not one. Claude Opus &amp; Sonnet. GPT-5.x series.
@@ -283,8 +303,8 @@ export default function Home() {
                 together they catch what any single model misses.
               </p>
             </div>
-            <div className="value-card">
-              <span className="card-icon">🔍</span>
+            <div className="value-card hex-card">
+              <div className="card-icon-hex">🔍</div>
               <h3>Cross-Validated</h3>
               <p>
                 Different model families review each other&apos;s work. Claude
@@ -292,8 +312,8 @@ export default function Home() {
                 that survive independent scrutiny make the cut.
               </p>
             </div>
-            <div className="value-card">
-              <span className="card-icon">🔒</span>
+            <div className="value-card hex-card">
+              <div className="card-icon-hex">🔒</div>
               <h3>Shadow Scored</h3>
               <p>
                 Hidden quality gates you can&apos;t game. Every agent is scored
@@ -301,6 +321,139 @@ export default function Home() {
                 don&apos;t know they&apos;re being watched. Bad work gets caught
                 automatically.
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────── ARCHITECTURE — Spawn Hierarchy ──────────── */}
+      <section className="section honeycomb-bg reveal" id="architecture">
+        <div className="container">
+          <h2 className="section-title">The Spawn Hierarchy</h2>
+          <p className="section-body" style={{ marginBottom: "3rem" }}>
+            Every commander runs in its own context window.
+            <br />
+            Different model families ensure diverse perspectives.
+          </p>
+
+          <div className="arch-vis">
+            <div className="arch-nexus">
+              <div className="arch-nexus-hex">🐝</div>
+              <span className="arch-nexus-label">YOU</span>
+              <span className="arch-nexus-cmd">
+                &quot;audit my codebase&quot;
+              </span>
+            </div>
+
+            <div className="arch-trunk" aria-hidden="true" />
+
+            <div className="arch-commanders">
+              {COMMANDERS.map((cmd, i) => (
+                <div key={i} className={`arch-commander arch-cmd-${i + 1}`}>
+                  <div className="arch-cmd-hex">
+                    <span className="arch-cmd-target">🎯</span>
+                    <span className="arch-cmd-name">CMD-{i + 1}</span>
+                  </div>
+                  <span className="arch-cmd-model">{cmd.model}</span>
+                  <span className="arch-cmd-badge">Own Context</span>
+                  <div className="arch-workers">
+                    {Array.from({ length: 10 }).map((_, j) => (
+                      <div
+                        key={j}
+                        className="arch-worker"
+                        style={{
+                          animationDelay: `${1.5 + i * 0.3 + j * 0.06}s`,
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <span className="arch-worker-count">~50 workers</span>
+                </div>
+              ))}
+            </div>
+
+            <p className="arch-caption">
+              5 Commanders × ~50 workers each ={" "}
+              <span className="text-amber">250 agents</span>, each with its own
+              context window
+            </p>
+          </div>
+
+          <div className="arch-features">
+            <div className="arch-feature">
+              <span className="arch-feature-icon">🧠</span>
+              <span>
+                Workers are leaf agents —{" "}
+                <strong>explore</strong> for research,{" "}
+                <strong>task</strong> for execution
+              </span>
+            </div>
+            <div className="arch-feature">
+              <span className="arch-feature-icon">🔀</span>
+              <span>
+                Cross-family reviewers validate outputs across model boundaries
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────── CONSENSUS ──────────── */}
+      <section className="section section-dark reveal" id="consensus">
+        <div className="container">
+          <h2 className="section-title">Consensus Across Models</h2>
+          <p className="section-body" style={{ marginBottom: "3rem" }}>
+            Multiple independent minds converge on one synthesized truth.
+          </p>
+
+          <div className="consensus-vis">
+            <div className="consensus-inputs">
+              {COMMANDERS.map((cmd, i) => (
+                <div key={i} className={`consensus-model cm-${i + 1}`}>
+                  <span className="consensus-model-name">{cmd.model}</span>
+                  <span className="consensus-model-output">
+                    Analysis #{i + 1}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <div className="consensus-funnel">
+              <div className="consensus-arrow-line" />
+              <span className="consensus-funnel-label">Convergence</span>
+              <div className="consensus-arrow-line" />
+            </div>
+
+            <div className="consensus-result-wrap">
+              <div className="consensus-result-hex">
+                <span className="consensus-hex-icon">⬡</span>
+                <span className="consensus-hex-label">Synthesized</span>
+                <span className="consensus-hex-label">Result</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="consensus-levels">
+            <div className="consensus-level cl-full">
+              <span className="cl-icon">✅</span>
+              <div className="cl-text">
+                <span className="cl-count">3+ models agree</span>
+                <span className="cl-tag">CONSENSUS</span>
+              </div>
+            </div>
+            <div className="consensus-level cl-majority">
+              <span className="cl-icon">🟡</span>
+              <div className="cl-text">
+                <span className="cl-count">2 models agree</span>
+                <span className="cl-tag">MAJORITY</span>
+              </div>
+            </div>
+            <div className="consensus-level cl-flagged">
+              <span className="cl-icon">⚠️</span>
+              <div className="cl-text">
+                <span className="cl-count">1 unique finding</span>
+                <span className="cl-tag">FLAGGED</span>
+              </div>
             </div>
           </div>
         </div>
@@ -351,14 +504,14 @@ export default function Home() {
             </div>
             <div className="proof-stat" ref={modelsStat.ref}>
               <span className="proof-number">{modelsStat.count}</span>
-              <span className="proof-label">model families</span>
+              <span className="proof-label">models available</span>
               <span className="proof-detail">Claude · GPT · Gemini</span>
             </div>
             <div className="proof-stat" ref={vulnsStat.ref}>
               <span className="proof-number">{vulnsStat.count}</span>
               <span className="proof-label">critical vulns found</span>
               <span className="proof-detail">
-                that 250 agents missed on first pass
+                that single models missed
               </span>
             </div>
           </div>
