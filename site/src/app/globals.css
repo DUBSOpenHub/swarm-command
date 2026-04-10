@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════
-   🐝 SWARM COMMAND — Bee-Themed Design System v2
-   Amber / honey / gold on dark · Honeycomb patterns
+   🐝 SWARM COMMAND — Bee-Themed Design System v3
+   Amber / honey / gold on dark · GLOWING Honeycomb
+   Inspired by Terminal Frenzy glow effects
    ═══════════════════════════════════════════════ */
 
 @layer base {
@@ -25,6 +26,8 @@
   --gold:     #fbbf24;
 
   --glow:     rgba(245,158,11,.25);
+  --glow-strong: rgba(245,158,11,.45);
+  --glow-soft: rgba(245,158,11,.12);
 
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
@@ -42,6 +45,25 @@ html {
   scrollbar-color: var(--border) var(--bg);
 }
 
+/* ─── Global hex grid overlay ─── */
+html::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(30deg, rgba(245,158,11,0.03) 12%, transparent 12.5%, transparent 87%, rgba(245,158,11,0.03) 87.5%),
+    linear-gradient(150deg, rgba(245,158,11,0.03) 12%, transparent 12.5%, transparent 87%, rgba(245,158,11,0.03) 87.5%),
+    linear-gradient(30deg, rgba(245,158,11,0.03) 12%, transparent 12.5%, transparent 87%, rgba(245,158,11,0.03) 87.5%),
+    linear-gradient(150deg, rgba(245,158,11,0.03) 12%, transparent 12.5%, transparent 87%, rgba(245,158,11,0.03) 87.5%),
+    linear-gradient(60deg, rgba(245,158,11,0.03) 25%, transparent 25.5%, transparent 75%, rgba(245,158,11,0.03) 75%),
+    linear-gradient(60deg, rgba(245,158,11,0.03) 25%, transparent 25.5%, transparent 75%, rgba(245,158,11,0.03) 75%);
+  background-size: 120px 208px;
+  background-position: 0 0, 0 0, 60px 104px, 60px 104px, 0 0, 60px 104px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 20%, transparent 100%);
+}
+
 body {
   background: var(--bg);
   color: var(--text);
@@ -50,8 +72,41 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-a { color: inherit; text-decoration: none; }
+/* ─── Floating Amber Orbs (Terminal Frenzy style) ─── */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
 }
+body::before {
+  width: 700px;
+  height: 700px;
+  background: rgba(245, 158, 11, 0.12);
+  top: -250px;
+  left: -200px;
+  animation: orbDrift 12s ease-in-out infinite;
+}
+body::after {
+  width: 500px;
+  height: 500px;
+  background: rgba(251, 191, 36, 0.08);
+  bottom: -150px;
+  right: -150px;
+  animation: orbDrift 12s ease-in-out infinite reverse;
+}
+} /* end @layer base */
+
+@keyframes orbDrift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(40px, -50px) scale(1.08); }
+  66% { transform: translate(-30px, 40px) scale(0.92); }
+}
+
+a { color: inherit; text-decoration: none; }
 
 /* ─── Scanlines ─── */
 .scanlines::after {
@@ -86,14 +141,31 @@ a { color: inherit; text-decoration: none; }
   pointer-events: none;
   background-color: transparent;
   background-image:
-    linear-gradient(30deg, rgba(245,158,11,0.20) 12%, transparent 12.5%, transparent 87%, rgba(245,158,11,0.20) 87.5%, rgba(245,158,11,0.20)),
-    linear-gradient(150deg, rgba(245,158,11,0.20) 12%, transparent 12.5%, transparent 87%, rgba(245,158,11,0.20) 87.5%, rgba(245,158,11,0.20)),
-    linear-gradient(30deg, rgba(245,158,11,0.20) 12%, transparent 12.5%, transparent 87%, rgba(245,158,11,0.20) 87.5%, rgba(245,158,11,0.20)),
-    linear-gradient(150deg, rgba(245,158,11,0.20) 12%, transparent 12.5%, transparent 87%, rgba(245,158,11,0.20) 87.5%, rgba(245,158,11,0.20)),
-    linear-gradient(60deg, rgba(245,158,11,0.20) 25%, transparent 25.5%, transparent 75%, rgba(245,158,11,0.20) 75%, rgba(245,158,11,0.20)),
-    linear-gradient(60deg, rgba(245,158,11,0.20) 25%, transparent 25.5%, transparent 75%, rgba(245,158,11,0.20) 75%, rgba(245,158,11,0.20));
+    linear-gradient(30deg, rgba(245,158,11,0.18) 12%, transparent 12.5%, transparent 87%, rgba(245,158,11,0.18) 87.5%, rgba(245,158,11,0.18)),
+    linear-gradient(150deg, rgba(245,158,11,0.18) 12%, transparent 12.5%, transparent 87%, rgba(245,158,11,0.18) 87.5%, rgba(245,158,11,0.18)),
+    linear-gradient(30deg, rgba(245,158,11,0.18) 12%, transparent 12.5%, transparent 87%, rgba(245,158,11,0.18) 87.5%, rgba(245,158,11,0.18)),
+    linear-gradient(150deg, rgba(245,158,11,0.18) 12%, transparent 12.5%, transparent 87%, rgba(245,158,11,0.18) 87.5%, rgba(245,158,11,0.18)),
+    linear-gradient(60deg, rgba(245,158,11,0.18) 25%, transparent 25.5%, transparent 75%, rgba(245,158,11,0.18) 75%, rgba(245,158,11,0.18)),
+    linear-gradient(60deg, rgba(245,158,11,0.18) 25%, transparent 25.5%, transparent 75%, rgba(245,158,11,0.18) 75%, rgba(245,158,11,0.18));
   background-size: 75px 130px;
   background-position: 0 0, 0 0, 37px 65px, 37px 65px, 0 0, 37px 65px;
+  animation: honeycomb-glow 4s ease-in-out infinite;
+}
+.honeycomb-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(245,158,11,0.06), transparent 70%);
+  animation: honeycomb-pulse 6s ease-in-out infinite;
+}
+@keyframes honeycomb-glow {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+@keyframes honeycomb-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
 }
 
 /* ─── Scroll Reveal ─── */
@@ -301,13 +373,15 @@ a { color: inherit; text-decoration: none; }
 /* ─── Terminal ─── */
 .terminal {
   text-align: left;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(13,17,23,0.96), rgba(7,9,14,0.98));
+  border: 1px solid rgba(245,158,11,.15);
+  border-radius: 12px;
   overflow: hidden;
   box-shadow:
-    0 0 40px rgba(245,158,11,.06),
-    0 20px 60px rgba(0,0,0,.4);
+    0 0 80px rgba(245,158,11,.08),
+    0 0 40px rgba(245,158,11,.04),
+    0 24px 80px rgba(0,0,0,.5);
+  backdrop-filter: blur(8px);
 }
 .terminal-bar {
   display: flex;
@@ -369,6 +443,7 @@ a { color: inherit; text-decoration: none; }
   text-align: center;
   margin-bottom: 1rem;
   line-height: 1.2;
+  text-shadow: 0 0 40px rgba(245,158,11,0.15);
 }
 .section-body {
   font-size: 1.1rem;
@@ -416,6 +491,7 @@ a { color: inherit; text-decoration: none; }
   color: var(--amber);
   background: var(--bg);
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  filter: drop-shadow(0 0 12px rgba(245,158,11,0.35));
 }
 .step h3 {
   font-size: 1.1rem;
@@ -447,21 +523,23 @@ a { color: inherit; text-decoration: none; }
   margin-top: 3rem;
 }
 .value-card.hex-card {
-  background: var(--bg);
-  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(245,158,11,0.03), var(--bg));
+  border: 1px solid rgba(245,158,11,0.15);
   border-top: 2px solid var(--amber);
   border-radius: 12px;
   padding: 2rem 1.5rem;
   transition: border-color .3s, box-shadow .3s, transform .3s;
   position: relative;
+  box-shadow: 0 0 20px rgba(245,158,11,0.04);
 }
 .value-card.hex-card:hover {
-  border-color: rgba(245,158,11,.4);
+  border-color: rgba(245,158,11,.5);
   border-top-color: var(--gold);
   box-shadow:
-    0 0 30px rgba(245,158,11,.08),
-    0 -2px 20px rgba(245,158,11,.1);
-  transform: translateY(-3px);
+    0 0 50px rgba(245,158,11,.15),
+    0 0 100px rgba(245,158,11,.06),
+    0 -2px 30px rgba(245,158,11,.12);
+  transform: translateY(-4px);
 }
 .card-icon-hex {
   width: 56px;
@@ -470,10 +548,11 @@ a { color: inherit; text-decoration: none; }
   align-items: center;
   justify-content: center;
   font-size: 1.6rem;
-  background: rgba(245,158,11,0.08);
-  border: 1px solid rgba(245,158,11,0.2);
+  background: rgba(245,158,11,0.1);
+  border: 1px solid rgba(245,158,11,0.3);
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   margin-bottom: 1rem;
+  box-shadow: 0 0 20px rgba(245,158,11,0.1);
 }
 .value-card h3 {
   font-size: 1.15rem;
@@ -997,6 +1076,7 @@ a { color: inherit; text-decoration: none; }
   color: var(--amber);
   letter-spacing: -0.03em;
   line-height: 1;
+  text-shadow: 0 0 30px rgba(245,158,11,0.3);
 }
 .proof-suffix {
   font-size: 2rem;
@@ -1056,11 +1136,12 @@ a { color: inherit; text-decoration: none; }
 .install-block {
   display: flex;
   align-items: stretch;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(13,17,23,0.95), rgba(7,9,14,0.98));
+  border: 1px solid rgba(245,158,11,.2);
+  border-radius: 12px;
   overflow: hidden;
   margin-bottom: 1rem;
+  box-shadow: 0 0 60px rgba(245,158,11,.08), 0 0 30px rgba(245,158,11,.04);
 }
 .install-code {
   flex: 1;
