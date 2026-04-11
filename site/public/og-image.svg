@@ -67,12 +67,11 @@
   <text x="600" y="415" text-anchor="middle" font-family="Inter, sans-serif" font-weight="800" font-size="44" fill="#e2e8f0">Swarm Command</text>
 
   <!-- Subtitle -->
-  <text x="600" y="460" text-anchor="middle" font-family="Inter, sans-serif" font-weight="400" font-size="20" fill="#94a3b8">
-    <tspan>Instantly launch up to 250 agents</tspan>
-    <tspan fill="#f59e0b"> · </tspan>
-    <tspan>Multi-Model Consensus</tspan>
-    <tspan fill="#f59e0b"> · </tspan>
-    <tspan>Shadow Scored</tspan>
+  <text x="600" y="452" text-anchor="middle" font-family="Inter, sans-serif" font-weight="600" font-size="22" fill="#e2e8f0">
+    Instantly launch up to 250 AI agents
+  </text>
+  <text x="600" y="480" text-anchor="middle" font-family="Inter, sans-serif" font-weight="400" font-size="17" fill="#94a3b8">
+    Find consensus across models that no single AI can reach alone
   </text>
 
   <!-- Model badges -->
