@@ -572,7 +572,7 @@ export default function Home() {
       <footer className="footer">
         <span className="footer-brand">🐝 Swarm Command</span>
         <span className="footer-sep">·</span>
-        <span>Collective intelligence for the Copilot CLI</span>
+        <span>Built by <a href="https://github.com/greggcochran" target="_blank" rel="noopener noreferrer" className="footer-link">Gregg Cochran</a></span>
         <span className="footer-sep">·</span>
         <a
           href="https://github.com/DUBSOpenHub/swarm-command"
@@ -581,6 +581,15 @@ export default function Home() {
           className="footer-link"
         >
           GitHub
+        </a>
+        <span className="footer-sep">·</span>
+        <a
+          href="https://github.com/DUBSOpenHub"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="footer-link"
+        >
+          @DUBSOpenHub
         </a>
       </footer>
     </>
