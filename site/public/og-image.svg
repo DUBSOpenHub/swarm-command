@@ -41,62 +41,62 @@
   <rect width="1200" height="630" fill="url(#centerGlow)"/>
 
   <!-- Glowing honeycomb grid -->
-  <g opacity="0.18" filter="url(#hexGlow)">
+  <g opacity="0.30" filter="url(#hexGlow)">
     <!-- Row 1 -->
-    <polygon points="100,40 130,23 160,40 160,73 130,90 100,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="170,40 200,23 230,40 230,73 200,90 170,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="240,40 270,23 300,40 300,73 270,90 240,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="310,40 340,23 370,40 370,73 340,90 310,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="380,40 410,23 440,40 440,73 410,90 380,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="450,40 480,23 510,40 510,73 480,90 450,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="520,40 550,23 580,40 580,73 550,90 520,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="590,40 620,23 650,40 650,73 620,90 590,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="660,40 690,23 720,40 720,73 690,90 660,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="730,40 760,23 790,40 790,73 760,90 730,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="800,40 830,23 860,40 860,73 830,90 800,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="870,40 900,23 930,40 930,73 900,90 870,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="940,40 970,23 1000,40 1000,73 970,90 940,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="1010,40 1040,23 1070,40 1070,73 1040,90 1010,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="100,40 130,23 160,40 160,73 130,90 100,73" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="170,40 200,23 230,40 230,73 200,90 170,73" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="240,40 270,23 300,40 300,73 270,90 240,73" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="310,40 340,23 370,40 370,73 340,90 310,73" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="380,40 410,23 440,40 440,73 410,90 380,73" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="450,40 480,23 510,40 510,73 480,90 450,73" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="520,40 550,23 580,40 580,73 550,90 520,73" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="590,40 620,23 650,40 650,73 620,90 590,73" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="660,40 690,23 720,40 720,73 690,90 660,73" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="730,40 760,23 790,40 790,73 760,90 730,73" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="800,40 830,23 860,40 860,73 830,90 800,73" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="870,40 900,23 930,40 930,73 900,90 870,73" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="940,40 970,23 1000,40 1000,73 970,90 940,73" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="1010,40 1040,23 1070,40 1070,73 1040,90 1010,73" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
     <!-- Row 2 (offset) -->
-    <polygon points="135,90 165,73 195,90 195,123 165,140 135,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="205,90 235,73 265,90 265,123 235,140 205,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="275,90 305,73 335,90 335,123 305,140 275,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="345,90 375,73 405,90 405,123 375,140 345,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="415,90 445,73 475,90 475,123 445,140 415,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="485,90 515,73 545,90 545,123 515,140 485,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="555,90 585,73 615,90 615,123 585,140 555,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="625,90 655,73 685,90 685,123 655,140 625,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="695,90 725,73 755,90 755,123 725,140 695,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="765,90 795,73 825,90 825,123 795,140 765,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="835,90 865,73 895,90 895,123 865,140 835,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="905,90 935,73 965,90 965,123 935,140 905,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="975,90 1005,73 1035,90 1035,123 1005,140 975,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="135,90 165,73 195,90 195,123 165,140 135,123" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="205,90 235,73 265,90 265,123 235,140 205,123" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="275,90 305,73 335,90 335,123 305,140 275,123" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="345,90 375,73 405,90 405,123 375,140 345,123" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="415,90 445,73 475,90 475,123 445,140 415,123" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="485,90 515,73 545,90 545,123 515,140 485,123" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="555,90 585,73 615,90 615,123 585,140 555,123" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="625,90 655,73 685,90 685,123 655,140 625,123" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="695,90 725,73 755,90 755,123 725,140 695,123" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="765,90 795,73 825,90 825,123 795,140 765,123" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="835,90 865,73 895,90 895,123 865,140 835,123" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="905,90 935,73 965,90 965,123 935,140 905,123" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="975,90 1005,73 1035,90 1035,123 1005,140 975,123" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
     <!-- Row 3 -->
-    <polygon points="100,140 130,123 160,140 160,173 130,190 100,173" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="170,140 200,123 230,140 230,173 200,190 170,173" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="240,140 270,123 300,140 300,173 270,190 240,173" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="310,140 340,123 370,140 370,173 340,190 310,173" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="800,140 830,123 860,140 860,173 830,190 800,173" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="870,140 900,123 930,140 930,173 900,190 870,173" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="940,140 970,123 1000,140 1000,173 970,190 940,173" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="1010,140 1040,123 1070,140 1070,173 1040,190 1010,173" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="100,140 130,123 160,140 160,173 130,190 100,173" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="170,140 200,123 230,140 230,173 200,190 170,173" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="240,140 270,123 300,140 300,173 270,190 240,173" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="310,140 340,123 370,140 370,173 340,190 310,173" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="800,140 830,123 860,140 860,173 830,190 800,173" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="870,140 900,123 930,140 930,173 900,190 870,173" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="940,140 970,123 1000,140 1000,173 970,190 940,173" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="1010,140 1040,123 1070,140 1070,173 1040,190 1010,173" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
     <!-- Row bottom 1 -->
-    <polygon points="100,440 130,423 160,440 160,473 130,490 100,473" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="170,440 200,423 230,440 230,473 200,490 170,473" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="240,440 270,423 300,440 300,473 270,490 240,473" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="870,440 900,423 930,440 930,473 900,490 870,473" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="940,440 970,423 1000,440 1000,473 970,490 940,473" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="1010,440 1040,423 1070,440 1070,473 1040,490 1010,473" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="100,440 130,423 160,440 160,473 130,490 100,473" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="170,440 200,423 230,440 230,473 200,490 170,473" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="240,440 270,423 300,440 300,473 270,490 240,473" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="870,440 900,423 930,440 930,473 900,490 870,473" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="940,440 970,423 1000,440 1000,473 970,490 940,473" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="1010,440 1040,423 1070,440 1070,473 1040,490 1010,473" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
     <!-- Row bottom 2 (offset) -->
-    <polygon points="135,490 165,473 195,490 195,523 165,540 135,523" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="205,490 235,473 265,490 265,523 235,540 205,523" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="905,490 935,473 965,490 965,523 935,540 905,523" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="975,490 1005,473 1035,490 1035,523 1005,540 975,523" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="135,490 165,473 195,490 195,523 165,540 135,523" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="205,490 235,473 265,490 265,523 235,540 205,523" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="905,490 935,473 965,490 965,523 935,540 905,523" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="975,490 1005,473 1035,490 1035,523 1005,540 975,523" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
     <!-- Row bottom 3 -->
-    <polygon points="100,540 130,523 160,540 160,573 130,590 100,573" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="170,540 200,523 230,540 230,573 200,590 170,573" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="940,540 970,523 1000,540 1000,573 970,590 940,573" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
-    <polygon points="1010,540 1040,523 1070,540 1070,573 1040,590 1010,573" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="100,540 130,523 160,540 160,573 130,590 100,573" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="170,540 200,523 230,540 230,573 200,590 170,573" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="940,540 970,523 1000,540 1000,573 970,590 940,573" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <polygon points="1010,540 1040,523 1070,540 1070,573 1040,590 1010,573" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
   </g>
 
   <!-- Bee -->
@@ -117,7 +117,10 @@
   <text x="600" y="390" text-anchor="middle" font-family="Inter, sans-serif" font-weight="800" font-size="48" fill="#e2e8f0">Swarm Command</text>
 
   <!-- Subtext -->
-  <text x="600" y="428" text-anchor="middle" font-family="Inter, sans-serif" font-weight="400" font-size="18" fill="#94a3b8">
+  <text x="600" y="422" text-anchor="middle" font-family="Inter, sans-serif" font-weight="400" font-size="17" fill="#94a3b8">
+    Multi-model consensus swarm orchestrator for the Copilot CLI
+  </text>
+  <text x="600" y="448" text-anchor="middle" font-family="Inter, sans-serif" font-weight="400" font-size="16" fill="#6b7280">
     Find consensus across models that no single AI can reach alone
   </text>
 
@@ -149,7 +152,7 @@
   <!-- Footer line 2 with Copilot sparkles -->
   <g transform="translate(600, 596)">
     <g transform="translate(-155, -10) scale(0.6)">
-      <path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z" fill="#e2e8f0"/>
+      <path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z" fill="#fbbf24"/>
     </g>
     <text x="0" y="5" text-anchor="middle" font-family="Inter, sans-serif" font-weight="600" font-size="16" fill="#e2e8f0">
       Built with the GitHub Copilot CLI
