@@ -68,9 +68,9 @@
 
   <!-- Subtitle -->
   <text x="600" y="460" text-anchor="middle" font-family="Inter, sans-serif" font-weight="400" font-size="20" fill="#94a3b8">
-    <tspan>Multi-Model Consensus</tspan>
+    <tspan>Instantly launch up to 250 agents</tspan>
     <tspan fill="#f59e0b"> · </tspan>
-    <tspan>Cross-Validated</tspan>
+    <tspan>Multi-Model Consensus</tspan>
     <tspan fill="#f59e0b"> · </tspan>
     <tspan>Shadow Scored</tspan>
   </text>
@@ -94,11 +94,11 @@
   </g>
 
   <!-- Footer -->
-  <text x="600" y="600" text-anchor="middle" font-family="Inter, sans-serif" font-weight="400" font-size="14" fill="#4a5568">
-    <tspan>Built by Gregg Cochran</tspan>
+  <text x="600" y="600" text-anchor="middle" font-family="Inter, sans-serif" font-size="16" fill="#94a3b8">
+    <tspan font-weight="700" fill="#e2e8f0">Built by Gregg Cochran</tspan>
     <tspan fill="#f59e0b"> · </tspan>
-    <tspan>@DUBSOpenHub</tspan>
+    <tspan font-weight="400">@DUBSOpenHub</tspan>
     <tspan fill="#f59e0b"> · </tspan>
-    <tspan>Copilot CLI</tspan>
+    <tspan font-weight="400">Copilot CLI</tspan>
   </text>
 </svg>
