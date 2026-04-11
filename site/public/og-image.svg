@@ -98,7 +98,19 @@
     <tspan> · </tspan>
     <tspan>@DUBSOpenHub</tspan>
   </text>
-  <text x="600" y="618" text-anchor="middle" font-family="Inter, sans-serif" font-weight="600" font-size="16" fill="#e2e8f0">
-    Built with the GitHub Copilot CLI ✦
-  </text>
+
+  <!-- Copilot sparkle icon + "Built with" line -->
+  <g transform="translate(600, 618)">
+    <!-- Copilot sparkle icon (4-pointed star) -->
+    <g transform="translate(-130, -12) scale(0.9)">
+      <path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z" fill="#e2e8f0"/>
+    </g>
+    <text x="0" y="5" text-anchor="middle" font-family="Inter, sans-serif" font-weight="600" font-size="16" fill="#e2e8f0">
+      Built with the GitHub Copilot CLI
+    </text>
+    <!-- Small trailing sparkle -->
+    <g transform="translate(128, -8) scale(0.5)">
+      <path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z" fill="#f59e0b"/>
+    </g>
+  </g>
 </svg>
