@@ -99,8 +99,11 @@
     <polygon points="1010,540 1040,523 1070,540 1070,573 1040,590 1010,573" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
   </g>
 
+  <!-- Bee -->
+  <text x="600" y="55" text-anchor="middle" font-size="48">🐝</text>
+
   <!-- "Instantly launch up to" ABOVE the 250 -->
-  <text x="600" y="120" text-anchor="middle" font-family="Inter, sans-serif" font-weight="600" font-size="26" fill="#e2e8f0" letter-spacing="2">
+  <text x="600" y="110" text-anchor="middle" font-family="Inter, sans-serif" font-weight="600" font-size="26" fill="#e2e8f0" letter-spacing="2">
     Instantly launch up to
   </text>
 
