@@ -97,7 +97,8 @@
     <tspan font-weight="700">Built by Gregg Cochran</tspan>
     <tspan> · </tspan>
     <tspan>@DUBSOpenHub</tspan>
-    <tspan> · </tspan>
-    <tspan>Built with the GitHub Copilot CLI</tspan>
+  </text>
+  <text x="600" y="622" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#94a3b8">
+    Built with the GitHub Copilot CLI
   </text>
 </svg>
