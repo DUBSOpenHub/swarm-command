@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="orb1" cx="15%" cy="20%" r="40%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#07090e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="orb2" cx="85%" cy="80%" r="35%">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#07090e" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#07090e"/>
+      <stop offset="40%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#1a1005"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="bigGlow">
+      <feGaussianBlur stdDeviation="20" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#orb1)"/>
+  <rect width="1200" height="630" fill="url(#orb2)"/>
+
+  <!-- Honeycomb dots -->
+  <g opacity="0.15">
+    <circle cx="100" cy="80" r="4" fill="#f59e0b"/>
+    <circle cx="200" cy="150" r="3" fill="#f59e0b"/>
+    <circle cx="350" cy="60" r="5" fill="#f59e0b"/>
+    <circle cx="500" cy="120" r="3" fill="#f59e0b"/>
+    <circle cx="650" cy="50" r="4" fill="#f59e0b"/>
+    <circle cx="800" cy="130" r="3" fill="#f59e0b"/>
+    <circle cx="950" cy="70" r="5" fill="#f59e0b"/>
+    <circle cx="1100" cy="110" r="3" fill="#f59e0b"/>
+    <circle cx="150" cy="500" r="4" fill="#f59e0b"/>
+    <circle cx="300" cy="560" r="3" fill="#f59e0b"/>
+    <circle cx="450" cy="520" r="5" fill="#f59e0b"/>
+    <circle cx="700" cy="550" r="3" fill="#f59e0b"/>
+    <circle cx="850" cy="490" r="4" fill="#f59e0b"/>
+    <circle cx="1000" cy="540" r="3" fill="#f59e0b"/>
+    <circle cx="1050" cy="300" r="4" fill="#f59e0b"/>
+    <circle cx="80" cy="320" r="3" fill="#f59e0b"/>
+  </g>
+
+  <!-- Bee emoji area -->
+  <text x="600" y="155" text-anchor="middle" font-size="64">🐝</text>
+
+  <!-- 250 number with glow -->
+  <text x="600" y="310" text-anchor="middle" font-family="Inter, sans-serif" font-weight="900" font-size="160" fill="#f59e0b" filter="url(#bigGlow)" letter-spacing="-8">250</text>
+
+  <!-- AI AGENTS label -->
+  <text x="600" y="355" text-anchor="middle" font-family="Inter, sans-serif" font-weight="700" font-size="28" fill="#fcd34d" letter-spacing="10">AI AGENTS</text>
+
+  <!-- Swarm Command title -->
+  <text x="600" y="415" text-anchor="middle" font-family="Inter, sans-serif" font-weight="800" font-size="44" fill="#e2e8f0">Swarm Command</text>
+
+  <!-- Subtitle -->
+  <text x="600" y="460" text-anchor="middle" font-family="Inter, sans-serif" font-weight="400" font-size="20" fill="#94a3b8">
+    <tspan>Multi-Model Consensus</tspan>
+    <tspan fill="#f59e0b"> · </tspan>
+    <tspan>Cross-Validated</tspan>
+    <tspan fill="#f59e0b"> · </tspan>
+    <tspan>Shadow Scored</tspan>
+  </text>
+
+  <!-- Model badges -->
+  <g transform="translate(600, 500)" text-anchor="middle">
+    <rect x="-280" y="-18" width="90" height="32" rx="16" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-opacity="0.3"/>
+    <text x="-235" y="5" font-family="Inter, sans-serif" font-weight="600" font-size="15" fill="#fbbf24">Claude</text>
+
+    <rect x="-155" y="-18" width="80" height="32" rx="16" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-opacity="0.3"/>
+    <text x="-115" y="5" font-family="Inter, sans-serif" font-weight="600" font-size="15" fill="#fbbf24">GPT-5</text>
+
+    <rect x="-40" y="-18" width="90" height="32" rx="16" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-opacity="0.3"/>
+    <text x="5" y="5" font-family="Inter, sans-serif" font-weight="600" font-size="15" fill="#fbbf24">Gemini</text>
+
+    <rect x="85" y="-18" width="80" height="32" rx="16" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-opacity="0.3"/>
+    <text x="125" y="5" font-family="Inter, sans-serif" font-weight="600" font-size="15" fill="#fbbf24">Haiku</text>
+
+    <rect x="200" y="-18" width="85" height="32" rx="16" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-opacity="0.3"/>
+    <text x="242" y="5" font-family="Inter, sans-serif" font-weight="600" font-size="15" fill="#fbbf24">16 total</text>
+  </g>
+
+  <!-- Footer -->
+  <text x="600" y="600" text-anchor="middle" font-family="Inter, sans-serif" font-weight="400" font-size="14" fill="#4a5568">
+    <tspan>Built by Gregg Cochran</tspan>
+    <tspan fill="#f59e0b"> · </tspan>
+    <tspan>@DUBSOpenHub</tspan>
+    <tspan fill="#f59e0b"> · </tspan>
+    <tspan>Copilot CLI</tspan>
+  </text>
+</svg>
