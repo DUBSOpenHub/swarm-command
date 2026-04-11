@@ -40,8 +40,8 @@
   <rect width="1200" height="630" fill="url(#orbBR)"/>
   <rect width="1200" height="630" fill="url(#centerGlow)"/>
 
-  <!-- Glowing honeycomb grid -->
-  <g opacity="0.30" filter="url(#hexGlow)">
+  <!-- Glowing honeycomb grid — top corners only, subtle -->
+  <g opacity="0.12" filter="url(#hexGlow)">
     <!-- Row 1 -->
     <polygon points="100,40 130,23 160,40 160,73 130,90 100,73" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
     <polygon points="170,40 200,23 230,40 230,73 200,90 170,73" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
@@ -80,23 +80,7 @@
     <polygon points="870,140 900,123 930,140 930,173 900,190 870,173" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
     <polygon points="940,140 970,123 1000,140 1000,173 970,190 940,173" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
     <polygon points="1010,140 1040,123 1070,140 1070,173 1040,190 1010,173" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
-    <!-- Row bottom 1 -->
-    <polygon points="100,440 130,423 160,440 160,473 130,490 100,473" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
-    <polygon points="170,440 200,423 230,440 230,473 200,490 170,473" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
-    <polygon points="240,440 270,423 300,440 300,473 270,490 240,473" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
-    <polygon points="870,440 900,423 930,440 930,473 900,490 870,473" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
-    <polygon points="940,440 970,423 1000,440 1000,473 970,490 940,473" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
-    <polygon points="1010,440 1040,423 1070,440 1070,473 1040,490 1010,473" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
-    <!-- Row bottom 2 (offset) -->
-    <polygon points="135,490 165,473 195,490 195,523 165,540 135,523" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
-    <polygon points="205,490 235,473 265,490 265,523 235,540 205,523" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
-    <polygon points="905,490 935,473 965,490 965,523 935,540 905,523" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
-    <polygon points="975,490 1005,473 1035,490 1035,523 1005,540 975,523" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
-    <!-- Row bottom 3 -->
-    <polygon points="100,540 130,523 160,540 160,573 130,590 100,573" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
-    <polygon points="170,540 200,523 230,540 230,573 200,590 170,573" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
-    <polygon points="940,540 970,523 1000,540 1000,573 970,590 940,573" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
-    <polygon points="1010,540 1040,523 1070,540 1070,573 1040,590 1010,573" fill="none" stroke="#f59e0b" stroke-width="1.2"/>
+    <!-- Bottom rows removed — were overlapping badges/footer -->
   </g>
 
   <!-- Bee -->
