@@ -353,6 +353,27 @@ a { color: inherit; text-decoration: none; }
   color: var(--amber);
   font-weight: 700;
 }
+.hero-github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .65rem 1.5rem;
+  border: 1px solid rgba(245,158,11,.3);
+  border-radius: 999px;
+  background: rgba(245,158,11,.08);
+  color: var(--amber-300);
+  font-size: .95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all .3s;
+  margin-bottom: 2rem;
+}
+.hero-github-link:hover {
+  background: rgba(245,158,11,.15);
+  border-color: var(--amber);
+  box-shadow: 0 0 30px rgba(245,158,11,.12);
+  transform: translateY(-2px);
+}
 
 /* ─── Terminal ─── */
 .terminal {

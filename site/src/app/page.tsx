@@ -185,6 +185,15 @@ export default function Home() {
             <span className="prop">Shadow-scored</span>
           </div>
 
+          <a
+            href="https://github.com/DUBSOpenHub/swarm-command"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hero-github-link"
+          >
+            ⭐ View on GitHub →
+          </a>
+
           <div className="terminal">
             <div className="terminal-bar">
               <span className="dot dot-r" />
