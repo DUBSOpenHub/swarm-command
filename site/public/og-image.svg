@@ -1,27 +1,32 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs>
-    <radialGradient id="orb1" cx="15%" cy="20%" r="40%">
-      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/>
-      <stop offset="100%" stop-color="#07090e" stop-opacity="0"/>
-    </radialGradient>
-    <radialGradient id="orb2" cx="85%" cy="80%" r="35%">
-      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.1"/>
-      <stop offset="100%" stop-color="#07090e" stop-opacity="0"/>
-    </radialGradient>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#07090e"/>
       <stop offset="40%" stop-color="#0d1117"/>
       <stop offset="100%" stop-color="#1a1005"/>
     </linearGradient>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="8" result="blur"/>
+    <radialGradient id="centerGlow" cx="50%" cy="45%" r="45%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.12"/>
+      <stop offset="60%" stop-color="#f59e0b" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#07090e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="orbTL" cx="10%" cy="15%" r="35%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#07090e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="orbBR" cx="90%" cy="85%" r="30%">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#07090e" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="bigGlow">
+      <feGaussianBlur stdDeviation="18" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
-    <filter id="bigGlow">
-      <feGaussianBlur stdDeviation="20" result="blur"/>
+    <filter id="hexGlow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
@@ -31,85 +36,122 @@
 
   <!-- Background -->
   <rect width="1200" height="630" fill="url(#bg)"/>
-  <rect width="1200" height="630" fill="url(#orb1)"/>
-  <rect width="1200" height="630" fill="url(#orb2)"/>
+  <rect width="1200" height="630" fill="url(#orbTL)"/>
+  <rect width="1200" height="630" fill="url(#orbBR)"/>
+  <rect width="1200" height="630" fill="url(#centerGlow)"/>
 
-  <!-- Honeycomb dots -->
-  <g opacity="0.15">
-    <circle cx="100" cy="80" r="4" fill="#f59e0b"/>
-    <circle cx="200" cy="150" r="3" fill="#f59e0b"/>
-    <circle cx="350" cy="60" r="5" fill="#f59e0b"/>
-    <circle cx="500" cy="120" r="3" fill="#f59e0b"/>
-    <circle cx="650" cy="50" r="4" fill="#f59e0b"/>
-    <circle cx="800" cy="130" r="3" fill="#f59e0b"/>
-    <circle cx="950" cy="70" r="5" fill="#f59e0b"/>
-    <circle cx="1100" cy="110" r="3" fill="#f59e0b"/>
-    <circle cx="150" cy="500" r="4" fill="#f59e0b"/>
-    <circle cx="300" cy="560" r="3" fill="#f59e0b"/>
-    <circle cx="450" cy="520" r="5" fill="#f59e0b"/>
-    <circle cx="700" cy="550" r="3" fill="#f59e0b"/>
-    <circle cx="850" cy="490" r="4" fill="#f59e0b"/>
-    <circle cx="1000" cy="540" r="3" fill="#f59e0b"/>
-    <circle cx="1050" cy="300" r="4" fill="#f59e0b"/>
-    <circle cx="80" cy="320" r="3" fill="#f59e0b"/>
+  <!-- Glowing honeycomb grid -->
+  <g opacity="0.18" filter="url(#hexGlow)">
+    <!-- Row 1 -->
+    <polygon points="100,40 130,23 160,40 160,73 130,90 100,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="170,40 200,23 230,40 230,73 200,90 170,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="240,40 270,23 300,40 300,73 270,90 240,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="310,40 340,23 370,40 370,73 340,90 310,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="380,40 410,23 440,40 440,73 410,90 380,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="450,40 480,23 510,40 510,73 480,90 450,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="520,40 550,23 580,40 580,73 550,90 520,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="590,40 620,23 650,40 650,73 620,90 590,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="660,40 690,23 720,40 720,73 690,90 660,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="730,40 760,23 790,40 790,73 760,90 730,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="800,40 830,23 860,40 860,73 830,90 800,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="870,40 900,23 930,40 930,73 900,90 870,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="940,40 970,23 1000,40 1000,73 970,90 940,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="1010,40 1040,23 1070,40 1070,73 1040,90 1010,73" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <!-- Row 2 (offset) -->
+    <polygon points="135,90 165,73 195,90 195,123 165,140 135,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="205,90 235,73 265,90 265,123 235,140 205,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="275,90 305,73 335,90 335,123 305,140 275,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="345,90 375,73 405,90 405,123 375,140 345,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="415,90 445,73 475,90 475,123 445,140 415,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="485,90 515,73 545,90 545,123 515,140 485,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="555,90 585,73 615,90 615,123 585,140 555,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="625,90 655,73 685,90 685,123 655,140 625,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="695,90 725,73 755,90 755,123 725,140 695,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="765,90 795,73 825,90 825,123 795,140 765,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="835,90 865,73 895,90 895,123 865,140 835,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="905,90 935,73 965,90 965,123 935,140 905,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="975,90 1005,73 1035,90 1035,123 1005,140 975,123" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <!-- Row 3 -->
+    <polygon points="100,140 130,123 160,140 160,173 130,190 100,173" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="170,140 200,123 230,140 230,173 200,190 170,173" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="240,140 270,123 300,140 300,173 270,190 240,173" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="310,140 340,123 370,140 370,173 340,190 310,173" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="800,140 830,123 860,140 860,173 830,190 800,173" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="870,140 900,123 930,140 930,173 900,190 870,173" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="940,140 970,123 1000,140 1000,173 970,190 940,173" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="1010,140 1040,123 1070,140 1070,173 1040,190 1010,173" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <!-- Row bottom 1 -->
+    <polygon points="100,440 130,423 160,440 160,473 130,490 100,473" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="170,440 200,423 230,440 230,473 200,490 170,473" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="240,440 270,423 300,440 300,473 270,490 240,473" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="870,440 900,423 930,440 930,473 900,490 870,473" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="940,440 970,423 1000,440 1000,473 970,490 940,473" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="1010,440 1040,423 1070,440 1070,473 1040,490 1010,473" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <!-- Row bottom 2 (offset) -->
+    <polygon points="135,490 165,473 195,490 195,523 165,540 135,523" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="205,490 235,473 265,490 265,523 235,540 205,523" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="905,490 935,473 965,490 965,523 935,540 905,523" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="975,490 1005,473 1035,490 1035,523 1005,540 975,523" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <!-- Row bottom 3 -->
+    <polygon points="100,540 130,523 160,540 160,573 130,590 100,573" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="170,540 200,523 230,540 230,573 200,590 170,573" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="940,540 970,523 1000,540 1000,573 970,590 940,573" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="1010,540 1040,523 1070,540 1070,573 1040,590 1010,573" fill="none" stroke="#f59e0b" stroke-width="0.8"/>
   </g>
 
-  <!-- Bee emoji area -->
-  <text x="600" y="155" text-anchor="middle" font-size="64">🐝</text>
+  <!-- "Instantly launch up to" ABOVE the 250 -->
+  <text x="600" y="120" text-anchor="middle" font-family="Inter, sans-serif" font-weight="600" font-size="26" fill="#e2e8f0" letter-spacing="2">
+    Instantly launch up to
+  </text>
 
   <!-- 250 number with glow -->
-  <text x="600" y="310" text-anchor="middle" font-family="Inter, sans-serif" font-weight="900" font-size="160" fill="#f59e0b" filter="url(#bigGlow)" letter-spacing="-8">250</text>
+  <text x="600" y="280" text-anchor="middle" font-family="Inter, sans-serif" font-weight="900" font-size="180" fill="#f59e0b" filter="url(#bigGlow)" letter-spacing="-8">250</text>
 
   <!-- AI AGENTS label -->
-  <text x="600" y="355" text-anchor="middle" font-family="Inter, sans-serif" font-weight="700" font-size="28" fill="#fcd34d" letter-spacing="10">AI AGENTS</text>
+  <text x="600" y="325" text-anchor="middle" font-family="Inter, sans-serif" font-weight="700" font-size="30" fill="#fcd34d" letter-spacing="12">AI AGENTS</text>
 
   <!-- Swarm Command title -->
-  <text x="600" y="415" text-anchor="middle" font-family="Inter, sans-serif" font-weight="800" font-size="44" fill="#e2e8f0">Swarm Command</text>
+  <text x="600" y="390" text-anchor="middle" font-family="Inter, sans-serif" font-weight="800" font-size="48" fill="#e2e8f0">Swarm Command</text>
 
-  <!-- Subtitle -->
-  <text x="600" y="440" text-anchor="middle" font-family="Inter, sans-serif" font-weight="600" font-size="22" fill="#e2e8f0">
-    Instantly launch up to 250 AI agents
-  </text>
-  <text x="600" y="466" text-anchor="middle" font-family="Inter, sans-serif" font-weight="400" font-size="17" fill="#94a3b8">
+  <!-- Subtext -->
+  <text x="600" y="428" text-anchor="middle" font-family="Inter, sans-serif" font-weight="400" font-size="18" fill="#94a3b8">
     Find consensus across models that no single AI can reach alone
   </text>
 
   <!-- Model badges -->
-  <g transform="translate(600, 516)" text-anchor="middle">
-    <rect x="-280" y="-18" width="90" height="32" rx="16" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-opacity="0.3"/>
+  <g transform="translate(600, 485)" text-anchor="middle">
+    <rect x="-280" y="-18" width="90" height="32" rx="16" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-opacity="0.35"/>
     <text x="-235" y="5" font-family="Inter, sans-serif" font-weight="600" font-size="15" fill="#fbbf24">Claude</text>
 
-    <rect x="-155" y="-18" width="80" height="32" rx="16" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-opacity="0.3"/>
+    <rect x="-155" y="-18" width="80" height="32" rx="16" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-opacity="0.35"/>
     <text x="-115" y="5" font-family="Inter, sans-serif" font-weight="600" font-size="15" fill="#fbbf24">GPT-5</text>
 
-    <rect x="-40" y="-18" width="90" height="32" rx="16" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-opacity="0.3"/>
+    <rect x="-40" y="-18" width="90" height="32" rx="16" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-opacity="0.35"/>
     <text x="5" y="5" font-family="Inter, sans-serif" font-weight="600" font-size="15" fill="#fbbf24">Gemini</text>
 
-    <rect x="85" y="-18" width="80" height="32" rx="16" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-opacity="0.3"/>
+    <rect x="85" y="-18" width="80" height="32" rx="16" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-opacity="0.35"/>
     <text x="125" y="5" font-family="Inter, sans-serif" font-weight="600" font-size="15" fill="#fbbf24">Haiku</text>
 
-    <rect x="200" y="-18" width="85" height="32" rx="16" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-opacity="0.3"/>
+    <rect x="200" y="-18" width="85" height="32" rx="16" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-opacity="0.35"/>
     <text x="242" y="5" font-family="Inter, sans-serif" font-weight="600" font-size="15" fill="#fbbf24">16 total</text>
   </g>
 
-  <!-- Footer -->
-  <text x="600" y="596" text-anchor="middle" font-family="Inter, sans-serif" font-size="16" fill="#e2e8f0">
+  <!-- Footer line 1 -->
+  <text x="600" y="570" text-anchor="middle" font-family="Inter, sans-serif" font-size="16" fill="#e2e8f0">
     <tspan font-weight="700">Built by Gregg Cochran</tspan>
     <tspan> · </tspan>
     <tspan>@DUBSOpenHub</tspan>
   </text>
 
-  <!-- Copilot sparkle icon + "Built with" line -->
-  <g transform="translate(600, 618)">
-    <!-- Copilot sparkle icon (4-pointed star) -->
-    <g transform="translate(-130, -12) scale(0.9)">
+  <!-- Footer line 2 with Copilot sparkles -->
+  <g transform="translate(600, 596)">
+    <g transform="translate(-138, -12) scale(0.8)">
       <path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z" fill="#e2e8f0"/>
     </g>
     <text x="0" y="5" text-anchor="middle" font-family="Inter, sans-serif" font-weight="600" font-size="16" fill="#e2e8f0">
       Built with the GitHub Copilot CLI
     </text>
-    <!-- Small trailing sparkle -->
-    <g transform="translate(128, -8) scale(0.5)">
+    <g transform="translate(135, -8) scale(0.5)">
       <path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z" fill="#f59e0b"/>
     </g>
   </g>
