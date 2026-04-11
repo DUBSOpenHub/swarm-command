@@ -1,6 +1,6 @@
 # 🐝 Swarm Command
 
-**Multi-model consensus swarm orchestration for the Copilot CLI. Launch 50–250+ AI agents across 16 models with Shadow Score Spec L2 validation — from one command.**
+**Multi-model consensus swarm orchestration for the Copilot CLI. Instantly launch up to 250+ AI agents across 16 models with Shadow Score Spec L2 validation — from one command.**
 
 [![GitHub](https://img.shields.io/badge/GitHub-Copilot_CLI-blue?logo=github)](https://github.com/features/copilot)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
