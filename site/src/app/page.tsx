@@ -327,7 +327,7 @@ export default function Home() {
       </section>
 
       {/* ──────────── ARCHITECTURE — Spawn Hierarchy ──────────── */}
-      <section className="section honeycomb-bg reveal" id="architecture">
+      <section className="section section-dark reveal" id="architecture">
         <div className="container">
           <h2 className="section-title">The Spawn Hierarchy</h2>
           <p className="section-body" style={{ marginBottom: "3rem" }}>

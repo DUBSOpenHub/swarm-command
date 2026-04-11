@@ -141,12 +141,12 @@ a { color: inherit; text-decoration: none; }
   pointer-events: none;
   background-color: transparent;
   background-image:
-    linear-gradient(30deg, rgba(245,158,11,0.18) 12%, transparent 12.5%, transparent 87%, rgba(245,158,11,0.18) 87.5%, rgba(245,158,11,0.18)),
-    linear-gradient(150deg, rgba(245,158,11,0.18) 12%, transparent 12.5%, transparent 87%, rgba(245,158,11,0.18) 87.5%, rgba(245,158,11,0.18)),
-    linear-gradient(30deg, rgba(245,158,11,0.18) 12%, transparent 12.5%, transparent 87%, rgba(245,158,11,0.18) 87.5%, rgba(245,158,11,0.18)),
-    linear-gradient(150deg, rgba(245,158,11,0.18) 12%, transparent 12.5%, transparent 87%, rgba(245,158,11,0.18) 87.5%, rgba(245,158,11,0.18)),
-    linear-gradient(60deg, rgba(245,158,11,0.18) 25%, transparent 25.5%, transparent 75%, rgba(245,158,11,0.18) 75%, rgba(245,158,11,0.18)),
-    linear-gradient(60deg, rgba(245,158,11,0.18) 25%, transparent 25.5%, transparent 75%, rgba(245,158,11,0.18) 75%, rgba(245,158,11,0.18));
+    linear-gradient(30deg, rgba(245,158,11,0.08) 12%, transparent 12.5%, transparent 87%, rgba(245,158,11,0.08) 87.5%, rgba(245,158,11,0.08)),
+    linear-gradient(150deg, rgba(245,158,11,0.08) 12%, transparent 12.5%, transparent 87%, rgba(245,158,11,0.08) 87.5%, rgba(245,158,11,0.08)),
+    linear-gradient(30deg, rgba(245,158,11,0.08) 12%, transparent 12.5%, transparent 87%, rgba(245,158,11,0.08) 87.5%, rgba(245,158,11,0.08)),
+    linear-gradient(150deg, rgba(245,158,11,0.08) 12%, transparent 12.5%, transparent 87%, rgba(245,158,11,0.08) 87.5%, rgba(245,158,11,0.08)),
+    linear-gradient(60deg, rgba(245,158,11,0.08) 25%, transparent 25.5%, transparent 75%, rgba(245,158,11,0.08) 75%, rgba(245,158,11,0.08)),
+    linear-gradient(60deg, rgba(245,158,11,0.08) 25%, transparent 25.5%, transparent 75%, rgba(245,158,11,0.08) 75%, rgba(245,158,11,0.08));
   background-size: 75px 130px;
   background-position: 0 0, 0 0, 37px 65px, 37px 65px, 0 0, 37px 65px;
   animation: honeycomb-glow 4s ease-in-out infinite;
@@ -160,12 +160,12 @@ a { color: inherit; text-decoration: none; }
   animation: honeycomb-pulse 6s ease-in-out infinite;
 }
 @keyframes honeycomb-glow {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
 }
 @keyframes honeycomb-pulse {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.8; }
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.5; }
 }
 
 /* ─── Scroll Reveal ─── */
