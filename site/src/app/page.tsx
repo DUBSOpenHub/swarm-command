@@ -266,7 +266,7 @@ export default function Home() {
               </div>
               <h3>The swarm fans out</h3>
               <p>
-                Agents from Claude, GPT, and Gemini families compete and
+                Agents from Claude and GPT families compete and
                 collaborate. Different models cross-pollinate and review each
                 other&apos;s work.
               </p>
@@ -299,7 +299,7 @@ export default function Home() {
               <h3>Collective Intelligence</h3>
               <p>
                 16 models, not one. Claude Opus &amp; Sonnet. GPT-5.x series.
-                Gemini 3 Pro. Claude Haiku. Each brings different strengths —
+                Claude Haiku. Each brings different strengths —
                 together they catch what any single model misses.
               </p>
             </div>
@@ -308,7 +308,7 @@ export default function Home() {
               <h3>Cross-Validated</h3>
               <p>
                 Different model families review each other&apos;s work. Claude
-                checks GPT. GPT checks Gemini. No echo chambers — only findings
+                checks GPT. GPT checks Claude. No echo chambers — only findings
                 that survive independent scrutiny make the cut.
               </p>
             </div>
@@ -505,7 +505,7 @@ export default function Home() {
             <div className="proof-stat" ref={modelsStat.ref}>
               <span className="proof-number">{modelsStat.count}</span>
               <span className="proof-label">models available</span>
-              <span className="proof-detail">Claude · GPT · Gemini</span>
+              <span className="proof-detail">Claude · GPT</span>
             </div>
             <div className="proof-stat" ref={vulnsStat.ref}>
               <span className="proof-number">{vulnsStat.count}</span>

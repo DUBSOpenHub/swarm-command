@@ -117,7 +117,7 @@
     <text x="-115" y="5" font-family="Inter, sans-serif" font-weight="600" font-size="15" fill="#fbbf24">GPT-5.x</text>
 
     <rect x="-40" y="-18" width="90" height="32" rx="16" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-opacity="0.35"/>
-    <text x="5" y="5" font-family="Inter, sans-serif" font-weight="600" font-size="15" fill="#fbbf24">Gemini</text>
+    <text x="5" y="5" font-family="Inter, sans-serif" font-weight="600" font-size="15" fill="#fbbf24">Sonnet</text>
 
     <rect x="85" y="-18" width="80" height="32" rx="16" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-opacity="0.35"/>
     <text x="125" y="5" font-family="Inter, sans-serif" font-weight="600" font-size="15" fill="#fbbf24">Haiku</text>
