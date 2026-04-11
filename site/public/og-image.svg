@@ -67,15 +67,15 @@
   <text x="600" y="415" text-anchor="middle" font-family="Inter, sans-serif" font-weight="800" font-size="44" fill="#e2e8f0">Swarm Command</text>
 
   <!-- Subtitle -->
-  <text x="600" y="448" text-anchor="middle" font-family="Inter, sans-serif" font-weight="600" font-size="22" fill="#e2e8f0">
+  <text x="600" y="440" text-anchor="middle" font-family="Inter, sans-serif" font-weight="600" font-size="22" fill="#e2e8f0">
     Instantly launch up to 250 AI agents
   </text>
-  <text x="600" y="478" text-anchor="middle" font-family="Inter, sans-serif" font-weight="400" font-size="17" fill="#94a3b8">
+  <text x="600" y="466" text-anchor="middle" font-family="Inter, sans-serif" font-weight="400" font-size="17" fill="#94a3b8">
     Find consensus across models that no single AI can reach alone
   </text>
 
   <!-- Model badges -->
-  <g transform="translate(600, 500)" text-anchor="middle">
+  <g transform="translate(600, 516)" text-anchor="middle">
     <rect x="-280" y="-18" width="90" height="32" rx="16" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-opacity="0.3"/>
     <text x="-235" y="5" font-family="Inter, sans-serif" font-weight="600" font-size="15" fill="#fbbf24">Claude</text>
 
@@ -93,12 +93,12 @@
   </g>
 
   <!-- Footer -->
-  <text x="600" y="600" text-anchor="middle" font-family="Inter, sans-serif" font-size="16" fill="#e2e8f0">
+  <text x="600" y="596" text-anchor="middle" font-family="Inter, sans-serif" font-size="16" fill="#e2e8f0">
     <tspan font-weight="700">Built by Gregg Cochran</tspan>
     <tspan> · </tspan>
     <tspan>@DUBSOpenHub</tspan>
   </text>
-  <text x="600" y="622" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#94a3b8">
-    Built with the GitHub Copilot CLI
+  <text x="600" y="618" text-anchor="middle" font-family="Inter, sans-serif" font-weight="600" font-size="16" fill="#e2e8f0">
+    Built with the GitHub Copilot CLI ✦
   </text>
 </svg>
