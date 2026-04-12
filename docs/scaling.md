@@ -56,9 +56,8 @@ Default: **SS-100**. Use `swarm command ss-250` for full deployment or `swarm co
 ```text
 L0: 1 Nexus (claude-opus-4.6)
 L1: 3 Commanders (commander pool — 10 models)
-L2: — (no Squad Leads at this scale)
-L3: 45 Workers (worker pool — 6 models)  — 15 per commander
-L4: 3 Reviewers (cross-family pairs)
+L2: 45 Workers (worker pool — 6 models)  — 15 per commander, spawned directly
+    3 Reviewers (cross-family pairs, spawned by Nexus)
 ──────────────────────────
 Total: ~52 agents
 Cost:  $1.50 – $3.50
@@ -95,9 +94,8 @@ Time:  ~30s wall-clock
 ```text
 L0: 1 Nexus (claude-opus-4.6)
 L1: 5 Commanders (commander pool — 10 models)
-L2: — (no Squad Leads at this scale)
-L3: 75 Workers (worker pool — 6 models)  — 15 per commander
-L4: 8 Reviewers (cross-family pairs)
+L2: 75 Workers (worker pool — 6 models)  — 15 per commander, spawned directly
+    8 Reviewers (cross-family pairs, spawned by Nexus)
     Shadow Scoring (Nexus-internal, sealed criteria)
 ──────────────────────────
 Total: ~89 agents
@@ -180,24 +178,24 @@ Time:  ~65–90s wall-clock
 
 ---
 
-## Sub-Linear Scaling Proof
+## Parallel Execution Design
+
+Wall-clock time grows slower than agent count because the expensive work runs in parallel:
 
 ```text
 Agents     Wall-Clock     Ratio vs SS-50
   50         ~30s           1.0×
  100         ~42s           1.4×
  250         ~65s           2.2×
-
-Scaling exponent ≈ 0.45 (vs 1.0 for linear)
 ```
 
-Sub-linear scaling happens because most of the expensive work runs in parallel. The serial bottlenecks are limited to:
+These are design targets, not measured benchmarks. The serial bottlenecks are limited to:
 
 - Nexus decomposition: ~2s
 - Canary verification: ~3s
 - Final synthesis: ~10s
 
-Everything else overlaps.
+Everything else overlaps via hierarchical fan-out and pipeline overlap.
 
 ---
 

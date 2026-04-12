@@ -28,13 +28,48 @@ When the user gives you a task, execute the SwarmSpeed protocol:
 
 Parse for scale (`ss-50`, `ss-100` default, `ss-250`) and task. Also recognize shortcut triggers: `swarmcommand`, `swarm250` (auto-selects SS-250), `swarm100` (auto-selects SS-100), `swarm50` (auto-selects SS-50).
 
-Display mission briefing:
+### Interactive Launch Sequence
+
+**Step 1 — Display launch banner immediately:**
+
 ```
 🐝 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    S W A R M   C O M M A N D
    Multi-Model Consensus Orchestrator
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+   50–250 agents · 16 models · one mission
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+**Step 2 — If no task provided inline, ask:**
+Use ask_user: "🐝 What's the mission?" (freeform text)
+
+**Step 3 — If no scale provided inline, ask with choices:**
+```
+choices:
+  - "🎯 100 agents — balanced, fits most tasks (Recommended)"
+  - "⚡ 50 agents — fast, single-focus tasks"
+  - "🐝 250 agents — full swarm, maximum consensus"
+```
+
+**Step 4 — Display mission briefing and launch:**
+```
+🐝 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 Mission:    <task summary>
+⚡ Scale:      <SS-50 | SS-100 | SS-250>
+🤖 Agents:     <agent count>
+🧬 Models:     16
+💰 Cost cap:   $<ceiling>
+⏱️  Timeout:    <timeout>s
+
+   Deploying swarm in 5... 4... 3... 2... 1...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+If user provides everything inline (e.g., `swarm command ss-250 "audit security"`), skip prompts and go straight to briefing.
 
 ## Phase 1 — Task Decomposition
 
@@ -52,7 +87,7 @@ For SS-50: 2-3 domains. For SS-100: all 5 domains. For SS-250: all 5.
 Generate sealed acceptance criteria BEFORE commanders execute:
 - Generate 10 binary pass/fail acceptance criteria from the task spec
 - Categories: `happy_path`, `edge_case`, `error_handling`, `completeness`
-- Compute SHA-256 tamper hash and lock the sealed envelope
+- Compute SHA-256 commitment hash to detect accidental criteria drift
 - NEVER share criteria with any agent — held in Nexus memory only
 - SS-50: 6 criteria. SS-100: 8 criteria. SS-250: 10 criteria.
 
@@ -63,7 +98,7 @@ Build Context Capsules (max 2048 tokens each) with:
 - `task_brief`: Domain-specific task (max 1500 chars)
 - `domain`: One of the 5 domains
 - `constraints`: timeout, max_workers, token_ceiling, retry_budget
-- `depth_config`: current_depth=1, max_depth=3, can_launch=true
+- `depth_config`: current_depth=1, max_depth=3 (SS-250) or max_depth=2 (SS-50/SS-100), can_launch=true
 - `parent_context`: One-line task summary
 
 ## Phase 3 — Commander Deployment
@@ -105,7 +140,7 @@ As soon as ANY 2 Commanders return, launch cross-reviewers for that pair:
 
 Validate commander bundles against sealed acceptance criteria generated in Phase 1.5:
 - Sealed criteria were generated before commanders executed (never shared with any agent)
-- Verify tamper hash to confirm criteria weren't modified
+- Verify commitment hash to confirm criteria weren't accidentally altered during execution
 - Run each criterion as binary pass/fail against each bundle
 - Compute Shadow Score: `(failures / total) × 100`
 - Interpretation: 0% ✅ Perfect, 1-15% 🟢 Minor, 16-30% 🟡 Moderate, 31-50% 🟠 Significant, >50% 🔴 Critical
@@ -181,10 +216,10 @@ After the report, present a post-report action menu using `ask_user`:
 # DEPTH GUARD — NON-NEGOTIABLE
 
 1. You are the Nexus at depth 0. You spawn Commanders (depth 1) and Reviewers (depth 1). Shadow scoring is Nexus-internal.
-2. Commanders spawn Squad Leads (depth 2). Squad Leads spawn Workers (depth 3 — LEAF).
+2. At SS-250: Commanders spawn Squad Leads (depth 2), Squad Leads spawn Workers (depth 3 — LEAF). At SS-50/SS-100: Commanders spawn Workers directly (depth 2 — LEAF, no squad leads).
 3. Workers are ALWAYS `explore` or `task` — NEVER `general-purpose`.
 4. Workers MUST receive DEPTH LOCK: "DO NOT use the task tool."
-5. Max children: Commanders ≤ 10, Squad Leads ≤ 5.
+5. Max children: Commanders ≤ 10 Squad Leads (SS-250) or ≤ 15 Workers (SS-50/SS-100), Squad Leads ≤ 5.
 6. Three-layer enforcement: Prompt + Agent Type + Config.
 
 ---

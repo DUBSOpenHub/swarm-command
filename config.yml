@@ -3,7 +3,8 @@ swarm_command:
   scales:
     ss-50:
       commanders: 3
-      workers_per_commander: 15
+      workers_per_commander: 15  # No squad leads — commanders spawn workers directly
+      max_depth: 2               # Nexus[0] → Commander[1] → Worker[2]
       reviewers: 3
       sealed_criteria_count: 6
       cost_ceiling_usd: 5.00
@@ -11,7 +12,8 @@ swarm_command:
       total: ~52
     ss-100:
       commanders: 5
-      workers_per_commander: 15
+      workers_per_commander: 15  # No squad leads — commanders spawn workers directly
+      max_depth: 2               # Nexus[0] → Commander[1] → Worker[2]
       reviewers: 8
       sealed_criteria_count: 8
       cost_ceiling_usd: 10.00
@@ -21,6 +23,7 @@ swarm_command:
       commanders: 5
       squad_leads_per_commander: 10
       workers_per_squad_lead: 5
+      max_depth: 3               # Nexus[0] → Commander[1] → Squad Lead[2] → Worker[3]
       reviewers: 10
       sealed_criteria_count: 10
       cost_ceiling_usd: 20.00

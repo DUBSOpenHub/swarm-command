@@ -137,7 +137,7 @@ Parent receives partial result with explicit gaps documented
 
 ## Timeout Cascade
 
-Each layer has a strictly decreasing timeout. Children MUST always finish before their parents:
+Each layer in the spawn chain has a strictly decreasing timeout. Children MUST always finish before their parents. Reviewers are a separate Nexus-spawned track outside the spawn chain:
 
 | Layer | Timeout | Rationale |
 |---|---|---|

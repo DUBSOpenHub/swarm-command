@@ -26,8 +26,8 @@ This repository contains **Swarm Command**, a GitHub Copilot CLI skill that orch
 
 ## Prohibited actions
 
-- Spawning `general-purpose` agents at the worker level (depth 3+)
-- Setting `can_launch = true` for Workers and Reviewers (depth 3+) is prohibited. Squad Leads at depth 2 MAY have `can_launch=true` (they spawn leaf workers only).
+- Spawning `general-purpose` agents at the worker level (depth 2+ for SS-50/SS-100, depth 3+ for SS-250)
+- Setting `can_launch = true` for Workers and Reviewers is prohibited. Squad Leads at depth 2 (SS-250 only) MAY have `can_launch=true` (they spawn leaf workers only). At SS-50/SS-100, commanders spawn workers directly at depth 2.
 - Passing full context (128K) to workers — compress to 128 tokens
 - Exposing shadow scoring criteria to workers or reviewers
 - Hardcoding model names in prompt templates (use placeholders)
