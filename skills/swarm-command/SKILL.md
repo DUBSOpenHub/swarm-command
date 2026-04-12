@@ -4,7 +4,7 @@ description: >
   🐝 Swarm Command — multi-model consensus swarm orchestrator.
   Launches 50-250+ AI agents across 16 models with hierarchical fan-out,
   cross-family review, Shadow Score Spec L2 conformance, and quality-gated synthesis.
-  Say "swarm command" to start.
+  Say "swarm command", "swarmcommand", or "swarm250" to start.
 license: MIT
 metadata:
   version: 1.0.0
@@ -30,40 +30,84 @@ Forbidden output patterns:
 
 # PHASE 0 — MISSION INTAKE
 
-**Trigger:** User says "swarm command" (optionally with scale and/or task)
+**Trigger:** User says any of these (case-insensitive, with or without spaces):
+- "swarm command"
+- "swarmcommand"
+- "swarm250" (auto-selects SS-250)
+- "swarm100" (auto-selects SS-100)
+- "swarm50" (auto-selects SS-50)
 
-Parse the user's input for:
-1. **Scale**: `ss-50`, `ss-100` (default), or `ss-250` — if provided inline
-2. **Task**: Everything after the scale identifier, or the full message if no scale given
+Optionally followed by a task description.
 
-If no task provided, ask: "🐝 **Swarm Command ready.** What's the mission?"
+**Step 1 — The Hive Awakens:**
 
-If no scale provided inline, use ask_user to prompt:
-
-```
-🐝 Choose your swarm size:
-
-  SS-50   (~52 agents)   ⚡ Fast — single-focus tasks
-  SS-100  (~89 agents)   🎯 Balanced — most tasks (recommended)
-  SS-250  (~316 agents)  🐝 Full swarm — maximum consensus
-```
-
-Display the mission briefing:
+Immediately display this opening banner — this is the first thing the user sees:
 
 ```
-🐝 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   S W A R M   C O M M A N D
-   Multi-Model Consensus Orchestrator
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡
+⬡                                                     ⬡
+⬡   🐝  S W A R M   C O M M A N D                    ⬡
+⬡       Multi-Model Consensus Orchestrator             ⬡
+⬡                                                     ⬡
+⬡   ┊ 16 Models ┊ Shadow Scoring ┊ Depth Guard ┊     ⬡
+⬡                                                     ⬡
+⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡
 
-📋 Mission:    <task summary>
-⚡ Scale:      <SS-50 | SS-100 | SS-250>
-🤖 Agents:     <agent count>
-🧬 Models:     <model count>
-💰 Cost cap:   $<ceiling>
-⏱️  Timeout:    <timeout>s
+   "The swarm is smarter than any single model."
+```
 
-Deploying swarm in 5... 4... 3... 2... 1...
+**Step 2 — Choose Your Swarm (MANDATORY — NEVER SKIP):**
+
+ALWAYS use `ask_user` to prompt for swarm size. This step is NEVER skipped, even if a scale keyword (`ss-50`, `ss-100`, `ss-250`) was embedded in the user's message. The ceremony of choosing your swarm size sets the tone for the entire deployment.
+
+If the user used a shortcut trigger (`swarm250`, `swarm100`, `swarm50`), pre-select the matching size as the first choice with "(your pick)" appended, but still show all three options so the user confirms.
+
+```
+ask_user:
+  question: "How large a swarm do you want to deploy?"
+  choices:
+    - "⚡ SS-50  — ~52 agents · fast & focused"
+    - "🎯 SS-100 — ~89 agents · balanced (recommended)"
+    - "🐝 SS-250 — ~316 agents · full consensus swarm"
+```
+
+**Step 3 — Get the Mission:**
+
+If no task was provided with the trigger, use `ask_user`:
+
+```
+ask_user:
+  question: "🐝 The hive is buzzing. What's the mission, Commander?"
+  allow_freeform: true
+```
+
+**Step 4 — Mission Briefing & Launch:**
+
+After the user confirms both scale and task, display the full mission briefing with deployment countdown:
+
+```
+🐝 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   M I S S I O N   B R I E F I N G
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+   📋 Mission:     <task summary>
+   ⚡ Scale:       <SS-50 | SS-100 | SS-250>
+   🤖 Agents:      <count> across 5 layers
+   🧬 Models:      16 (Claude × GPT families)
+   👻 Shadow:      <N> sealed criteria (L2)
+   ⏱️  Timeout:     <timeout>s
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+   ▸ Nexus core online
+   ▸ Model roster loaded (16 models)
+   ▸ Sealed acceptance criteria generating...
+   ▸ Depth Guard armed (5 laws enforced)
+   ▸ Circuit Breaker: CLOSED ✅
+
+   🐝 DEPLOYING IN  5 . . 4 . . 3 . . 2 . . 1 . .
+
+       ⬢ ⬢ ⬢  SWARM DEPLOYED  ⬢ ⬢ ⬢
 ```
 
 ---
@@ -560,16 +604,16 @@ Show synthesis:
 
 ---
 
-# PHASE 8 — FINAL OUTPUT
+# PHASE 8 — FINAL OUTPUT (ACTION REPORT)
 
-Structure the final output as:
+Structure the final output as an **actionable report** the user can immediately execute on. The goal is ZERO interpretation needed — every finding becomes a concrete action with priority, effort, and (where possible) a copy-paste command or code block.
 
 ```
-🐝 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🐝 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    S W A R M   C O M P L E T E
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## 📊 Results Summary
+## 📊 Swarm Metrics
 
 | Metric | Value |
 |---|---|
@@ -580,46 +624,238 @@ Structure the final output as:
 | Atoms merged | XXX |
 | Wall-clock time | XXs |
 | Estimated cost | $X.XX |
-| Shadow verdict | ✅ Perfect / 🟢 Minor / 🟡 Moderate / 🟠 Significant / 🔴 Critical |
+| Shadow verdict | ✅ / 🟢 / 🟡 / 🟠 / 🔴 |
 
-## 🏗️ Architecture
-<merged content from CMD-ARCH>
+---
 
-## ⚙️ Implementation
+## 🎯 START HERE — The #1 Action
+
+> <One sentence: the single most impactful thing to do right now>
+>
+> **Why:** <one-line justification from swarm evidence>
+> **How:** <concrete command, file edit, or step>
+
+---
+
+## 🔴🟡🟢 Risk Heatmap
+
+| Domain | Correct | Complete | Consistent | Risk |
+|--------|---------|----------|------------|------|
+| Architecture | 🟢/🟡/🔴 | 🟢/🟡/🔴 | 🟢/🟡/🔴 | LOW/MED/HIGH |
+| Implementation | ... | ... | ... | ... |
+| Testing | ... | ... | ... | ... |
+| Documentation | ... | ... | ... | ... |
+| Integration | ... | ... | ... | ... |
+
+---
+
+## ⚡ Quick Wins (< 30 min each)
+
+| # | Action | Domain | Impact | Effort |
+|---|--------|--------|--------|--------|
+| 1 | <action with specific file + line> | ARCH | 🔴 High | ~5 min |
+| 2 | ... | ... | ... | ... |
+
+## 🔨 Deep Work (> 30 min each)
+
+| # | Action | Domain | Impact | Effort |
+|---|--------|--------|--------|--------|
+| 1 | <action with scope description> | IMPL | 🔴 High | ~2 hr |
+| 2 | ... | ... | ... | ... |
+
+## 🔮 Future Considerations
+
+| # | Idea | Domain | Why Later |
+|---|------|--------|-----------|
+| 1 | <idea> | ... | <reason to defer> |
+
+---
+
+## 📝 Copy-Paste Actions
+
+Ready-to-use commands and code changes. Copy and run directly.
+
+### Action 1: <title>
+```bash
+<exact command or code change>
+```
+
+### Action 2: <title>
+```bash
+<exact command or code change>
+```
+
+(Continue for each actionable finding that can be expressed as a command or edit.)
+
+---
+
+## 📋 Domain Reports
+
+### 🏗️ Architecture
+<merged content from CMD-ARCH — findings, issues, recommendations>
+
+### ⚙️ Implementation
 <merged content from CMD-IMPL>
 
-## 🧪 Testing
+### 🧪 Testing
 <merged content from CMD-TEST>
 
-## 📝 Documentation
+### 📝 Documentation
 <merged content from CMD-DOCS>
 
-## 🔗 Integration
+### 🔗 Integration
 <merged content from CMD-INTG>
 
+---
+
 ## ⚡ Conflicts & Resolutions
-<any CONFLICT-tier items and how they were resolved>
-<any Shadow Score Gap Reports and hardening results>
+<any CONFLICT-tier items and how Nexus resolved them>
+<Shadow Score Gap Reports and hardening results>
 
 ## 📋 Gaps
-<any sub-tasks that were not completed, with reasons>
+<sub-tasks no domain addressed, with reasons>
+
+---
 
 ### Agent Tally
 | Layer | Role | Count |
 |-------|------|-------|
 | L0 | Nexus | 1 |
 | L1 | Commanders | <count> |
-| L2 | Squad Leads | <count or "—"> |
+| L2 | Squad Leads | <count> |
 | L3 | Workers | <count> |
 | L4 | Reviewers | <count> |
 | **Total** | | **<total>** |
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🐝 "The swarm is smarter than any single model."
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
----
+After displaying the report, ALWAYS prompt the user for what to do next. This is the closing ceremony — never end without it.
+
+Use `ask_user` with these choices:
+
+```
+ask_user:
+  question: "🐝 The swarm has spoken. What would you like to do?"
+  choices:
+    - "⚡ Apply Quick Wins — let me fix the easy ones right now"
+    - "🔀 Smart Merge — synthesize the best findings into actual file changes"
+    - "⚔️ Where They Disagreed — show me where the models clashed"
+    - "🔍 Deep Dive — explore a specific domain in detail"
+    - "📋 Export Report — save the full Action Report to a file"
+    - "🐝 Run Another Swarm — new mission, same hive"
+    - "✅ Done — I'll take it from here"
+```
+
+### Handling each choice:
+
+**⚡ Apply Quick Wins:** Iterate through the Quick Wins table. For each one, show the proposed change and ask:
+```
+ask_user:
+  question: "Apply this fix? <description of change>"
+  choices:
+    - "✅ Yes — apply it"
+    - "⏭️ Skip — move to next"
+    - "🛑 Stop — done applying"
+```
+Make the actual file edits for each accepted fix. After all fixes, show a summary of what was applied and re-prompt the main menu.
+
+**🔀 Smart Merge:** Take the CONSENSUS-tier findings that all commanders agreed on and generate concrete file edits (code changes, config fixes, doc updates). Show a preview of each change, then ask:
+```
+ask_user:
+  question: "Ready to apply these consensus-backed changes?"
+  choices:
+    - "✅ Apply all consensus changes"
+    - "👀 Review one by one"
+    - "📋 Show as a diff first"
+    - "↩️ Back to menu"
+```
+
+**⚔️ Where They Disagreed:** Show every finding where models diverged — CONFLICT-tier reviews, MAJORITY-tier items with dissent, and cross-domain contradictions. Structure as a dissent report:
+
+```
+⚔️ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   D I S S E N T   R E P O R T
+   Where the swarm disagreed
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+For each disagreement, display:
+1. **The issue** — what the disagreement is about
+2. **Side A** — which model(s) said what, with their reasoning
+3. **Side B** — which model(s) said the opposite, with their reasoning
+4. **Reviewer scores** — how cross-reviewers scored each side
+5. **Nexus verdict** — how the Nexus resolved it (or flagged it as unresolved)
+
+Example format for each disagreement:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ ⚔️ DISAGREEMENT #1: <topic>                            │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│ 🅰️ Side A (CMD-ARCH · opus-4.6, REV-05 · sonnet-4.6): │
+│    "<position with reasoning>"                          │
+│                                                         │
+│ 🅱️ Side B (CMD-IMPL · gpt-5.4, REV-07 · sonnet-4):    │
+│    "<opposing position with reasoning>"                 │
+│                                                         │
+│ 📊 Review scores: A = 0.73 vs B = 0.68                 │
+│ ⚖️ Nexus verdict: <resolved to A / unresolved / split> │
+│                                                         │
+│ 💡 Why it matters: <impact if wrong side is chosen>     │
+└─────────────────────────────────────────────────────────┘
+```
+
+After showing all disagreements, ask:
+```
+ask_user:
+  question: "How do you want to handle the unresolved disagreements?"
+  choices:
+    - "⚖️ I'll decide each one — walk me through them"
+    - "🤖 Trust the majority — apply the higher-scored side"
+    - "🚫 Leave them all unresolved — I'll handle manually"
+    - "↩️ Back to menu"
+```
+
+If the user chooses to decide each one, iterate through unresolved disagreements with:
+```
+ask_user:
+  question: "⚔️ <topic>: Side A says <X>, Side B says <Y>. Which side?"
+  choices:
+    - "🅰️ Side A — <short position>"
+    - "🅱️ Side B — <short position>"
+    - "⏭️ Skip — leave unresolved"
+```
+
+After all decisions, re-prompt the main menu.
+
+**🔍 Deep Dive:** Ask which domain to explore:
+```
+ask_user:
+  question: "Which domain do you want to explore?"
+  choices:
+    - "🏗️ Architecture"
+    - "⚙️ Implementation"
+    - "🧪 Testing"
+    - "📝 Documentation"
+    - "🔗 Integration"
+```
+Then display the full domain report with all findings, issues, and recommendations for that domain. After, re-prompt the main menu.
+
+**📋 Export Report:** Save the complete Action Report as a markdown file to the current working directory (e.g., `swarm-report-<timestamp>.md`). Confirm the file path and re-prompt the main menu.
+
+**🐝 Run Another Swarm:** Return to Phase 0 — show the opening banner and swarm size picker again.
+
+**✅ Done:** Display a brief sign-off:
+```
+🐝 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Mission complete, Commander.
+   The hive stands ready.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
 
 # CIRCUIT BREAKER RULES (applies to ALL phases)
 

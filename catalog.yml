@@ -4,7 +4,7 @@ name: Swarm Command
 description: >
   Multi-model swarm orchestrator with consensus scoring and Shadow Score Spec L2
   conformance. Launches 50-250+ AI agents across 16 models with hierarchical fan-out,
-  cross-family review, and quality-gated synthesis. Say "swarm command" to start.
+  cross-family review, and quality-gated synthesis. Say "swarm command", "swarmcommand", or "swarm250" to start.
 emoji: "🐝"
 codename: Hive Mind
 category: orchestrator
