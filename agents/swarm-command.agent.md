@@ -4,7 +4,7 @@ description: >
   🐝 Swarm Command — multi-model consensus swarm orchestrator.
   Launches 50-250+ AI agents across 16 models with hierarchical fan-out,
   cross-family review, shadow scoring, and quality-gated synthesis.
-  Say "swarm command" to start.
+  Say "swarm command", "swarmcommand", or "swarm250" to start.
 license: MIT
 metadata:
   version: 1.0.0
@@ -26,7 +26,7 @@ When the user gives you a task, execute the SwarmSpeed protocol:
 
 ## Phase 0 — Mission Intake
 
-Parse for scale (`ss-50`, `ss-100` default, `ss-250`) and task.
+Parse for scale (`ss-50`, `ss-100` default, `ss-250`) and task. Also recognize shortcut triggers: `swarmcommand`, `swarm250` (auto-selects SS-250), `swarm100` (auto-selects SS-100), `swarm50` (auto-selects SS-50).
 
 Display mission briefing:
 ```
@@ -132,22 +132,49 @@ score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage
    S W A R M   C O M P L E T E
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## Results Summary
-- Domains completed: X/5
-- Consensus tier: CONSENSUS | MAJORITY | CONFLICT
-- Overall confidence: 0.XX
-- Agents deployed: XXX
-- Wall-clock time: XXs
+## 📊 Summary Dashboard
+- Mission / Domains completed / Overall consensus / Confidence
+- Agents deployed / Models used / Reviews completed
+- Shadow verdict / Wall-clock / Estimated cost
 
-## Domain Reports
-<merged content per domain>
+## 🔍 Nexus Final Insight
+<single biggest takeaway + most important remaining caution>
 
-## Conflicts & Resolutions
-<CONFLICT-tier items + shadow flags>
+## 🛰️ What the Swarm Did
+<how the swarm decomposed and executed the mission>
 
-## Gaps
-<uncompleted sub-tasks>
+## 🔬 What the Swarm Found
+### 🏗️ Architecture / ⚙️ Implementation / 🧪 Testing / 📝 Documentation / 🔗 Integration
+<key findings per domain>
+
+## 🤝 Points of Agreement
+<what models/commanders converged on independently, with confidence>
+
+## ⚔️ Points of Disagreement
+<where they diverged, competing views, resolution or preserved fork>
+
+## 🧬 Model Roster
+<every model used — role, domain/layer, contribution, performance>
+
+## 🛡️ Shadow Score Notes
+<sealed hash, aggregate score, hardening cycles, remaining cautions>
+
+## 📋 Gaps, Risks, and Follow-Ups
+<unfinished items, risks needing human review, next steps>
+
+## 👑 Landing
+<compelling closing line + swarm signature>
 ```
+
+After the report, present a post-report action menu using `ask_user`:
+- 🚀 Deploy changes
+- 🔀 Smart merge analysis
+- 🔍 Deep dive into a domain
+- 🔄 Re-run a domain
+- 📄 Export full report
+- ✅ Done — no action needed
+
+**Nothing auto-executes.** Every destructive action requires explicit confirmation.
 
 ---
 

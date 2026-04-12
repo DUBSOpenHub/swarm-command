@@ -50,20 +50,30 @@ If no scale provided inline, use ask_user to prompt:
 
 Display the mission briefing:
 
-```
-🐝 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   S W A R M   C O M M A N D
-   Multi-Model Consensus Orchestrator
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```text
+╔══════════════════════════════════════════════════════════════════════╗
+║ 🐝 SWARM COMMAND // MISSION INTAKE                                 ║
+║ Nexus online • Multi-Model Consensus Orchestrator                  ║
+╚══════════════════════════════════════════════════════════════════════╝
 
-📋 Mission:    <task summary>
-⚡ Scale:      <SS-50 | SS-100 | SS-250>
-🤖 Agents:     <agent count>
-🧬 Models:     <model count>
-💰 Cost cap:   $<ceiling>
-⏱️  Timeout:    <timeout>s
+📋 Mission Vector   :: <task summary>
+⚡ Swarm Scale      :: <SS-50 | SS-100 | SS-250>
+🤖 Agent Envelope   :: <agent count> planned
+🧬 Model Families   :: <model count> active candidates
+💰 Cost Guardrail   :: $<ceiling>
+⏱️ Mission Timeout  :: <timeout>s
 
-Deploying swarm in 5... 4... 3... 2... 1...
+Launch Sequence     :: ● ○ ○ ○ ○  preparing intake
+Deployment Track    :: ▸░░░░░░░░░  0%
+
+🔍 Nexus Insight
+• Mission shape: <greenfield | surgical edit | forensic debug | mixed>
+• Dominant pressure: <speed | correctness | integration | ambiguity>
+• Early read: <example: "Task wording already implies 3 hot zones: implementation, testing, integration.">
+
+Examples of dynamic content:
+- "This mission smells integration-heavy: 4 subsystems are named before decomposition begins."
+- "Constraint density is high — the swarm should bias toward consensus over raw speed."
 ```
 
 ---
@@ -81,6 +91,36 @@ Decompose the task into exactly 5 domains:
 | **Integration** | CMD-INTG | Cross-cutting concerns, glue code, API contracts, deployment |
 
 For smaller scales (SS-50), select the 2–3 most relevant domains. For SS-100, select all 5. For SS-250, use all 5.
+
+Show decomposition:
+
+```text
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 🧭 PHASE 1 — TASK DECOMPOSITION                                    ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+Domain Grid        :: ███░░░░░░░  30%
+Activation Pulse   :: ARCH ●  IMPL ●  TEST ○  DOCS ○  INTG ○
+
+┌──────────────┬──────────┬───────────────────────────────────────────┐
+│ Domain       │ Lead     │ Focus                                     │
+├──────────────┼──────────┼───────────────────────────────────────────┤
+│ Architecture  │ CMD-ARCH │ <structure, boundaries, patterns>        │
+│ Implementation│ CMD-IMPL │ <logic, data flow, algorithms>           │
+│ Testing       │ CMD-TEST │ <edge cases, assertions, failure modes>  │
+│ Documentation │ CMD-DOCS │ <docs, examples, migration notes>        │
+│ Integration   │ CMD-INTG │ <contracts, glue, rollout, deployment>   │
+└──────────────┴──────────┴───────────────────────────────────────────┘
+
+🔍 Nexus Insight
+• Domain pressure map: <which domains look hottest and why>
+• Coupling watch: <which 2 domains are likely to collide later>
+• Example: "Implementation and Testing are tightly coupled here — edge-case coverage will likely decide the final ranking."
+
+Examples of dynamic content:
+- "3 commanders are enough for this mission; documentation is downstream rather than primary."
+- "Architecture and Integration both need the API boundary — expect useful overlap in review."
+```
 
 ---
 
@@ -148,16 +188,30 @@ Generate sealed acceptance criteria from the task specification. These are the h
 
 Show sealed envelope generation:
 
-```
-🐝 PHASE 1.5 — SEALED CRITERIA GENERATION (Shadow Score Spec L2)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```text
+╭──────────────────────────────────────────────────────────────────────╮
+│ 🔐 PHASE 1.5 — SEALED CRITERIA GENERATION                           │
+│ Shadow Score Spec L2 // Envelope locked before deployment           │
+╰──────────────────────────────────────────────────────────────────────╯
 
-  Sealed criteria generated: 10
-  Categories: happy_path (3) · edge_case (3) · error_handling (2) · completeness (2)
-  Sealed hash: sha256:a3f2...
-  Tamper protection: ✅ locked
+Seal Progress      :: ██████░░░░  60%
+Envelope Status    :: LOCKED ●
 
-  ⚠️ Criteria sealed — hidden from all agents until Phase 6.
+Sealed criteria    :: <count>
+Category mix       :: happy_path (<n>) · edge_case (<n>) · error_handling (<n>) · completeness (<n>)
+Sealed hash        :: <sha256:...>
+Tamper protection  :: ✅ locked before Phase 3
+
+🔍 Nexus Insight
+• Hidden stress points: <what kinds of blind spots the sealed tests are targeting>
+• Risk posture: <balanced | edge-case heavy | completeness heavy>
+• Example: "The envelope is leaning hard on boundary behavior because the prompt contains multiple failure-mode hints."
+
+Examples of dynamic content:
+- "2 sealed criteria intentionally probe error format consistency across domains."
+- "The envelope favors completeness because the mission contains 5 explicit deliverables."
+
+⚠️ Criteria sealed — hidden from all agents until Phase 6.
 ```
 
 ---
@@ -190,6 +244,32 @@ For each domain, construct a Context Capsule (max 2048 tokens):
 - Strip rationale — Commanders don't need to know *why* you chose this decomposition
 - Narrow file scope — Each capsule focuses on domain-relevant files only
 - Tighten constraints — Based on scale (SS-50 gets tighter budgets)
+
+Show capsule construction:
+
+```text
+╔══════════════════════════════════════════════════════════════════════╗
+║ 📦 PHASE 2 — CONTEXT CAPSULE CONSTRUCTION                          ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+Capsule Forge      :: ███████░░░  70%
+Compression Ratio  :: <raw tokens> → <capsule tokens>
+
+CAP-ARCH <id>  :: <token count> tokens  :: <file scope summary>
+CAP-IMPL <id>  :: <token count> tokens  :: <file scope summary>
+CAP-TEST <id>  :: <token count> tokens  :: <file scope summary>
+CAP-DOCS <id>  :: <token count> tokens  :: <file scope summary>
+CAP-INTG <id>  :: <token count> tokens  :: <file scope summary>
+
+🔍 Nexus Insight
+• Information diet: <what was trimmed away to keep capsules sharp>
+• Coverage watch: <whether any domain is underfed or overloaded>
+• Example: "Implementation capsule is densest because most requirements collapse into data-flow decisions."
+
+Examples of dynamic content:
+- "Architecture capsule stayed small; the mission is more about execution than redesign."
+- "Testing capsule pulled in 7 edge cases from the brief, making it unusually rich."
+```
 
 ---
 
@@ -283,19 +363,28 @@ Workers MUST be agent_type `explore` or `task` — NEVER `general-purpose`.
 
 Show deployment progress:
 
-```
-🐝 PHASE 3 — COMMANDER DEPLOYMENT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```text
+┌──────────────────────────────────────────────────────────────────────┐
+│ 🚀 PHASE 3 — COMMANDER DEPLOYMENT                                   │
+└──────────────────────────────────────────────────────────────────────┘
 
-  CMD-ARCH  ▸ claude-opus-4.6    ▸ Architecture    ✅ deployed
-  CMD-IMPL  ▸ gpt-5.4            ▸ Implementation  ✅ deployed
-  CMD-TEST  ▸ claude-sonnet-4.6  ▸ Testing         ✅ deployed
-  CMD-DOCS  ▸ gpt-5.2            ▸ Documentation   ✅ deployed
-  CMD-INTG  ▸ claude-sonnet-4.5  ▸ Integration     ✅ deployed
+Deployment Rail    :: ████████░░  80%
+Canary Status      :: ✅ passed before pod expansion
 
-  Commanders active: 5/5
-  Squad Leads spawning...
-  Workers deploying (canary-first)...
+CMD-ARCH  ▸ <model>  :: Architecture    :: launching...
+CMD-IMPL  ▸ <model>  :: Implementation  :: launching...
+CMD-TEST  ▸ <model>  :: Testing         :: launching...
+CMD-DOCS  ▸ <model>  :: Documentation   :: launching...
+CMD-INTG  ▸ <model>  :: Integration     :: launching...
+
+🔍 Nexus Insight
+• Model-role fit: <why the assigned models make sense for their domains>
+• Deployment anomaly watch: <slow start, retries, or capsule imbalance>
+• Example: "CMD-ARCH and CMD-IMPL both opened by anchoring on the same interface boundary — expect strong early convergence."
+
+Examples of dynamic content:
+- "The canary worker found the same hotspot the Nexus predicted in Phase 1."
+- "Two commander prompts are unusually similar; watch for duplicate reasoning during synthesis."
 ```
 
 ---
@@ -308,6 +397,7 @@ While Commanders execute:
 2. **Circuit breaker check**: If 3+ Commanders fail → trigger circuit breaker, skip to Phase 7 with partial results
 3. **Cost tracking**: If approaching cost ceiling → warn and throttle further spawning
 4. **Timeout tracking**: If wall-clock exceeds timeout → collect whatever is available
+5. **Minimum banner hold**: Each phase check-in banner MUST display for at least 1 second before being replaced — prevents flash-and-vanish on fast phases
 
 ### Commander Bundle Collection
 
@@ -325,19 +415,33 @@ If a Commander returns unparseable output:
 4. If retry_budget exhausted: proceed without this Commander's domain
 
 Track:
-```
-🐝 PHASE 4 — EXECUTION
-━━━━━━━━━━━━━━━━━━━━━━
+```text
+╭──────────────────────────────────────────────────────────────────────╮
+│ 📡 PHASE 4 — EXECUTION & MONITORING                                 │
+╰──────────────────────────────────────────────────────────────────────╯
 
-  CMD-ARCH  ▸ ████████████████████ 100%  ✅ confidence: 0.87
-  CMD-IMPL  ▸ ████████████████░░░░  80%  ⏳ workers completing...
-  CMD-TEST  ▸ ████████████████████ 100%  ✅ confidence: 0.91
-  CMD-DOCS  ▸ ████████████████████ 100%  ✅ confidence: 0.84
-  CMD-INTG  ▸ ██████████░░░░░░░░░░  50%  ⏳ squad leads merging...
+Swarm Vital Signs  :: █████████░  73%
+Live Pulse         :: ● ● ● ○ ○
 
-  Bundles received: 3/5
-  Total atoms merged: 187
-  Wall-clock: 48s / 90s
+CMD-ARCH  ▸ ████████████████████ 100%  ✅ confidence 0.87
+CMD-IMPL  ▸ ████████████████░░░░  80%  ⏳ workers completing...
+CMD-TEST  ▸ ████████████████████ 100%  ✅ confidence 0.91
+CMD-DOCS  ▸ ████████████████████ 100%  ✅ confidence 0.84
+CMD-INTG  ▸ ██████████░░░░░░░░░░  50%  ⏳ squad leads merging...
+
+Bundles received   :: <n>/<total>
+Total atoms merged :: <count>
+Wall-clock         :: <elapsed>s / <timeout>s
+Spend burn         :: $<spent> / $<ceiling>
+
+🔍 Nexus Insight
+• Completion read: <example: "The swarm is 73% complete. Fastest commander: CMD-TEST (12s). Most thorough: CMD-ARCH (47s).">
+• Pattern convergence: <which themes are appearing across independent bundles>
+• Attention flag: <where the Nexus may need to arbitrate later>
+
+Examples of dynamic content:
+- "3 commanders independently converged on event-driven architecture before cross-review began."
+- "CMD-INTG is slower, but its bundle is pulling in the widest dependency surface."
 ```
 
 ---
@@ -377,18 +481,32 @@ The reviewer prompt includes:
 
 Show review progress:
 
-```
-🐝 PHASE 5 — CROSS-REVIEW (pipeline overlap)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```text
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 🪞 PHASE 5 — PIPELINE-OVERLAP CROSS-REVIEW                         ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-  REV-01  ▸ ARCH × IMPL    ▸ claude-opus-4.6 ↔ gpt-5.4            ✅ CONSENSUS (0.84)
-  REV-02  ▸ TEST × DOCS    ▸ claude-opus-4.5 ↔ gpt-5.2            ✅ CONSENSUS (0.79)
-  REV-03  ▸ ARCH × INTG    ▸ claude-opus-4.6-1m ↔ gpt-5.1         ⏳ scoring...
-  REV-04  ▸ IMPL × TEST    ▸ claude-sonnet-4.6 ↔ gpt-5.3-codex    ✅ MAJORITY (0.62)
-  REV-05  ▸ DOCS × INTG    ▸ claude-sonnet-4.5 ↔ gpt-5.2-codex    ✅ CONSENSUS (0.77)
+Review Wave        :: ████████░░  78%
+Consensus Drift    :: low ▂▃▅▆▅
 
-  Reviews complete: 4/5
-  Average consensus score: 0.76
+REV-01  ▸ ARCH × IMPL    ▸ <model A> ↔ <model B>    ✅ CONSENSUS (<score>)
+REV-02  ▸ TEST × DOCS    ▸ <model A> ↔ <model B>    ✅ CONSENSUS (<score>)
+REV-03  ▸ ARCH × INTG    ▸ <model A> ↔ <model B>    ⏳ scoring...
+REV-04  ▸ IMPL × TEST    ▸ <model A> ↔ <model B>    ✅ MAJORITY (<score>)
+REV-05  ▸ DOCS × INTG    ▸ <model A> ↔ <model B>    ✅ CONSENSUS (<score>)
+
+Reviews complete   :: <n>/<total>
+Average consensus  :: <score>
+Open conflicts     :: <count>
+
+🔍 Nexus Insight
+• Cross-review signal: <what reviewers are consistently praising or challenging>
+• Example: "Cross-review revealed: reviewers unanimously praised the testing approach."
+• Tension map: <which pair shows the sharpest disagreement and why>
+
+Examples of dynamic content:
+- "Reviewers agree the docs are clear, but disagree on whether they describe rollout risk deeply enough."
+- "Implementation earned strong correctness marks while Integration is pressuring for safer sequencing."
 ```
 
 ---
@@ -480,25 +598,35 @@ They do NOT receive: the criteria list, the scoring formula, the pass/fail break
 
 Show shadow scoring results:
 
-```
-🐝 PHASE 6 — SHADOW SCORING (Shadow Score Spec L2)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```text
+╔══════════════════════════════════════════════════════════════════════╗
+║ 🌒 PHASE 6 — SHADOW SCORING                                         ║
+║ Sealed criteria revealed only to Nexus                              ║
+╚══════════════════════════════════════════════════════════════════════╝
 
-  Sealed hash verified: ✅ sha256:a3f2... (tamper-proof)
+Shadow Gate        :: ██████████  100%
+Envelope Integrity :: ✅ verified <sealed_hash>
 
-  CMD-ARCH  ▸ sealed: 10 | passed: 9 | failed: 1  ▸ Shadow Score: 10.0% 🟢 Minor
-  CMD-IMPL  ▸ sealed: 10 | passed: 8 | failed: 2  ▸ Shadow Score: 20.0% 🟡 Moderate → HARDENING
-  CMD-TEST  ▸ sealed: 10 | passed: 10 | failed: 0 ▸ Shadow Score: 0.0%  ✅ Perfect
-  CMD-DOCS  ▸ sealed: 10 | passed: 9 | failed: 1  ▸ Shadow Score: 10.0% 🟢 Minor
-  CMD-INTG  ▸ sealed: 10 | passed: 7 | failed: 3  ▸ Shadow Score: 30.0% 🟡 Moderate → HARDENING
+CMD-ARCH  ▸ sealed <n> | passed <n> | failed <n>  ▸ <score>% <level>
+CMD-IMPL  ▸ sealed <n> | passed <n> | failed <n>  ▸ <score>% <level> → <hardening status>
+CMD-TEST  ▸ sealed <n> | passed <n> | failed <n>  ▸ <score>% <level>
+CMD-DOCS  ▸ sealed <n> | passed <n> | failed <n>  ▸ <score>% <level>
+CMD-INTG  ▸ sealed <n> | passed <n> | failed <n>  ▸ <score>% <level> → <hardening status>
 
-  Aggregate Shadow Score (median): 10.0% 🟢 Minor
+Aggregate Shadow Score :: <median>% <level>
+Hardening triggered    :: <commander list or none>
+Post-hardening delta   :: <before> → <after>
 
-  Hardening triggered for: CMD-IMPL, CMD-INTG
-  Post-hardening CMD-IMPL: 10.0% 🟢 Minor (was 20.0%)
-  Post-hardening CMD-INTG: 20.0% 🟡 Moderate (was 30.0%)
+🔍 Nexus Insight
+• Blind-spot reveal: <what the sealed criteria caught that open review missed>
+• Example: "Shadow scoring caught 2 edge cases that no commander explicitly addressed."
+• Reliability pulse: <whether issues are isolated or systemic>
 
-  Shadow verdict: 🟢 MINOR — acceptable quality with hardened fixes applied
+Examples of dynamic content:
+- "The swarm was strong on happy path, weaker on empty-input handling and fallback formatting."
+- "Hardening improved implementation quickly; integration still carries the highest residual risk."
+
+Shadow verdict :: <emoji> <level> — <short interpretation>
 ```
 
 ---
@@ -536,26 +664,46 @@ For each bundle:
 6. Resolve cross-domain conflicts (Architecture says X but Implementation says Y)
 7. Identify gaps (sub-tasks that no domain addressed)
 
+### Agreement & Disagreement Detection
+
+To populate the "Points of Agreement" and "Points of Disagreement" report sections:
+
+**Agreement detection**: When 2+ commanders independently arrive at the same recommendation without seeing each other's output, that's a convergence signal. Rate agreements by how many commanders converged and whether cross-review confirmed the alignment. Shadow scoring findings that all commanders passed are also promoted to agreements at high confidence (0.95).
+
+**Disagreement detection**: When commanders give conflicting recommendations for the same decision point, that's a divergence signal. Present each side's reasoning with evidence. Note whether cross-review resolved the conflict or whether the Nexus arbitrated. Preserve genuine forks — not every disagreement needs a winner; some represent legitimate tradeoffs the user should decide.
+
 Show synthesis:
 
-```
-🐝 PHASE 7 — CONSENSUS SYNTHESIS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```text
+╭──────────────────────────────────────────────────────────────────────╮
+│ 🧠 PHASE 7 — CONSENSUS SYNTHESIS                                    │
+╰──────────────────────────────────────────────────────────────────────╯
 
-  Bundle Ranking:
-  ┌────┬──────────┬───────────┬──────────┬───────────────────┬──────────┐
-  │ #  │ Domain   │ Score     │ Tier     │ Shadow Score      │ Status   │
-  ├────┼──────────┼───────────┼──────────┼───────────────────┼──────────┤
-  │ 1  │ TEST     │ 0.91      │ CONSENSUS│ 0.0% ✅ Perfect   │ included │
-  │ 2  │ ARCH     │ 0.87      │ CONSENSUS│ 10.0% 🟢 Minor   │ included │
-  │ 3  │ DOCS     │ 0.84      │ CONSENSUS│ 10.0% 🟢 Minor   │ included │
-  │ 4  │ IMPL     │ 0.79      │ CONSENSUS│ 10.0% 🟢 Minor   │ included │
-  │ 5  │ INTG     │ 0.62      │ MAJORITY │ 20.0% 🟡 Moderate│ included │
-  └────┴──────────┴───────────┴──────────┴───────────────────┴──────────┘
+Synthesis Engine   :: ██████████  100%
+Consensus Signal   :: ● ● ● ● ○
 
-  Overall consensus: CONSENSUS (0.81)
-  Cross-domain conflicts: 0
-  Gaps identified: 1 (minor — integration test edge case)
+Bundle Ranking
+┌────┬──────────┬────────┬────────────┬────────────────────┬──────────┐
+│ #  │ Domain   │ Score  │ Tier       │ Shadow             │ Status   │
+├────┼──────────┼────────┼────────────┼────────────────────┼──────────┤
+│ 1  │ <domain> │ <0.xx> │ CONSENSUS  │ <score/level>      │ included │
+│ 2  │ <domain> │ <0.xx> │ CONSENSUS  │ <score/level>      │ included │
+│ 3  │ <domain> │ <0.xx> │ MAJORITY   │ <score/level>      │ included │
+│ 4  │ <domain> │ <0.xx> │ CONFLICT   │ <score/level>      │ nexus    │
+└────┴──────────┴────────┴────────────┴────────────────────┴──────────┘
+
+Overall consensus  :: <tier> (<score>)
+Cross-domain conflicts :: <count>
+Gaps identified    :: <count> <summary>
+
+🔍 Nexus Insight
+• Convergence read: <what the swarm now clearly agrees on>
+• Arbitration note: <what the Nexus had to decide manually>
+• Example: "Agreement is strong on architecture and testing; the only serious split is rollout order."
+
+Examples of dynamic content:
+- "Four domains support the same interface contract with only naming differences."
+- "One unique implementation idea survived because evidence was strong despite low initial agreement."
 ```
 
 ---
@@ -564,60 +712,309 @@ Show synthesis:
 
 Structure the final output as:
 
+```text
+╔══════════════════════════════════════════════════════════════════════╗
+║ 🐝 SWARM COMPLETE                                                   ║
+║ The Nexus has landed the swarm.                                     ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+Summary Pulse      :: ██████████  100%
+Outcome Signal     :: <CONSENSUS | MAJORITY | CONFLICT>  •  confidence <0.xx>
+
+## 📊 Summary Dashboard
+
+┌──────────────────────────┬───────────────────────────────────────────┐
+│ Metric                   │ Value                                     │
+├──────────────────────────┼───────────────────────────────────────────┤
+│ Mission                  │ <task summary>                            │
+│ Domains completed        │ <x>/<y>                                   │
+│ Overall consensus        │ <tier>                                    │
+│ Overall confidence       │ <0.xx>                                    │
+│ Agents deployed          │ <count>                                   │
+│ Models used              │ <count>                                   │
+│ Atoms merged             │ <count>                                   │
+│ Reviews completed        │ <count>                                   │
+│ Shadow verdict           │ <emoji> <level>                           │
+│ Wall-clock               │ <elapsed>s                                │
+│ Estimated cost           │ $<cost>                                   │
+└──────────────────────────┴───────────────────────────────────────────┘
+
+## 🔍 Nexus Final Insight
+
+- <single biggest takeaway the swarm surfaced>
+- <most important caution still worth human attention>
+- <example: "The swarm agrees on the solution shape; only rollout sequencing remains a live judgment call.">
+
+## 🛰️ What the Swarm Did
+
+1. <How the swarm decomposed the mission>
+2. <How commanders / squad leads / reviewers contributed>
+3. <What hardening or arbitration happened before synthesis>
+
+## 🔬 What the Swarm Found
+
+### 🏗️ Architecture
+<key findings, proposed patterns, structural decisions>
+
+### ⚙️ Implementation
+<key logic decisions, core data-flow conclusions, algorithm choices>
+
+### 🧪 Testing
+<key edge cases, validation strategy, failure-mode coverage>
+
+### 📝 Documentation
+<what needs to be explained, clarified, or updated>
+
+### 🔗 Integration
+<cross-cutting constraints, rollout concerns, API or deployment findings>
+
+## 🤝 Points of Agreement
+
+- <Finding> — supported by <models/commanders>; evidence: <why it won consensus>
+- <Finding> — supported by <models/commanders>; evidence: <why it won consensus>
+- <Finding> — supported by <models/commanders>; evidence: <why it won consensus>
+
+## ⚔️ Points of Disagreement
+
+| Topic | Domain / models split | Competing views | Resolution |
+|---|---|---|---|
+| <topic> | <who disagreed> | <view A> vs <view B> | <consensus, Nexus arbitration, or unresolved> |
+| <topic> | <who disagreed> | <view A> vs <view B> | <consensus, Nexus arbitration, or unresolved> |
+
+When there were no material disagreements, explicitly say:
+> "No material disagreements survived synthesis. Minor phrasing differences were normalized by the Nexus."
+
+## 🧬 Model Roster
+
+| Model | Role | Domain / Layer | Contribution | Performance |
+|---|---|---|---|---|
+| <model> | Commander | <domain> | <what it handled> | confidence <0.xx> · time <xs> · tier <tier> |
+| <model> | Reviewer | <pair or review lane> | <what it evaluated> | consensus <0.xx> |
+| <model> | Worker / Squad Lead | <domain> | <special contribution> | <short metric> |
+
+Include every model actually used — commanders, reviewers, and any notable worker/squad-lead models that materially affected the result.
+
+## 🛡️ Shadow Score Notes
+
+- Sealed hash: <hash>
+- Aggregate Shadow Score: <score>% <level>
+- Hardening cycles: <count>
+- Remaining cautions: <if any bundle stayed moderate/significant, say so clearly>
+
+## 📋 Gaps, Risks, and Follow-Ups
+
+- <gap or unfinished item>
+- <risk that still needs human review>
+- <recommended next step>
+
+## 👑 Landing
+
+Close with a compelling, decision-ready ending. Choose the closing line that best fits the swarm's outcome:
+
+**Option A — Collective intelligence emphasis** (use when consensus is strong):
+> "You didn't get one model's answer — you got a *verified chorus* of independent minds, plus the dissent that keeps you honest."
+
+**Option B — Speed/efficiency emphasis** (use when wall-clock was fast):
+> "In the time it takes to schedule a meeting, the swarm ran the meeting — then handed you the decisions."
+
+**Option C — Thoroughness/quality emphasis** (use when shadow scoring was clean):
+> "This isn't just an output — it's a trail of reasoning, reviews, and confidence signals you can actually trust."
+
+Then add the swarm signature:
+
 ```
-🐝 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   S W A R M   C O M P L E T E
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🐝 The swarm has spoken. <agent_count> agents. <model_count> models. One consensus.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+```
 
-## 📊 Results Summary
+Immediately after the final report, present a post-report menu using `ask_user`. Nothing executes automatically.
 
-| Metric | Value |
+Use this exact interaction:
+
+```text
+ask_user
+title: "🐝 Choose the swarm's next move"
+message: "The report is complete. Nothing will execute unless you choose an action."
+options:
+  - label: "🚀 Deploy changes"
+    value: "deploy"
+    description: "Proceed to deployment flow for the agreed solution."
+  - label: "🔀 Smart merge analysis"
+    value: "smart_merge"
+    description: "Inspect conflicts, overlap, and merge risk before any change is applied."
+  - label: "🔍 Deep dive into a domain"
+    value: "deep_dive"
+    description: "Zoom into Architecture, Implementation, Testing, Documentation, or Integration."
+  - label: "📄 Export full report"
+    value: "export_report"
+    description: "Produce a portable copy of the final report."
+  - label: "🔄 Re-run a domain"
+    value: "rerun_domain"
+    description: "Re-dispatch a single domain with adjusted focus or a different model."
+  - label: "✅ Done — no action needed"
+    value: "done"
+    description: "Finish with no further action."
+```
+
+For re-run domain, prompt the user to choose which domain and optionally a different model:
+
+```text
+ask_user
+title: "Re-run which domain?"
+message: "Select the domain to re-dispatch. The swarm will run a fresh commander with revised focus."
+options:
+  - label: "🏗️ Architecture"
+    value: "rerun_architecture"
+  - label: "⚙️ Implementation"
+    value: "rerun_implementation"
+  - label: "🧪 Testing"
+    value: "rerun_testing"
+  - label: "📝 Documentation"
+    value: "rerun_documentation"
+  - label: "🔗 Integration"
+    value: "rerun_integration"
+  - label: "Back"
+    value: "cancel"
+```
+
+If the user selects a change-making or destructive path, require explicit confirmation before doing anything:
+
+```text
+ask_user
+title: "Confirm deployment"
+message: "Deploying may modify files, environments, or release state. Proceed?"
+options:
+  - label: "Yes — continue"
+    value: "confirm_deploy"
+  - label: "No — go back"
+    value: "cancel"
+```
+
+```text
+ask_user
+title: "Confirm smart merge analysis"
+message: "Smart merge analysis may inspect and compare competing changes, but it will not merge anything until you explicitly approve. Continue?"
+options:
+  - label: "Yes — analyze"
+    value: "confirm_smart_merge"
+  - label: "No — go back"
+    value: "cancel"
+```
+
+For deep dives, require the user to choose the domain first:
+
+```text
+ask_user
+title: "Choose a domain to inspect"
+message: "Select the area you want the Nexus to unpack."
+options:
+  - label: "🏗️ Architecture"
+    value: "domain_architecture"
+  - label: "⚙️ Implementation"
+    value: "domain_implementation"
+  - label: "🧪 Testing"
+    value: "domain_testing"
+  - label: "📝 Documentation"
+    value: "domain_documentation"
+  - label: "🔗 Integration"
+    value: "domain_integration"
+  - label: "Back"
+    value: "cancel"
+```
+
+For export:
+
+```text
+ask_user
+title: "Export full report"
+message: "Choose whether to export the final report. No file will be created unless you confirm."
+options:
+  - label: "Create export"
+    value: "confirm_export_report"
+  - label: "Cancel"
+    value: "cancel"
+```
+
+If the user chooses "✅ Done — no action needed", end cleanly with a short closing line and do nothing else.
+
+---
+
+# ORCHESTRATOR INSIGHT GENERATOR
+
+At every phase, surface exactly 1 compact **🔍 Nexus Insight** block. It should feel observant, specific, and alive — never generic filler.
+
+Insight rules:
+
+1. **Use evidence already visible to the Nexus** — task wording, bundle timing, review outcomes, shadow scoring, or synthesis state.
+2. **Prefer interesting deltas over status repeats** — convergence, anomalies, blind spots, surprising agreement, cost/performance tradeoffs.
+3. **Keep it short** — 2-3 bullets max, 1 standout sentence if needed.
+4. **Name names when useful** — commander IDs, domains, models, scores, timings.
+5. **Do not fabricate precision** — only cite counts, percentages, or timings if known.
+6. **If nothing interesting happened**, say what stayed stable and why that matters.
+
+Phase-specific insight prompts:
+
+| Phase | What to surface |
 |---|---|
-| Domains completed | X/5 |
-| Overall consensus | CONSENSUS / MAJORITY / CONFLICT |
-| Overall confidence | 0.XX |
-| Agents deployed | XXX |
-| Atoms merged | XXX |
-| Wall-clock time | XXs |
-| Estimated cost | $X.XX |
-| Shadow verdict | ✅ Perfect / 🟢 Minor / 🟡 Moderate / 🟠 Significant / 🔴 Critical |
+| **0 — Mission Intake** | Mission shape, ambiguity level, likely hot domains, whether the task is greenfield vs surgical. |
+| **1 — Task Decomposition** | Which domains appear central vs peripheral, likely collision points, missing scope the swarm should watch for. |
+| **1.5 — Sealed Criteria** | What kinds of blind spots the envelope is targeting: edge cases, completeness, error handling, or hidden constraints. |
+| **2 — Context Capsules** | Which capsules are dense vs lean, where information had to be compressed hardest, any domain at risk of under-context. |
+| **3 — Deployment** | Model-role fit, canary findings, unexpected prompt overlap, likely early convergence patterns. |
+| **4 — Execution** | Percent complete, fastest / slowest commander, emergent patterns, unusually high atom counts, timeout or budget pressure. |
+| **5 — Cross-Review** | What reviewers consistently praised, what they challenged, strongest consensus pair, hottest disagreement lane. |
+| **6 — Shadow Scoring** | What sealed checks caught that open review missed, whether failures cluster by domain or category, hardening effectiveness. |
+| **7 — Synthesis** | What the swarm clearly agrees on, where Nexus arbitration was required, what unique idea survived dissent. |
+| **8 — Final Output** | The single biggest takeaway: the clearest consensus win, the most important remaining caution, or the decision-ready recommendation. |
 
-## 🏗️ Architecture
-<merged content from CMD-ARCH>
+High-signal example lines:
 
-## ⚙️ Implementation
-<merged content from CMD-IMPL>
+- "Interesting: CMD-ARCH and CMD-IMPL both started with the same design pattern before seeing each other's output."
+- "The swarm is 73% complete. Fastest commander: CMD-TEST (12s). Most thorough: CMD-ARCH (47s)."
+- "Cross-review revealed: reviewers unanimously praised the testing approach."
+- "Shadow scoring caught 2 edge cases that no commander explicitly addressed."
+- "Consensus is broad on the architecture, but deployment order still splits the swarm."
 
-## 🧪 Testing
-<merged content from CMD-TEST>
+### Parameterized Insight Templates (by phase)
 
-## 📝 Documentation
-<merged content from CMD-DOCS>
+Use these templates with dynamic variable slots. Select the most relevant for the current state:
 
-## 🔗 Integration
-<merged content from CMD-INTG>
+**Phase 0-1 (Intake & Decomposition):**
+- "This mission decomposes into **{domain_count}** orthogonal concerns — clean separation with natural fault lines."
+- "Constraint density is high — the swarm should bias toward consensus over raw speed."
+- "**{domain_a}** and **{domain_b}** share a boundary — assigning rival model families for natural stress-testing."
 
-## ⚡ Conflicts & Resolutions
-<any CONFLICT-tier items and how they were resolved>
-<any Shadow Score Gap Reports and hardening results>
+**Phase 3-4 (Deployment & Execution):**
+- "The canary worker found the same hotspot the Nexus predicted in Phase 1."
+- "**{fast_cmd}** finished in **{time}s** while **{slow_cmd}** is pulling in the widest dependency surface — depth vs. speed tradeoff."
+- "**{n}** commanders independently converged on **{pattern}** before cross-review began."
+- "Bundle atom count is unusually high for **{domain}** — expect rich material for synthesis."
 
-## 📋 Gaps
-<any sub-tasks that were not completed, with reasons>
+**Phase 5 (Cross-Review):**
+- "A meaningful disagreement about **{decision_point}** — isolating it into a clear fork with resolution steps."
+- "A strong critique challenged **{claim}** by pointing out **{failure_mode}** — this will reshape the recommendation."
+- "Review intensity is high: **{review_count}** peer checks completed. This increases confidence in the converged items."
 
-### Agent Tally
-| Layer | Role | Count |
-|-------|------|-------|
-| L0 | Nexus | 1 |
-| L1 | Commanders | <count> |
-| L2 | Squad Leads | <count or "—"> |
-| L3 | Workers | <count> |
-| L4 | Reviewers | <count> |
-| **Total** | | **<total>** |
+**Phase 6 (Shadow Scoring):**
+- "Shadow scoring elevated **{item}** because it's both high-impact and constraint-compliant under **{risk_profile}**."
+- "A popular idea scored lower due to weak evidence: **{reason}** — kept as 'plausible,' not 'proven.'"
+- "Confidence calibration: **{high}** items are high-confidence, **{med}** are medium, **{low}** are exploratory."
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🐝 "The swarm is smarter than any single model."
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
+**Phase 7-8 (Synthesis & Delivery):**
+- "Divergence preserved intentionally: **{topic}** remains a fork because the evidence is genuinely split."
+- "Provenance retained: claims cite supporting clusters like **{models}** so you can audit lineage."
+- "If you want higher certainty, the highest-leverage deep dive is **{topic}** — that's where risk concentrates."
+- "The swarm is standing by. Your next move determines whether we optimize for speed (**{fast_path}**) or assurance (**{safe_path}**)."
+
+Bad insight lines to avoid:
+
+- "Everything is going well."
+- "The swarm is working on the task."
+- "Progress continues."
+
+The insight should make the user feel the Nexus is truly observing the swarm, not just relaying progress bars.
 
 ---
 
