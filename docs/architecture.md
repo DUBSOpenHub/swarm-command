@@ -110,7 +110,7 @@ The Nexus is the brain of the swarm. It receives the user's task, decomposes it 
 | Property | Value |
 |---|---|
 | Agent type | `general-purpose` |
-| Model | Commander pool (10): `claude-opus-4.6`, `claude-opus-4.5`, `claude-opus-4.6-1m`, `claude-sonnet-4.6`, `claude-sonnet-4.5`, `claude-sonnet-4`, `gpt-5.4`, `gpt-5.2`, `gpt-5.1`, `goldeneye` |
+| Model | Commander pool (9): `claude-opus-4.6`, `claude-opus-4.5`, `claude-opus-4.6-1m`, `claude-sonnet-4.6`, `claude-sonnet-4.5`, `claude-sonnet-4`, `gpt-5.4`, `gpt-5.2`, `gpt-5.1` |
 | Context budget | 64K tokens |
 | `can_launch` | `true` |
 | Max children | 10 Squad Leads each |
@@ -242,11 +242,11 @@ For maximum insight diversity, models from different families are paired within 
 
 | Pod Role | Primary Model | Alternate Model | Why alternate |
 |---|---|---|---|
-| Commander | claude-opus-4.6 | gpt-5.4, gpt-5.2, gpt-5.1, goldeneye | Reduce same-family blind spots |
+| Commander | claude-opus-4.6 | gpt-5.4, gpt-5.2, gpt-5.1 | Reduce same-family blind spots |
 | Squad Lead | claude-haiku-4.5 | gpt-5.4-mini | Keep fan-out cheap while mixing reasoning styles |
 | Scout Worker | claude-haiku-4.5 | gpt-5.4-mini, gpt-5-mini, gpt-4.1 | Increase search and interpretation diversity |
 | Executor Worker | gpt-5.3-codex | gpt-5.2-codex | Prefer code execution specialists for build/test |
-| Reviewer | 8 cross-family pairs | — | Final scoring should not be self-referential |
+| Reviewer | 7 cross-family pairs | — | Final scoring should not be self-referential |
 
 ---
 

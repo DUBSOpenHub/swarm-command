@@ -115,7 +115,7 @@ export default function Home() {
 
   const heroCounter = useCounter(250, 2500);
   const agentsStat = useCounter(750);
-  const modelsStat = useCounter(16);
+  const modelsStat = useCounter(15);
   const vulnsStat = useCounter(4);
 
   useEffect(() => {
@@ -174,7 +174,7 @@ export default function Home() {
           <h1>
             Launch up to <span className="text-amber">250 AI agents</span>
             <br />
-            across 16 models. Find consensus no single model can.
+            across 15 models. Find consensus no single model can.
           </h1>
 
           <div className="hero-props">
@@ -207,7 +207,7 @@ export default function Home() {
               </span>
               {"\n\n"}
               <span className="amber">
-                🐝 Hive activated · 250 agents · 16 models · 3 families
+                🐝 Hive activated · 250 agents · 15 models · 3 families
               </span>
               {"\n"}
               <span className="bar">
@@ -307,7 +307,7 @@ export default function Home() {
               <div className="card-icon-hex">🐝</div>
               <h3>Collective Intelligence</h3>
               <p>
-                16 models, not one. Claude Opus &amp; Sonnet. GPT-5.x series.
+                15 models, not one. Claude Opus &amp; Sonnet. GPT-5.x series.
                 Claude Haiku. Each brings different strengths —
                 together they catch what any single model misses.
               </p>
@@ -492,6 +492,123 @@ export default function Home() {
             <div className="scale-command">
               <code>$ {scale.cmd}</code>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────── COST CONTROL ──────────── */}
+      <section className="section section-dark reveal" id="cost">
+        <div className="container">
+          <h2 className="section-title">
+            250 agents.{" "}
+            <span className="text-amber">Under $20.</span>
+          </h2>
+          <p className="section-body" style={{ marginBottom: "3rem" }}>
+            Every layer of the swarm is engineered to maximize signal while
+            minimizing spend. Here&apos;s how.
+          </p>
+
+          <div className="value-cards">
+            <div className="value-card hex-card">
+              <div className="card-icon-hex">📦</div>
+              <h3>1024:1 Token Compression</h3>
+              <p>
+                Context shrinks at every layer — 128K&nbsp;tokens at the Nexus
+                compresses to just 128&nbsp;tokens at each worker.
+                Parents strip rationale, narrow file scope, and tighten
+                constraints so children only receive the bytes they need.
+              </p>
+            </div>
+            <div className="value-card hex-card">
+              <div className="card-icon-hex">⚡</div>
+              <h3>Circuit Breakers</h3>
+              <p>
+                A three-state FSM (Closed → Open → Half-Open) monitors
+                every layer. If 50-60% of agents fail, the breaker trips —
+                no new agents spawn, costs stop climbing, and a recovery
+                probe tests before the swarm resumes.
+              </p>
+            </div>
+            <div className="value-card hex-card">
+              <div className="card-icon-hex">🛡️</div>
+              <h3>Six Resource Guards</h3>
+              <p>
+                Timeout cascade (90→60→40→30s), token ceilings per layer,
+                output size caps, retry budgets, a concurrent-agent cap of 50,
+                and a hard cost ceiling ($5–$20 depending on scale)
+                that kills all agents if breached.
+              </p>
+            </div>
+          </div>
+
+          <div className="value-cards" style={{ marginTop: "2rem" }}>
+            <div className="value-card hex-card">
+              <div className="card-icon-hex">🌊</div>
+              <h3>Wave Deployment</h3>
+              <p>
+                Agents launch in three waves — Canary&nbsp;(1), Probe&nbsp;(3),
+                Remainder — with health gates between each. If the canary
+                fails, the full pod never deploys. One cheap test prevents
+                many expensive failures.
+              </p>
+            </div>
+            <div className="value-card hex-card">
+              <div className="card-icon-hex">🐝</div>
+              <h3>Cheap Workers, Smart Leaders</h3>
+              <p>
+                Workers use Haiku and GPT-Mini — the lightest, cheapest models.
+                Expensive Opus and Sonnet reasoning is reserved for
+                Commanders and the Nexus where it matters most.
+                60% of agents cost 10× less.
+              </p>
+            </div>
+            <div className="value-card hex-card">
+              <div className="card-icon-hex">📊</div>
+              <h3>Predictable Pricing</h3>
+              <p>
+                SS-50 runs $1.50–$3.50. SS-100 runs $3.50–$8.
+                SS-250 runs $8–$16. Hard ceilings at $5, $10, and $20
+                guarantee you never get a surprise bill — even if
+                every agent retries at maximum.
+              </p>
+            </div>
+          </div>
+
+          <div className="cost-table-wrap" style={{ marginTop: "3rem" }}>
+            <table className="cost-table">
+              <thead>
+                <tr>
+                  <th>Scale</th>
+                  <th>Agents</th>
+                  <th>Typical Cost</th>
+                  <th>Hard Cap</th>
+                  <th>Wall-Clock</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="text-amber">SS-50</td>
+                  <td>~52</td>
+                  <td>$2.50</td>
+                  <td>$5</td>
+                  <td>~30s</td>
+                </tr>
+                <tr>
+                  <td className="text-amber">SS-100</td>
+                  <td>~89</td>
+                  <td>$5.50</td>
+                  <td>$10</td>
+                  <td>~45s</td>
+                </tr>
+                <tr>
+                  <td className="text-amber">SS-250</td>
+                  <td>~316</td>
+                  <td>$10</td>
+                  <td>$20</td>
+                  <td>~65–90s</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>

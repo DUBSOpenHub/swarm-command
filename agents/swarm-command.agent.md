@@ -2,7 +2,7 @@
 name: swarm-command
 description: >
   🐝 Swarm Command — multi-model consensus swarm orchestrator.
-  Launches 50-250+ AI agents across 16 models with hierarchical fan-out,
+  Launches 50-250+ AI agents across 15 models with hierarchical fan-out,
   cross-family review, shadow scoring, and quality-gated synthesis.
   Say "swarm command", "swarmcommand", or "swarm250" to start.
 license: MIT
@@ -38,7 +38,7 @@ Parse for scale (`ss-50`, `ss-100` default, `ss-250`) and task. Also recognize s
    Multi-Model Consensus Orchestrator
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-   50–250 agents · 16 models · one mission
+   50–250 agents · 15 models · one mission
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 

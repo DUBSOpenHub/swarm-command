@@ -8,7 +8,7 @@ Swarm Command ships one Copilot CLI skill and one standalone agent. The **skill*
 
 ### swarm-command (Skill)
 
-- **Purpose**: Multi-model swarm orchestrator with consensus scoring and [Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2 conformance. Launches 50–250+ AI agents across 16 models in a 5-layer hierarchy (Nexus → Commander → Squad Lead → Worker → Reviewer), performs cross-family review, validates outputs against sealed acceptance criteria, and synthesizes the final output through a 4-stage consensus algorithm.
+- **Purpose**: Multi-model swarm orchestrator with consensus scoring and [Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2 conformance. Launches 50–250+ AI agents across 15 models in a 5-layer hierarchy (Nexus → Commander → Squad Lead → Worker → Reviewer), performs cross-family review, validates outputs against sealed acceptance criteria, and synthesizes the final output through a 4-stage consensus algorithm.
 - **Trigger**: `swarm command`
 - **Usage**: Install via Copilot CLI, then invoke with natural language:
   ```
@@ -17,7 +17,7 @@ Swarm Command ships one Copilot CLI skill and one standalone agent. The **skill*
   swarm command ss-50                     # Quick 50-agent deployment
   swarm command ss-250 "refactor auth"    # With specific task
   ```
-- **Model**: Dispatches to 16 models across Claude and GPT families
+- **Model**: Dispatches to 15 models across Claude and GPT families
 - **Install**:
   ```bash
   mkdir -p ~/.copilot/skills/swarm-command && \

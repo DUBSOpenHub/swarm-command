@@ -55,7 +55,7 @@ Default: **SS-100**. Use `swarm command ss-250` for full deployment or `swarm co
 
 ```text
 L0: 1 Nexus (claude-opus-4.6)
-L1: 3 Commanders (commander pool — 10 models)
+L1: 3 Commanders (commander pool — 9 models)
 L2: 45 Workers (worker pool — 6 models)  — 15 per commander, spawned directly
     3 Reviewers (cross-family pairs, spawned by Nexus)
 ──────────────────────────
@@ -93,7 +93,7 @@ Time:  ~30s wall-clock
 
 ```text
 L0: 1 Nexus (claude-opus-4.6)
-L1: 5 Commanders (commander pool — 10 models)
+L1: 5 Commanders (commander pool — 9 models)
 L2: 75 Workers (worker pool — 6 models)  — 15 per commander, spawned directly
     8 Reviewers (cross-family pairs, spawned by Nexus)
     Shadow Scoring (Nexus-internal, sealed criteria)
@@ -111,7 +111,7 @@ Time:  ~45s wall-clock
 | Domains covered | 3 of 5 (auto-selected by task type) |
 | Squad Leads per Commander | — |
 | Workers per Commander | 15 |
-| Reviewers | 8 reviewers (8 cross-family pairs) |
+| Reviewers | 8 reviewers (7 cross-family pairs) |
 | Shadow scoring | 8 sealed criteria, hardening at >15% |
 | Cost ceiling | $10.00 |
 | Timeout cascade | 75/50/35/25s |
@@ -132,10 +132,10 @@ Time:  ~45s wall-clock
 
 ```text
 L0: 1 Nexus (claude-opus-4.6)
-L1: 5 Commanders (commander pool — 10 models)
+L1: 5 Commanders (commander pool — 9 models)
 L2: 50 Squad Leads (claude-haiku-4.5 | gpt-5.4-mini)  — 10 per commander
 L3: 250 Workers (worker pool — 6 models)               — 5 per squad lead
-L4: 10 Reviewers (8 cross-family pairs)
+L4: 10 Reviewers (7 cross-family pairs)
     Shadow Scoring (Nexus-internal, sealed criteria)
 ──────────────────────────
 Total: ~316 agents
@@ -151,7 +151,7 @@ Time:  ~65–90s wall-clock
 | Domains covered | All 5 |
 | Squad Leads per Commander | 10 |
 | Workers per Squad Lead | 5 |
-| Reviewers | 10 reviewers forming 8 cross-family pairs |
+| Reviewers | 10 reviewers forming 7 cross-family pairs |
 | Shadow scoring | 10 sealed criteria, hardening at >15% |
 | Cost ceiling | $20.00 |
 | Timeout cascade | 90/60/40/30s |
@@ -173,7 +173,7 @@ Time:  ~65–90s wall-clock
 | Commanders (L1) | 5 | commander pool | 30K × 5 | 4K × 5 | $0.75 |
 | Squad Leads (L2) | 50 | haiku / gpt-5.4-mini | 8K × 50 | 2K × 50 | $0.72 |
 | Workers (L3) | 250 | worker pool | 2K × 250 | 0.5K × 250 | $0.90 |
-| Reviewers (L4) | 10 | 8 cross-family pairs | 10K × 10 | 2K × 10 | $0.60 |
+| Reviewers (L4) | 10 | 7 cross-family pairs | 10K × 10 | 2K × 10 | $0.60 |
 | **Total** | **316** | | | | **$4.32** (optimistic) |
 
 ---

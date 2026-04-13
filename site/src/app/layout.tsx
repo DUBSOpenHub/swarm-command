@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Swarm Command 🐝 — Launch 250+ AI Agents for Multi-Model Consensus",
   description:
-    "Launch 50–250+ AI agents across 16 models to solve complex tasks through hierarchical fan-out, cross-family review, and consensus-gated synthesis. One command. Collective intelligence.",
+    "Launch 50–250+ AI agents across 15 models to solve complex tasks through hierarchical fan-out, cross-family review, and consensus-gated synthesis. One command. Collective intelligence.",
   metadataBase: new URL("https://dubsopenhub.github.io"),
   openGraph: {
     title: "Swarm Command 🐝 — 250 AI Agents. One Command.",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Swarm Command 🐝 — 250 AI Agents. One Command.",
     description:
-      "Multi-model consensus intelligence. Launch 250+ agents across 16 models with shadow scoring. Built by @greggcochran.",
+      "Multi-model consensus intelligence. Launch 250+ agents across 15 models with shadow scoring. Built by @greggcochran.",
     images: ["/swarm-command/og-image.svg"],
   },
   keywords: [

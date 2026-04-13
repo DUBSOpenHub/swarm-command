@@ -1,6 +1,6 @@
 # 🐝 Swarm Command
 
-**Multi-model consensus swarm orchestration for the Copilot CLI. Launch 50–250+ AI agents across 16 models with Shadow Score Spec L2 validation — from one command.**
+**Multi-model consensus swarm orchestration for the Copilot CLI. Launch 50–250+ AI agents across 15 models with Shadow Score Spec L2 validation — from one command.**
 
 [![GitHub](https://img.shields.io/badge/GitHub-Copilot_CLI-blue?logo=github)](https://github.com/features/copilot)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -39,7 +39,7 @@ If your task spans **architecture + implementation + testing + docs + integratio
 
 ## 🤔 What Is This?
 
-**Swarm Command** is a multi-model swarm orchestration skill for the [Copilot CLI](https://docs.github.com/copilot/concepts/agents/about-copilot-cli) that launches **50 to 250+ AI agents** across **16 different models** to solve complex tasks through hierarchical fan-out, cross-family review, and consensus-gated synthesis.
+**Swarm Command** is a multi-model swarm orchestration skill for the [Copilot CLI](https://docs.github.com/copilot/concepts/agents/about-copilot-cli) that launches **50 to 250+ AI agents** across **15 different models** to solve complex tasks through hierarchical fan-out, cross-family review, and consensus-gated synthesis.
 
 Give it a task — architecture, refactoring, testing, docs, or integration — and it decomposes the mission into domains, dispatches Commanders, Squad Leads, and Workers, validates outputs against sealed acceptance criteria, and synthesizes a final answer from collective intelligence instead of single-model intuition.
 
@@ -85,7 +85,67 @@ These systems are complementary — not competitors.
 - 🛡️ **Depth Guard** — 5 laws + 3-layer enforcement prevent runaway agent spawning
 - ⚡ **Circuit breaker** — 3-state FSM with 5-level recovery escalation
 - 📉 **Parallel by design** — agents execute concurrently with hierarchical fan-out and pipeline overlap
+- 💰 **Cost-controlled** — 1024:1 token compression, wave deployment, hard cost ceilings, and cheap workers
 - 📦 **Zero infrastructure** — no servers, no API keys, no build step
+
+---
+
+## 💰 Built for Cost Control
+
+Running 250+ agents sounds expensive. It isn't — because every layer is engineered to minimize spend.
+
+### Token Compression (1024:1)
+
+Context shrinks at every layer. The Nexus holds 128K tokens; by the time instructions reach a worker, they're 128 tokens. Parents strip rationale, narrow file scope, and tighten constraints so children only receive the bytes they need.
+
+```text
+Nexus       128K tokens ──► 4K task brief
+Commander    64K tokens ──► 2K context capsule
+Squad Lead   32K tokens ──► 512 shard
+Worker        8K tokens ──► 128 micro-brief
+```
+
+### Circuit Breakers
+
+A three-state FSM (CLOSED → OPEN → HALF-OPEN) monitors every layer. If too many agents fail (50–60% threshold), the breaker trips — no new agents spawn, costs stop climbing, and a recovery probe tests before the swarm resumes.
+
+**5-level recovery escalation:** Retry → Simplify → Model Swap → Scope Reduce → Graceful Degrade.
+
+### Wave Deployment (Canary → Probe → Remainder)
+
+Agents don't all launch at once. Each pod deploys in three waves with health gates between them:
+
+1. **Wave 1 (Canary)** — 1 agent verifies the task is feasible
+2. **Wave 2 (Probe)** — 3 agents test for rate limits and bulk viability
+3. **Wave 3 (Remainder)** — full pod only if gates pass
+
+If the canary fails, the full pod never deploys. One cheap test prevents many expensive failures.
+
+### Six Resource Guards
+
+| Guard | What it does |
+|---|---|
+| **Timeout cascade** | 90s → 60s → 40s → 30s per layer — children always finish before parents |
+| **Token ceiling** | 128K / 64K / 32K / 8K per layer |
+| **Output size cap** | 4K / 1K / 512 / 256 tokens per layer |
+| **Retry budget** | Workers: 0 retries. Squad Leads: 1 retry. |
+| **Concurrent agent cap** | Max 50 agents launching simultaneously |
+| **Cost ceiling** | $5 / $10 / $20 hard cap — kills all agents if breached |
+
+### Cost by Scale
+
+| Scale | Agents | Typical Cost | Hard Cap | Wall-Clock |
+|---|---|---|---|---|
+| **SS-50** | ~52 | $2.50 | $5 | ~30s |
+| **SS-100** | ~89 | $5.50 | $10 | ~45s |
+| **SS-250** | ~316 | $10 | $20 | ~65–90s |
+
+### Why It's Cheap
+
+- **Workers are the cheapest models** — Haiku and GPT-Mini at L3, 10× cheaper than Opus
+- **Expensive reasoning stays at the top** — Opus and Sonnet only at Commander/Nexus level
+- **Context compresses monotonically** — each layer receives a fraction of its parent's tokens
+- **Failed work stops early** — circuit breakers and canary gates prevent runaway spend
 
 ---
 
@@ -491,10 +551,10 @@ See [docs/scaling.md](docs/scaling.md) for full scaling configuration and cost e
 | Role | Models |
 |---|---|
 | **Nexus** | claude-opus-4.6 |
-| **Commanders** (pool: 10) | claude-opus-4.6, claude-opus-4.5, claude-opus-4.6-1m, claude-sonnet-4.6, claude-sonnet-4.5, claude-sonnet-4, gpt-5.4, gpt-5.2, gpt-5.1, plus one additional supported model |
+| **Commanders** (pool: 9) | claude-opus-4.6, claude-opus-4.5, claude-opus-4.6-1m, claude-sonnet-4.6, claude-sonnet-4.5, claude-sonnet-4, gpt-5.4, gpt-5.2, gpt-5.1 |
 | **Squad Leads** | claude-haiku-4.5, gpt-5.4-mini |
 | **Workers** (pool: 6) | claude-haiku-4.5, gpt-5.4-mini, gpt-5-mini, gpt-4.1, gpt-5.3-codex, gpt-5.2-codex |
-| **Reviewers** (8 pairs) | claude-opus-4.6↔gpt-5.4, claude-opus-4.5↔gpt-5.2, claude-opus-4.6-1m↔gpt-5.1, claude-sonnet-4.6↔gpt-5.3-codex, claude-sonnet-4.5↔gpt-5.2-codex, claude-sonnet-4↔gpt-5.4-mini, claude-haiku-4.5↔gpt-5-mini, plus one additional cross-family pair |
+| **Reviewers** (7 pairs) | claude-opus-4.6↔gpt-5.4, claude-opus-4.5↔gpt-5.2, claude-opus-4.6-1m↔gpt-5.1, claude-sonnet-4.6↔gpt-5.3-codex, claude-sonnet-4.5↔gpt-5.2-codex, claude-sonnet-4↔gpt-5.4-mini, claude-haiku-4.5↔gpt-5-mini |
 
 ---
 
