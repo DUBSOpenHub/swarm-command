@@ -136,7 +136,7 @@ If the canary fails, the full pod never deploys. One cheap test prevents many ex
 
 | Scale | Agents | Typical Cost | Hard Cap | Wall-Clock |
 |---|---|---|---|---|
-| **SS-50** | ~52 | $2.50 | $5 | ~30s |
+| **SS-50** | ~36-52 | $2.50 | $5 | ~30s |
 | **SS-100** | ~89 | $5.50 | $10 | ~45s |
 | **SS-250** | ~316 | $10 | $20 | ~65–90s |
 
@@ -249,7 +249,7 @@ T+0s     T+2s       T+5s         T+12s       T+45s      T+65s    T+80s   T+90s
 
 | Scale | Agents | Commanders | Workers | Reviewers | Best For | Wall-Clock |
 |---|---|---|---|---|---|---|
-| **SS-50** | ~52 | 3 | 45 | 3 | Fast bounded tasks | ~30s |
+| **SS-50** | ~36-52 | 2-3 | 30-45 | 3 | Fast bounded tasks | ~30s |
 | **SS-100** | ~89 | 5 | 75 | 8 | Multi-file features and reviews | ~45s |
 | **SS-250** | ~316 | 5 | 250 | 10 | Repo-wide or high-stakes work | ~65–90s |
 
@@ -536,9 +536,9 @@ shadow_scoring:
   enabled: true
   spec_version: "1.0.0"
   conformance_level: "L2"
-  sealed_criteria_count: 10
+  sealed_criteria_count: 10  # max; per-scale: SS-50=6, SS-100=8, SS-250=10
   hardening:
-    enabled: true
+    enabled: true  # SS-50 overrides to disabled
     threshold: 15
 ```
 

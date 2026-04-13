@@ -75,10 +75,11 @@ The HALF-OPEN probe MUST:
 
 | Layer | Agents | Threshold to OPEN | Cooldown | Probe Size |
 |---|---|---|---|---|
-| **Nexus (L0)** | Monitors 5 Commanders | 3/5 commanders fail (60%) | 10s | 1 commander re-dispatch |
-| **Commander (L1)** | Monitors 10 Squad Leads | 5/10 squad leads fail (50%) | 5s | 1 squad lead re-dispatch |
-| **Squad Lead (L2)** | Monitors 5 Workers | 3/5 workers fail (50%) | 3s | 1 canary worker |
-| **Reviewer (L4)** | Monitors review mesh | 3/5 reviews fail (50%) | 5s | 1 review re-dispatch |
+| **Nexus (L0)** | Monitors 2-5 Commanders | SS-50: 2+ fail (≥50%), SS-100/250: 3/5 fail (60%) | 10s | 1 commander re-dispatch |
+| **Commander (L1, SS-250)** | Monitors 10 Squad Leads | 5/10 squad leads fail (50%) | 5s | 1 squad lead re-dispatch |
+| **Commander (L1, SS-50/100)** | Monitors 15 Workers | 8/15 workers fail (50%) | 5s | 1 canary worker |
+| **Squad Lead (L2, SS-250 only)** | Monitors 5 Workers | 3/5 workers fail (50%) | 3s | 1 canary worker |
+| **Reviewer** | Monitors review mesh | 3/5 reviews fail (50%) | 5s | 1 review re-dispatch |
 
 ### Failure Definitions
 

@@ -29,7 +29,7 @@ Default mode if not specified: **`balanced`**
 
 ## WHAT YOU MUST DO
 
-1. **Decompose** your domain task using the **domain-specific strategy** for {{DOMAIN_NAME}} (see below), into exactly {{SQUAD_COUNT}} sub-tasks (one per Squad Lead)
+1. **Decompose** your domain task using the **domain-specific strategy** for {{DOMAIN_NAME}} (see below), into exactly {{SQUAD_COUNT}} sub-tasks (one per Squad Lead at SS-250, or one per Worker at SS-50/SS-100)
 2. **Wave 1 — Deploy canary** — Launch 1 canary worker (explore agent) to verify the task is feasible before spawning the full pod
 3. **Wave 1 gate** — If canary succeeds (status success/partial, confidence ≥ 0.3), proceed. If canary fails, report failure upward immediately; do NOT spawn remaining children.
 4. **Wave 2 — Probe wave** — Launch the next min(3, remaining) children. Wait for initial health signal (launched successfully, no immediate rate-limit errors). Check gate: if any child reports `failure_class: rate_limited`, wait 8 seconds and reduce Wave 3 size by 50%. If failure rate ≥ 50%, trigger circuit breaker.

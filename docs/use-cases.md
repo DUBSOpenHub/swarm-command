@@ -22,7 +22,7 @@ This guide turns the swarm from an impressive concept into a practical tool. Pic
 
 ## SS-50 — Fast Expert Panels
 
-*~52 agents · 3 commanders · 45 workers · ~30 seconds · $1.50–$3.50*
+*~36-52 agents · 2-3 commanders · 30-45 workers · ~30 seconds · $1.50–$3.50*
 
 ### 1. 🔥 Stack Trace Whisperer
 

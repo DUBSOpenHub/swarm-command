@@ -169,7 +169,8 @@ Sent from Nexus to each Commander. Contains the domain-specific task and constra
   "depth_config": {
     "current_depth": 1,
     "max_depth": 3,
-    "can_launch": true
+    "can_launch": true,
+    "_note": "max_depth=3 for SS-250 (with Squad Leads); use max_depth=2 for SS-50/SS-100 (no Squad Leads)"
   },
   "depth_budget": {
     "squads_allocated": 10,

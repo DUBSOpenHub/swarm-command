@@ -39,7 +39,7 @@ Is the task bounded to 1–2 files or one very narrow question?
 
 | Scale | Total Agents | Commanders | Squad Leads | Workers | Reviewers | Best For | Wall-Clock |
 |---|---|---|---|---|---|---|---|
-| **SS-50** | ~52 | 3 | — | 45 | 3 | Fast bounded tasks | ~30s |
+| **SS-50** | ~36-52 | 2-3 | — | 30-45 | 3 | Fast bounded tasks | ~30s |
 | **SS-100** | ~89 | 5 | — | 75 | 8 | Default for real software work | ~45s |
 | **SS-250** | ~316 | 5 | 50 | 250 | 10 | Repo-wide or maximum-confidence work | ~65–90s |
 
@@ -55,11 +55,11 @@ Default: **SS-100**. Use `swarm command ss-250` for full deployment or `swarm co
 
 ```text
 L0: 1 Nexus (claude-opus-4.6)
-L1: 3 Commanders (commander pool — 9 models)
-L2: 45 Workers (worker pool — 6 models)  — 15 per commander, spawned directly
+L1: 2-3 Commanders (commander pool — 10 models)
+L2: 30-45 Workers (worker pool — 6 models)  — 15 per commander, spawned directly
     3 Reviewers (cross-family pairs, spawned by Nexus)
 ──────────────────────────
-Total: ~52 agents
+Total: ~36-52 agents
 Cost:  $1.50 – $3.50
 Time:  ~30s wall-clock
 ```
@@ -68,7 +68,7 @@ Time:  ~30s wall-clock
 
 | Parameter | Value |
 |---|---|
-| Commanders | 3 |
+| Commanders | 2-3 |
 | Domains covered | 2–3 of 5 (auto-selected by task type) |
 | Squad Leads per Commander | — |
 | Workers per Commander | 15 |
@@ -93,7 +93,7 @@ Time:  ~30s wall-clock
 
 ```text
 L0: 1 Nexus (claude-opus-4.6)
-L1: 5 Commanders (commander pool — 9 models)
+L1: 5 Commanders (commander pool — 10 models)
 L2: 75 Workers (worker pool — 6 models)  — 15 per commander, spawned directly
     8 Reviewers (cross-family pairs, spawned by Nexus)
     Shadow Scoring (Nexus-internal, sealed criteria)
@@ -132,7 +132,7 @@ Time:  ~45s wall-clock
 
 ```text
 L0: 1 Nexus (claude-opus-4.6)
-L1: 5 Commanders (commander pool — 9 models)
+L1: 5 Commanders (commander pool — 10 models)
 L2: 50 Squad Leads (claude-haiku-4.5 | gpt-5.4-mini)  — 10 per commander
 L3: 250 Workers (worker pool — 6 models)               — 5 per squad lead
 L4: 10 Reviewers (7 cross-family pairs)
@@ -151,8 +151,8 @@ Time:  ~65–90s wall-clock
 | Domains covered | All 5 |
 | Squad Leads per Commander | 10 |
 | Workers per Squad Lead | 5 |
-| Reviewers | 10 reviewers forming 7 cross-family pairs |
-| Shadow scoring | 10 sealed criteria, hardening at >15% |
+| Reviewers | 10 reviewers forming 8 cross-family pairs |
+| Shadow scoring | 10 sealed criteria (SS-50: 6, SS-100: 8), hardening at >15% (SS-50: disabled) |
 | Cost ceiling | $20.00 |
 | Timeout cascade | 90/60/40/30s |
 

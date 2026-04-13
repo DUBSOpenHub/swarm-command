@@ -9,7 +9,7 @@ swarm_command:
       sealed_criteria_count: 6
       cost_ceiling_usd: 5.00
       timeout_s: 60
-      total: ~52
+      total: "~36-52"  # 2 commanders = 36, 3 commanders = 52
     ss-100:
       commanders: 5
       workers_per_commander: 15  # No squad leads — commanders spawn workers directly
@@ -41,7 +41,7 @@ swarm_command:
       conflict_penalty_cap: 0.30
 
   depth_guard:
-    max_spawn_depth: 3
+    max_spawn_depth: 3  # SS-250 max; SS-50/SS-100 use max_depth=2 (no Squad Leads)
     max_workers_per_squad_lead: 5
     worker_agent_types: ["explore", "task"]
     commander_agent_type: "general-purpose"
@@ -121,11 +121,14 @@ swarm_command:
     enabled: true
     spec_version: "1.0.0"
     conformance_level: "L2"
-    sealed_criteria_count: 10  # criteria per task
+    sealed_criteria_count: 10  # max criteria; per-scale overrides in scales section (6/8/10)
     hardening:
-      enabled: true
+      enabled: true  # global default; SS-50 overrides to disabled
       max_cycles: 1
       threshold: 15  # hardening triggers if score > 15%
+      scale_overrides:
+        ss-50:
+          enabled: false  # SS-50: score computed but no fix cycle
     categories:
       - happy_path
       - edge_case
@@ -143,6 +146,7 @@ swarm_command:
       - gpt-5.4
       - gpt-5.2
       - gpt-5.1
+      - goldeneye
     worker_pool:
       - claude-haiku-4.5
       - gpt-5.4-mini
@@ -158,5 +162,6 @@ swarm_command:
       - [claude-sonnet-4.5, gpt-5.2-codex]
       - [claude-sonnet-4, gpt-5.4-mini]
       - [claude-haiku-4.5, gpt-5-mini]
+      - [goldeneye, gpt-4.1]
 
 
