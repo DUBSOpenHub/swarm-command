@@ -206,7 +206,7 @@ Everything else overlaps via hierarchical fan-out and pipeline overlap.
 | 1 | Use `explore` / `task` workers | 60% cheaper | Worker types are significantly cheaper than `general-purpose` |
 | 2 | Haiku / Mini at L3 | 10× cheaper | Cheapest models handle the most atomic work |
 | 3 | Micro-brief compression | ~15% savings | Smaller inputs reduce per-agent cost at scale |
-| 4 | Wave deployment | ~20% savings on failure | Catch bad tasks before all 250 workers launch |
+| 4 | Wave deployment | ~20% savings on failure | Canary → Probe (max 3) → Remainder — with health gates between waves. Catches rate limits and bad tasks before full deployment. |
 | 5 | Canary verification | ~5% savings on failure | One cheap canary prevents many expensive failures |
 | 6 | Timeout cascade | Cost protection | Stop slow work before it burns budget |
 | 7 | Cost ceiling | Absolute protection | $20 hard cap prevents runaway bills |

@@ -241,7 +241,25 @@ For each domain, construct a Context Capsule (max 2048 tokens):
 
 > **Naming**: Swarm Command is the skill name. SwarmSpeed is the internal execution protocol. Templates use SwarmSpeed role titles (e.g., "SwarmSpeed Commander") as the protocol identity agents operate under.
 
-Launch Commanders in PARALLEL using the `task` tool:
+Launch Commanders using **wave deployment** to prevent concentrated request bursts:
+
+### Wave Deployment Strategy
+
+**SS-50 / SS-100:** Launch all Commanders in PARALLEL (2-5 commanders — small enough to avoid rate limits).
+
+**SS-250:** Deploy Commanders in two waves:
+- **Wave 1:** Launch 2 Commanders (highest-priority domains: ARCH + IMPL)
+- **Gate check:** Verify both launched successfully with no immediate rate-limit errors
+- **Wave 2:** Launch remaining 3 Commanders (TEST + DOCS + INTG)
+
+### Commander Children — Wave Rules
+
+Each Commander deploys its children (Squad Leads or Workers) in waves:
+1. **Wave 1 (Canary):** 1 agent — validate task feasibility
+2. **Wave 2 (Probe):** min(3, remaining) agents — test for rate limits and bulk feasibility. Wait 2s after canary. Gate: `failure_rate < 0.50 AND rate_limited_count == 0`
+3. **Wave 3 (Remainder):** All remaining agents — full deployment. Wait 2s after probe.
+
+If any child reports `failure_class: rate_limited` in Wave 2, extend delay to 8s and reduce Wave 3 size by 50%.
 
 ### Scale-Specific Deployment
 
@@ -292,11 +310,11 @@ Each Commander prompt MUST include:
    - "Squad Leads MUST use agent_type explore or task for workers."
    - "Include in every worker prompt: DO NOT use the task tool. You are a LEAF NODE."
 
-4. **Canary requirement**: "Deploy 1 canary worker before full pod deployment."
+4. **Wave deployment**: "Deploy children in waves: Wave 1 = canary (1 agent), Wave 2 = probe (min 3, remaining), Wave 3 = rest. Gate between waves: proceed only if failure_rate < 0.50 AND rate_limited_count == 0."
 
 5. **Output format**: Strict JSON Bundle schema with bundle_id, domain, status, summary, atoms_merged, conflicts, content, confidence, wall_clock_s.
 
-6. **Circuit breaker**: "If more than 50% of squad leads fail, STOP and report failure."
+6. **Circuit breaker**: "If more than 50% of squad leads fail, STOP and report failure. Classify failures as: rate_limited, timeout, unparseable, scope_error, or unknown."
 
 ### Squad Lead Instructions (embedded in Commander prompt)
 
@@ -304,7 +322,7 @@ Each Commander must instruct its Squad Leads to:
 
 1. **Decompose** into 5 atomic sub-tasks (one per worker)
 2. **Deploy canary** — 1 explore agent first
-3. **If canary succeeds** — Launch 4 more workers in parallel
+3. **If canary succeeds** — Add random 0-2s jitter (SS-250 only), then launch remaining workers in parallel
 4. **If canary fails** — Retry once with simplified prompt, then report failure
 5. **Collect** 5 Result Atoms
 6. **Merge** — Group by sub-task, classify CONSENSUS/MAJORITY/CONFLICT
@@ -328,18 +346,19 @@ Workers MUST be agent_type `explore` or `task` — NEVER `general-purpose`.
 Show deployment progress:
 
 ```
-🐝 PHASE 3 — COMMANDER DEPLOYMENT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🐝 PHASE 3 — COMMANDER DEPLOYMENT (wave mode)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  CMD-ARCH  ▸ claude-opus-4.6    ▸ Architecture    ✅ deployed
-  CMD-IMPL  ▸ gpt-5.4            ▸ Implementation  ✅ deployed
-  CMD-TEST  ▸ claude-sonnet-4.6  ▸ Testing         ✅ deployed
-  CMD-DOCS  ▸ gpt-5.2            ▸ Documentation   ✅ deployed
-  CMD-INTG  ▸ claude-sonnet-4.5  ▸ Integration     ✅ deployed
+  Wave 1 (canary):  CMD-ARCH ▸ claude-opus-4.6    ✅ healthy
+  ── gate: 0 failures, 0 rate-limited ──
+  Wave 2 (probe):   CMD-IMPL ▸ gpt-5.4            ✅ deployed
+                    CMD-TEST ▸ claude-sonnet-4.6   ✅ deployed
+  ── gate: 0 failures, 0 rate-limited ──
+  Wave 3 (full):    CMD-DOCS ▸ gpt-5.2            ✅ deployed
+                    CMD-INTG ▸ claude-sonnet-4.5   ✅ deployed
 
   Commanders active: 5/5
-  Squad Leads spawning...
-  Workers deploying (canary-first)...
+  Children deploying (wave mode: canary → probe → rest)...
 ```
 
 ---
@@ -859,6 +878,20 @@ Then display the full domain report with all findings, issues, and recommendatio
 
 # CIRCUIT BREAKER RULES (applies to ALL phases)
 
+### Failure Classification
+
+Classify every agent failure before applying recovery logic:
+
+| Class | Detection |
+|---|---|
+| `rate_limited` | Output contains "429", "rate limit", "too many requests", "secondary rate limit", or "abuse detection" |
+| `timeout` | Agent did not respond within its allocated timeout |
+| `unparseable` | Agent returned output that is not valid JSON |
+| `scope_error` | Agent returned `status: "failed"` with out-of-scope errors |
+| `unknown` | Any other failure |
+
+**Rate-limit failures get special treatment**: any `rate_limited` failure immediately extends inter-wave delays to 8s and reduces next wave size by 50%.
+
 ### Circuit Breaker States
 - **CLOSED** (normal): All agents launching, monitoring failure rate
 - **OPEN** (broken): No new agent spawns, synthesize partial results, wait for cooldown
@@ -941,11 +974,12 @@ Apply these 7 critical optimizations:
 
 1. **Pipeline overlap** — Start reviewers as soon as first 2 Commanders return (don't wait for all 5)
 2. **Canary pre-flight** — 1 canary worker per pod before full deployment
-3. **Parallel squad launch** — All Squad Leads per Commander launch simultaneously
+3. **Wave deployment** — Deploy children in waves (Canary → Probe → Remainder) with health gates between waves to avoid platform rate limits
 4. **Micro-brief compression** — 128-token worker prompts for fast processing
 5. **Haiku/Mini for workers** — Cheapest/fastest models at leaf level
 6. **Timeout cascade** — Nexus: 90s, Commander: 60s, Squad Lead: 40s, Worker: 30s
 7. **Content-hash dedup** — Identical results merged automatically
+8. **SS-250 jitter** — Squad Leads add random 0-2s delay before pod launch to prevent synchronized secondary bursts
 
 ---
 

@@ -262,15 +262,15 @@ For maximum insight diversity, models from different families are paired within 
 
 ## Parallel Execution Design
 
-The architecture is designed for concurrent execution at scale. Wall-clock time grows slower than agent count because the expensive work runs in parallel:
+The architecture is designed for concurrent execution at scale with **wave deployment** to respect platform rate limits. Wall-clock time grows slower than agent count because the expensive work runs in parallel, but launches are staggered in waves (Canary → Probe → Remainder) to avoid concentrated bursts:
 
 ```text
 Agents     Wall-Clock     Ratio vs SS-50
   50         ~30s           1.0×
- 100         ~42s           1.4×
- 250         ~65s           2.2×
+ 100         ~45s           1.5×
+ 250         ~70s           2.3×
 ```
 
-These are design targets, not measured benchmarks. Actual performance depends on task decomposability and platform concurrency limits.
+These are design targets, not measured benchmarks. Actual performance depends on task decomposability and platform concurrency limits. Wave deployment adds ~4-6s per layer but prevents rate-limit failures that would cost more time in recovery.
 
-The main serial bottlenecks are Nexus decomposition (~2s), canary verification (~3s), and final synthesis (~10s). Everything else overlaps via hierarchical fan-out.
+The main serial bottlenecks are Nexus decomposition (~2s), canary verification (~3s), wave gate checks (~2s per gate), and final synthesis (~10s). Everything else overlaps via hierarchical fan-out.

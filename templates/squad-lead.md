@@ -70,6 +70,7 @@ Use `worker_count` from this table to cap your pod size (not always 5). Use `tim
    - Each gets its own Micro-Brief
    - Each prompt MUST include the complete DEPTH LOCK block
    - Mix models within the pod for diversity (alternate claude-haiku-4.5 and gpt-5.4-mini)
+   - **SS-250 jitter**: Before launching remaining workers, add a random delay of 0–2 seconds to prevent synchronized bursts across Squad Leads
 
 ### Phase 4 — Collection & Merge (T+10 to T+15s)
 6. Collect all Result Atoms (including canary)

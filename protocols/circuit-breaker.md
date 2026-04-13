@@ -40,6 +40,7 @@ When a circuit breaker trips to OPEN, select a recovery strategy based on the **
 
 | Failure Signature | Recovery Strategy | Implementation |
 |---|---|---|
+| `failure_class: "rate_limited"` on any agent | **Wave Throttle** — extend inter-wave delay and reduce wave size | Increase delay to 8s, reduce next wave size by 50%, switch to lighter models |
 | `status: "timeout"` on ≥50% of agents | **Model Downgrade** — switch to a faster/lighter model | Replace `claude-opus` → `claude-haiku-4.5`; replace `gpt-5.4` → `gpt-5.4-mini` |
 | `status: "failed"` with unparseable output | **Prompt Simplification** — reduce instruction complexity | Strip context to bare minimum; replace compound instructions with single atomic tasks |
 | `status: "failed"` with out-of-scope errors | **Scope Reduction** — narrow file scope | Remove all but the 2 most critical files from file_scope; mark removed scope as `skipped` |
@@ -131,6 +132,103 @@ L5: Graceful Degrade (emit partial results + gap report)
     │
     ▼
 Parent receives partial result with explicit gaps documented
+```
+
+---
+
+## Failure Classification
+
+Every agent failure MUST be classified into one of these categories. The classification determines which recovery strategy and wave gate logic applies:
+
+| Failure Class | Detection | Examples |
+|---|---|---|
+| `rate_limited` | Output contains "429", "rate limit", "too many requests", "secondary rate limit", or "abuse detection" | Platform throttling the request |
+| `timeout` | Agent did not respond within its allocated timeout | Slow model, overloaded infrastructure |
+| `unparseable` | Agent returned output that is not valid JSON | Prompt confusion, model hallucination |
+| `scope_error` | Agent returned `status: "failed"` with out-of-scope errors | Task beyond agent capability |
+| `unknown` | Any other failure not matching the above | Unexpected errors |
+
+### Classification in Output
+
+Failed agents MUST include `failure_class` in their output when possible:
+
+```json
+{
+  "status": "failed",
+  "failure_class": "rate_limited | timeout | unparseable | scope_error | unknown",
+  "failure_detail": "<brief description>"
+}
+```
+
+Parents classifying child failures SHOULD inspect error messages for rate-limit keywords even when the child reports `status: "timeout"`, since rate-limited requests may surface as timeouts.
+
+---
+
+## Wave Deployment Protocol
+
+Wave deployment prevents concentrated bursts of agent launches that can trigger platform rate limits. Instead of launching all children simultaneously, agents deploy in progressive waves with health gates between them.
+
+### Wave Strategy: Canary → Probe → Remainder
+
+| Wave | Size | Purpose | Gate to Next |
+|---|---|---|---|
+| **Wave 1 (Canary)** | 1 agent | Validate task feasibility | Canary returns `success` or `partial` with confidence ≥ 0.3 |
+| **Wave 2 (Probe)** | min(3, remaining) agents | Test for rate limits and bulk feasibility | `failure_rate < 0.50` AND `rate_limited_count == 0` |
+| **Wave 3 (Remainder)** | All remaining agents | Full deployment | N/A — final wave |
+
+### Inter-Wave Delay
+
+| Condition | Delay |
+|---|---|
+| Normal (no failures) | 2 seconds base |
+| Any `failure_class: timeout` in previous wave | 4 seconds |
+| Any `failure_class: rate_limited` in previous wave | 8 seconds + reduce Wave 3 size by 50% |
+
+### Scale-Specific Wave Rules
+
+| Scale | Nexus → Commanders | Commander → Children | Squad Lead → Workers |
+|---|---|---|---|
+| **SS-50** | Launch all in parallel (2-3 commanders) | Canary → Probe(3) → Rest | Canary → Rest (3-5 workers, too small for 3 waves) |
+| **SS-100** | Launch all in parallel (3-5 commanders) | Canary → Probe(3) → Rest | Canary → Rest |
+| **SS-250** | Wave 1: 2 commanders → Wave 2: 3 commanders | Canary → Probe(3) → Rest | Canary → Rest + random 0-2s jitter before pod launch |
+
+### SS-250 Jitter (Anti-Synchronization)
+
+At SS-250 scale, many Squad Leads may complete their canary at similar times and launch their full pods simultaneously — creating a secondary burst. To prevent this:
+
+- After canary success, each Squad Lead adds a **random delay of 0–2 seconds** before launching the remaining workers
+- This spreads the worker launch window across ~2 seconds instead of a single burst
+
+### Wave Gate Logic
+
+Between waves, the parent checks:
+
+```
+CAN_PROCEED = (
+  failures_in_wave / launched_in_wave < 0.50
+  AND rate_limited_count_in_wave == 0
+  AND circuit_breaker_state == CLOSED
+)
+```
+
+If `CAN_PROCEED` is false:
+1. If `rate_limited_count > 0` → wait `adaptive_delay` (8s), reduce next wave size by 50%
+2. If `failure_rate ≥ 0.50` → trigger circuit breaker (enter OPEN state)
+3. If `circuit_breaker_state != CLOSED` → do not launch next wave
+
+### Wave Deployment Display
+
+```
+🐝 PHASE 3 — COMMANDER DEPLOYMENT (wave mode)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Wave 1 (canary):  CMD-ARCH ▸ claude-opus-4.6  ✅ healthy
+  ── gate check: 0 failures, 0 rate-limited ──
+  Wave 2 (probe):   CMD-IMPL ▸ gpt-5.4  ✅ | CMD-TEST ▸ claude-sonnet-4.6  ✅
+  ── gate check: 0 failures, 0 rate-limited ──
+  Wave 3 (full):    CMD-DOCS ▸ gpt-5.2  ✅ | CMD-INTG ▸ claude-sonnet-4.5  ✅
+
+  All commanders deployed: 5/5
 ```
 
 ---

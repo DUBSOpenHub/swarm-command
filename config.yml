@@ -92,6 +92,25 @@ swarm_command:
     rubber_stamp_delta_threshold: 0.05
     rubber_stamp_min_reviewers: 3
 
+  wave_deployment:
+    enabled: true
+    strategy: "canary-probe-rest"
+    waves:
+      wave_1: 1               # Canary (already exists)
+      wave_2: 3               # Probe wave — max 3 children
+      wave_3: "remainder"     # All remaining children
+    inter_wave_delay_s: 2     # Base delay between waves
+    adaptive_delay:
+      on_rate_limit: 8        # Extended delay if rate-limit detected
+      jitter_range_s: [0, 2]  # Random jitter added to squad-lead pod launches
+    gate_check:
+      proceed_if: "failure_rate < 0.50 AND rate_limited_count == 0"
+      failure_classes: ["rate_limited", "timeout", "unparseable", "scope_error", "unknown"]
+    scale_overrides:
+      ss-50:  { nexus_waves: false }   # 2-3 commanders — launch in parallel
+      ss-100: { nexus_waves: false }   # 3-5 commanders — launch in parallel
+      ss-250: { nexus_waves: true, nexus_wave_1: 2, nexus_wave_2: 3 }
+
   circuit_breaker:
     commander_failure_threshold: 0.60
     worker_failure_threshold: 0.50

@@ -30,12 +30,13 @@ Default mode if not specified: **`balanced`**
 ## WHAT YOU MUST DO
 
 1. **Decompose** your domain task using the **domain-specific strategy** for {{DOMAIN_NAME}} (see below), into exactly {{SQUAD_COUNT}} sub-tasks (one per Squad Lead)
-2. **Deploy canary** — For the FIRST Squad Lead, launch 1 canary worker (explore agent) to verify the task is feasible before spawning the full pod
-3. **If canary succeeds** — Launch remaining {{SQUAD_COUNT_MINUS_1}} Squad Leads in parallel
-4. **If canary fails** — Report failure upward immediately with diagnostic info; do NOT spawn remaining Squad Leads
-5. **Collect** atom bundles from all Squad Leads
-6. **Merge** results: deduplicate, resolve conflicts, compute confidence scores
-7. **Emit** a single Bundle JSON (max 1024 tokens) back to Nexus
+2. **Wave 1 — Deploy canary** — Launch 1 canary worker (explore agent) to verify the task is feasible before spawning the full pod
+3. **Wave 1 gate** — If canary succeeds (status success/partial, confidence ≥ 0.3), proceed. If canary fails, report failure upward immediately; do NOT spawn remaining children.
+4. **Wave 2 — Probe wave** — Launch the next min(3, remaining) children. Wait for initial health signal (launched successfully, no immediate rate-limit errors). Check gate: if any child reports `failure_class: rate_limited`, wait 8 seconds and reduce Wave 3 size by 50%. If failure rate ≥ 50%, trigger circuit breaker.
+5. **Wave 3 — Remainder** — Launch all remaining children in parallel.
+6. **Collect** atom bundles from all children
+7. **Merge** results: deduplicate, resolve conflicts, compute confidence scores
+8. **Emit** a single Bundle JSON (max 1024 tokens) back to Nexus
 
 ## DOMAIN-SPECIFIC DECOMPOSITION STRATEGIES
 
