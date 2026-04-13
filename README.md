@@ -6,6 +6,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Security Policy](https://img.shields.io/badge/Security-Policy-brightgreen?logo=github)](SECURITY.md)
 
+**Learn more and see the website here:** [dubsopenhub.github.io/swarm-command](https://dubsopenhub.github.io/swarm-command/)
+
 > ### ⚡ One Command. That's It.
 >
 > **Never used the CLI before? No problem.**
@@ -32,46 +34,6 @@
 - **Need zero setup?** No servers, no API keys, no build step.
 
 If your task spans **architecture + implementation + testing + docs + integration**, this is exactly what Swarm Command is built for.
-
----
-
-## 🎬 Quick Demo
-
-### Representative CLI transcript
-
-```text
-$ copilot
-
-> swarm command ss-100 "Document the auth system, add missing tests, and flag rollout risks"
-
-[NEXUS] Booting SS-100 swarm...
-[NEXUS] Sealing acceptance criteria (8 checks)
-[CMD-ARCH] Mapping auth boundaries and module ownership
-[CMD-IMPL] Tracing token issuance, refresh, and revocation flows
-[CMD-TEST] Enumerating missing happy-path, edge-case, and failure-path tests
-[CMD-DOCS] Drafting operator-facing docs and examples
-[CMD-INTG] Checking rollout risks across API, web, DB, and monitoring
-[REVIEW] Cross-family review mesh started
-[SHADOW] 1 criterion failed on first pass → hardening cycle triggered
-[SHADOW] Re-validated bundle: 0 critical failures remaining
-
-✅ Final bundle ready in 47s
-
-Top outputs:
-1. Auth architecture brief with module boundaries
-2. Ranked test-gap list with highest-risk paths first
-3. Rollout checklist covering cookies, refresh tokens, and observability
-4. Updated docs outline for onboarding + operations
-
-Consensus: CONSENSUS on 3/4 major findings
-Shadow Score: 12.5% → hardened and accepted
-```
-
-**Good first prompt:**
-
-```text
-swarm command "Map this repo, explain how the major systems fit together, and list the 5 highest-risk gaps"
-```
 
 ---
 
@@ -102,14 +64,14 @@ These systems are complementary — not competitors.
 
 | If you need to... | Use | Why |
 |---|---|---|
-| Solve **one complex task** with layered consensus inside your current Copilot CLI session | **Swarm Command** | Best when you want decomposition, cross-model review, shadow validation, and one synthesized answer |
-| Run **parallel coding workstreams** across terminals or branches | **Stampede** | Best when the goal is execution throughput across independent task lanes |
-| Run a **many-model tournament** to pressure-test ideas and rank options | **Havoc Hackathon** | Best when you want competitive ideation, elimination rounds, and judged synthesis |
+| Solve **one complex task** with layered consensus inside your current Copilot CLI session | [**Swarm Command**](https://github.com/DUBSOpenHub/swarm-command) | Best when you want decomposition, cross-model review, shadow validation, and one synthesized answer |
+| Run **parallel coding workstreams** across terminals or branches | [**Stampede**](https://github.com/DUBSOpenHub/terminal-stampede) | Best when the goal is execution throughput across independent task lanes |
+| Run a **many-model tournament** to pressure-test ideas and rank options | [**Havoc Hackathon**](https://github.com/DUBSOpenHub/havoc-hackathon) | Best when you want competitive ideation, elimination rounds, and judged synthesis |
 
 **Rule of thumb:**
-- Choose **Swarm Command** for **consensus execution**.
-- Choose **Stampede** for **parallel implementation**.
-- Choose **Havoc** for **idea tournaments and comparative judging**.
+- Choose [**Swarm Command**](https://github.com/DUBSOpenHub/swarm-command) for **consensus execution**.
+- Choose [**Stampede**](https://github.com/DUBSOpenHub/terminal-stampede) for **parallel implementation**.
+- Choose [**Havoc Hackathon**](https://github.com/DUBSOpenHub/havoc-hackathon) for **idea tournaments and comparative judging**.
 
 ---
 
@@ -369,7 +331,7 @@ If you're new, read in this order:
 
 ### Fast paths
 
-- **I just want to try it:** README → install → quick demo
+- **I just want to try it:** README → install → run `swarm command`
 - **I want to operate it well:** README → learning path → scaling → use cases
 - **I want to understand the design:** README → architecture → consensus → shadow scoring
 
@@ -529,10 +491,10 @@ See [docs/scaling.md](docs/scaling.md) for full scaling configuration and cost e
 | Role | Models |
 |---|---|
 | **Nexus** | claude-opus-4.6 |
-| **Commanders** (pool: 10) | claude-opus-4.6, claude-opus-4.5, claude-opus-4.6-1m, claude-sonnet-4.6, claude-sonnet-4.5, claude-sonnet-4, gpt-5.4, gpt-5.2, gpt-5.1, goldeneye |
+| **Commanders** (pool: 10) | claude-opus-4.6, claude-opus-4.5, claude-opus-4.6-1m, claude-sonnet-4.6, claude-sonnet-4.5, claude-sonnet-4, gpt-5.4, gpt-5.2, gpt-5.1, plus one additional supported model |
 | **Squad Leads** | claude-haiku-4.5, gpt-5.4-mini |
 | **Workers** (pool: 6) | claude-haiku-4.5, gpt-5.4-mini, gpt-5-mini, gpt-4.1, gpt-5.3-codex, gpt-5.2-codex |
-| **Reviewers** (8 pairs) | claude-opus-4.6↔gpt-5.4, claude-opus-4.5↔gpt-5.2, claude-opus-4.6-1m↔gpt-5.1, claude-sonnet-4.6↔gpt-5.3-codex, claude-sonnet-4.5↔gpt-5.2-codex, claude-sonnet-4↔gpt-5.4-mini, claude-haiku-4.5↔gpt-5-mini, goldeneye↔gpt-4.1 |
+| **Reviewers** (8 pairs) | claude-opus-4.6↔gpt-5.4, claude-opus-4.5↔gpt-5.2, claude-opus-4.6-1m↔gpt-5.1, claude-sonnet-4.6↔gpt-5.3-codex, claude-sonnet-4.5↔gpt-5.2-codex, claude-sonnet-4↔gpt-5.4-mini, claude-haiku-4.5↔gpt-5-mini, plus one additional cross-family pair |
 
 ---
 
@@ -540,7 +502,7 @@ See [docs/scaling.md](docs/scaling.md) for full scaling configuration and cost e
 
 ```text
 swarm-command/
-├── README.md                           # Overview, install, quick demo, FAQ
+├── README.md                           # Overview, install, comparison, FAQ
 ├── AGENTS.md                           # Agent/skill descriptions
 ├── CONTRIBUTING.md                     # Contribution guidelines
 ├── catalog.yml                         # Skill metadata
