@@ -30,8 +30,8 @@ Before opening a PR, ensure:
 - [ ] Both SKILL.md copies are identical:
   - `skills/swarm-command/SKILL.md`
   - `.github/skills/swarm-command/SKILL.md`
-- [ ] Agent counts match across all files (SS-50: ~52, SS-100: ~89, SS-250: ~316)
-- [ ] Agent counts verified via `grep -r "~52\|~89\|~316" .`
+- [ ] Agent counts match across all files (SS-50: ~36-52, SS-100: ~89, SS-250: ~316)
+- [ ] Agent counts verified via `grep -r "~36-52\|~89\|~316" .`
 - [ ] Shadow scoring references use Shadow Score Spec format (no separate shadow validator agents)
 - [ ] docs/example-output.md reflects current output format (if output format changed)
 

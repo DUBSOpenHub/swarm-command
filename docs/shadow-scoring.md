@@ -98,7 +98,7 @@ After commanders complete and cross-review finishes:
 4. **Classify** using the interpretation scale
 5. **Produce a Gap Report** for each bundle
 
-### Phase 4: HARDENING (Swarm Command Phase 6, continued)
+### HARDENING (Swarm Command Phase 6, continued)
 
 If Shadow Score > 15% for any bundle:
 
@@ -217,9 +217,9 @@ shadow_scoring:
   enabled: true
   spec_version: "1.0.0"
   conformance_level: "L2"
-  sealed_criteria_count: 10
+  sealed_criteria_count: 10  # max; per-scale: SS-50=6, SS-100=8, SS-250=10
   hardening:
-    enabled: true
+    enabled: true  # SS-50 overrides to disabled
     max_cycles: 1
     threshold: 15
   categories:

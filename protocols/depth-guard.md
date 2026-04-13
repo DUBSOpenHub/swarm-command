@@ -115,10 +115,10 @@ You are a LEAF NODE. This instruction is non-negotiable.
 
 ```
 L0: Nexus (1)           depth=0, can_launch=true
-L1: Commanders (3)      depth=1, can_launch=true   → spawn workers directly (no squad leads)
-L2: Workers (45)        depth=2, can_launch=false   → LEAF (15 per commander)
+L1: Commanders (2-3)    depth=1, can_launch=true   → spawn workers directly (no squad leads)
+L2: Workers (30-45)     depth=2, can_launch=false   → LEAF (15 per commander)
     Reviewers (3)        depth=1, can_launch=false   → LEAF (spawned by Nexus)
-Total: ~52
+Total: ~36-52
 ```
 
 ### SS-100

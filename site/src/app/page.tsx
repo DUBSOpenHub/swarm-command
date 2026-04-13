@@ -63,7 +63,7 @@ const SCALES: Record<
 > = {
   ss50: {
     label: "SS-50",
-    agents: "~52 agents",
+    agents: "~36-52 agents",
     useCase: "Quick Review",
     desc: "Fast consensus on focused tasks. Code reviews, config checks, quick security scans. Results in minutes.",
     cmd: 'swarm command --scale 50 "review auth module"',
@@ -588,7 +588,7 @@ export default function Home() {
               <tbody>
                 <tr>
                   <td className="text-amber">SS-50</td>
-                  <td>~52</td>
+                  <td>~36-52</td>
                   <td>$2.50</td>
                   <td>$5</td>
                   <td>~30s</td>

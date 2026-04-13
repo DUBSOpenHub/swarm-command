@@ -238,7 +238,7 @@ flowchart TD
 ```mermaid
 graph LR
     subgraph SS50["🐝 SS-50"]
-        A50["3 Commanders<br/>15 Workers each<br/>3 Reviewers<br/>~52 agents"]
+        A50["2-3 Commanders<br/>15 Workers each<br/>3 Reviewers<br/>~36-52 agents"]
     end
 
     subgraph SS100["🐝🐝 SS-100"]
