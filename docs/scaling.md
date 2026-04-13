@@ -239,3 +239,4 @@ Budget configuration uses **60% `explore` + 30% `task` + 10% `general-purpose`**
 - Start at **SS-100** when you want strong coverage but don't yet know whether you need maximum depth.
 - Drop to **SS-50** when latency is the main constraint.
 - Jump straight to **SS-250** when the cost of a missed class of issue is higher than the cost of waiting another 20–40 seconds.
+

@@ -89,3 +89,4 @@ The `templates/` and `protocols/` directories contain **reference documentation*
 5. **Pipeline overlap** — Reviewers start as soon as the first 2 commander bundles arrive, don't wait for all 5.
 6. **Canary before swarm** — Deploy 1 canary worker per pod before full deployment to verify task feasibility.
 7. **Fail parsably** — Every failure is a structured JSON object with status, reason, and diagnostics.
+

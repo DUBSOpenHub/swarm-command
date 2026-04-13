@@ -159,3 +159,4 @@ swarm_command:
       - [claude-sonnet-4, gpt-5.4-mini]
       - [claude-haiku-4.5, gpt-5-mini]
 
+

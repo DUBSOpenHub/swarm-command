@@ -274,3 +274,4 @@ Agents     Wall-Clock     Ratio vs SS-50
 These are design targets, not measured benchmarks. Actual performance depends on task decomposability and platform concurrency limits. Wave deployment adds ~4-6s per layer but prevents rate-limit failures that would cost more time in recovery.
 
 The main serial bottlenecks are Nexus decomposition (~2s), canary verification (~3s), wave gate checks (~2s per gate), and final synthesis (~10s). Everything else overlaps via hierarchical fan-out.
+
