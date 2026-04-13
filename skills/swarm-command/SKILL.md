@@ -245,10 +245,10 @@ Launch Commanders in PARALLEL using the `task` tool:
 
 ### Scale-Specific Deployment
 
-**Commander pool (9 models — draw in order, alternate Claude↔GPT for diversity):**
+**Commander pool (10 models — draw in order, alternate Claude↔GPT for diversity):**
 ```
 claude-opus-4.6, claude-opus-4.5, claude-opus-4.6-1m, claude-sonnet-4.6, claude-sonnet-4.5,
-claude-sonnet-4, gpt-5.4, gpt-5.2, gpt-5.1
+claude-sonnet-4, gpt-5.4, gpt-5.2, gpt-5.1, goldeneye
 ```
 
 **SS-50 (2-3 Commanders):**
@@ -267,7 +267,7 @@ Commander 4: agent_type="general-purpose", model="gpt-5.2"
 Commander 5: agent_type="general-purpose", model="claude-sonnet-4"
 ```
 
-**SS-250 (5 Commanders — drawn from commander pool of 9):**
+**SS-250 (5 Commanders — drawn from commander pool of 10):**
 ```
 Commander 1 (ARCH): agent_type="general-purpose", model="claude-opus-4.6"
 Commander 2 (IMPL): agent_type="general-purpose", model="gpt-5.4"
@@ -421,7 +421,7 @@ Pair bundles from different domains for cross-review:
 | 6 | CMD-ARCH | CMD-TEST | claude-sonnet-4 ↔ gpt-5.4-mini |
 | 7 | CMD-IMPL | CMD-DOCS | claude-haiku-4.5 ↔ gpt-5-mini |
 
-For SS-50/SS-100: Use 3-4 review pairs based on available bundles. For SS-250: Use all 7 cross-family pairs (10 reviewer slots filled by cycling through pairs).
+For SS-50/SS-100: Use 3-4 review pairs based on available bundles. For SS-250: Use all 8 cross-family pairs (10 reviewer slots filled by cycling through pairs).
 
 ### Reviewer Prompt
 
@@ -1012,10 +1012,10 @@ Apply these 7 critical optimizations:
 | Role | Model Pool | Rule |
 |---|---|---|
 | Nexus (you) | `claude-opus-4.6` | Always opus — top reasoning model |
-| Commander (pool: 9) | `claude-opus-4.6`, `claude-opus-4.5`, `claude-opus-4.6-1m`, `claude-sonnet-4.6`, `claude-sonnet-4.5`, `claude-sonnet-4`, `gpt-5.4`, `gpt-5.2`, `gpt-5.1` | Draw in order; alternate Claude↔GPT for diversity |
+| Commander (pool: 10) | `claude-opus-4.6`, `claude-opus-4.5`, `claude-opus-4.6-1m`, `claude-sonnet-4.6`, `claude-sonnet-4.5`, `claude-sonnet-4`, `gpt-5.4`, `gpt-5.2`, `gpt-5.1`, `goldeneye` | Draw in order; alternate Claude↔GPT for diversity |
 | Squad Lead (SS-250 only) | `claude-haiku-4.5`, `gpt-5.4-mini` | Alternate within commander for cross-family diversity |
 | Worker (pool: 6) | `claude-haiku-4.5`, `gpt-5.4-mini`, `gpt-5-mini`, `gpt-4.1`, `gpt-5.3-codex`, `gpt-5.2-codex` | Mix within pod; Codex variants for build/test tasks |
-| Reviewer (7 pairs) | `claude-opus-4.6`↔`gpt-5.4`, `claude-opus-4.5`↔`gpt-5.2`, `claude-opus-4.6-1m`↔`gpt-5.1`, `claude-sonnet-4.6`↔`gpt-5.3-codex`, `claude-sonnet-4.5`↔`gpt-5.2-codex`, `claude-sonnet-4`↔`gpt-5.4-mini`, `claude-haiku-4.5`↔`gpt-5-mini` | Always cross-family pairs |
+| Reviewer (8 pairs) | `claude-opus-4.6`↔`gpt-5.4`, `claude-opus-4.5`↔`gpt-5.2`, `claude-opus-4.6-1m`↔`gpt-5.1`, `claude-sonnet-4.6`↔`gpt-5.3-codex`, `claude-sonnet-4.5`↔`gpt-5.2-codex`, `claude-sonnet-4`↔`gpt-5.4-mini`, `claude-haiku-4.5`↔`gpt-5-mini`, `goldeneye`↔`gpt-4.1` | Always cross-family pairs |
 | Shadow Scoring | Nexus-internal | Nexus validates against sealed criteria (Shadow Score Spec L2) |
 
 ---

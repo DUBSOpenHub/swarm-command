@@ -2,7 +2,7 @@ swarm_command:
   default_scale: "ss-100"
   scales:
     ss-50:
-      commanders: 3
+      commanders: 3  # max; runtime selects 2-3 most relevant domains
       workers_per_commander: 15  # No squad leads — commanders spawn workers directly
       max_depth: 2               # Nexus[0] → Commander[1] → Worker[2]
       reviewers: 3

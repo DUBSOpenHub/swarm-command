@@ -246,7 +246,7 @@ For maximum insight diversity, models from different families are paired within 
 | Squad Lead | claude-haiku-4.5 | gpt-5.4-mini | Keep fan-out cheap while mixing reasoning styles |
 | Scout Worker | claude-haiku-4.5 | gpt-5.4-mini, gpt-5-mini, gpt-4.1 | Increase search and interpretation diversity |
 | Executor Worker | gpt-5.3-codex | gpt-5.2-codex | Prefer code execution specialists for build/test |
-| Reviewer | 7 cross-family pairs | — | Final scoring should not be self-referential |
+| Reviewer | 8 cross-family pairs | — | Final scoring should not be self-referential |
 
 ---
 

@@ -551,10 +551,10 @@ See [docs/scaling.md](docs/scaling.md) for full scaling configuration and cost e
 | Role | Models |
 |---|---|
 | **Nexus** | claude-opus-4.6 |
-| **Commanders** (pool: 9) | claude-opus-4.6, claude-opus-4.5, claude-opus-4.6-1m, claude-sonnet-4.6, claude-sonnet-4.5, claude-sonnet-4, gpt-5.4, gpt-5.2, gpt-5.1 |
-| **Squad Leads** | claude-haiku-4.5, gpt-5.4-mini |
+| **Commanders** (pool: 10) | claude-opus-4.6, claude-opus-4.5, claude-opus-4.6-1m, claude-sonnet-4.6, claude-sonnet-4.5, claude-sonnet-4, gpt-5.4, gpt-5.2, gpt-5.1, goldeneye |
+| **Squad Leads** (SS-250 only) | claude-haiku-4.5, gpt-5.4-mini |
 | **Workers** (pool: 6) | claude-haiku-4.5, gpt-5.4-mini, gpt-5-mini, gpt-4.1, gpt-5.3-codex, gpt-5.2-codex |
-| **Reviewers** (7 pairs) | claude-opus-4.6↔gpt-5.4, claude-opus-4.5↔gpt-5.2, claude-opus-4.6-1m↔gpt-5.1, claude-sonnet-4.6↔gpt-5.3-codex, claude-sonnet-4.5↔gpt-5.2-codex, claude-sonnet-4↔gpt-5.4-mini, claude-haiku-4.5↔gpt-5-mini |
+| **Reviewers** (8 pairs) | claude-opus-4.6↔gpt-5.4, claude-opus-4.5↔gpt-5.2, claude-opus-4.6-1m↔gpt-5.1, claude-sonnet-4.6↔gpt-5.3-codex, claude-sonnet-4.5↔gpt-5.2-codex, claude-sonnet-4↔gpt-5.4-mini, claude-haiku-4.5↔gpt-5-mini, goldeneye↔gpt-4.1 |
 
 ---
 
