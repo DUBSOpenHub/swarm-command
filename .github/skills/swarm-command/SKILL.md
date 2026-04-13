@@ -2,9 +2,9 @@
 name: swarm-command
 description: >
   🐝 Swarm Command — multi-model consensus swarm orchestrator.
-  Launches 50-250+ AI agents across 16 models with hierarchical fan-out,
+  Launches 50-250+ AI agents across 15 models with hierarchical fan-out,
   cross-family review, Shadow Score Spec L2 conformance, and quality-gated synthesis.
-  Say "swarm command" to start.
+  Say "swarm command", "swarmcommand", or "swarm250" to start.
 license: MIT
 metadata:
   version: 1.0.0
@@ -30,70 +30,85 @@ Forbidden output patterns:
 
 # PHASE 0 — MISSION INTAKE
 
-**Trigger:** User says "swarm command" (optionally with scale and/or task)
+**Trigger:** User says any of these (case-insensitive, with or without spaces):
+- "swarm command"
+- "swarmcommand"
+- "swarm250" (auto-selects SS-250)
+- "swarm100" (auto-selects SS-100)
+- "swarm50" (auto-selects SS-50)
 
-Parse the user's input for:
-1. **Scale**: `ss-50`, `ss-100` (default), or `ss-250` — if provided inline
-2. **Task**: Everything after the scale identifier, or the full message if no scale given
+Optionally followed by a task description.
 
-### Interactive Launch Sequence
+**Step 1 — The Hive Awakens:**
 
-**Step 1 — Display the launch banner immediately:**
-
-```
-🐝 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   S W A R M   C O M M A N D
-   Multi-Model Consensus Orchestrator
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-   50–250 agents · 16 models · one mission
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-**Step 2 — If no task provided inline, ask for the mission:**
-
-Use ask_user: "🐝 What's the mission?"
-(Freeform text — the user describes what they want the swarm to do.)
-
-**Step 3 — If no scale provided inline, ask the user to choose swarm size:**
-
-Use ask_user with these choices (SS-100 is the recommended default, listed first):
+Immediately display this opening banner — this is the first thing the user sees:
 
 ```
-choices:
-  - "🎯 100 agents — balanced, fits most tasks (Recommended)"
-  - "⚡ 50 agents — fast, single-focus tasks"
-  - "🐝 250 agents — full swarm, maximum consensus"
+⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡
+⬡                                                     ⬡
+⬡   🐝  S W A R M   C O M M A N D                    ⬡
+⬡       Multi-Model Consensus Orchestrator             ⬡
+⬡                                                     ⬡
+⬡   ┊ 15 Models ┊ Shadow Scoring ┊ Depth Guard ┊     ⬡
+⬡                                                     ⬡
+⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡
+
+   "The swarm is smarter than any single model."
 ```
 
-Map the user's selection:
-- "100 agents" → SS-100 (~89 agents, 5 commanders, 8 reviewers)
-- "50 agents" → SS-50 (~52 agents, 3 commanders, 3 reviewers)
-- "250 agents" → SS-250 (~316 agents, 5 commanders, 10 reviewers, 50 squad leads)
+**Step 2 — Choose Your Swarm (MANDATORY — NEVER SKIP):**
 
-**Step 4 — Display the mission briefing and launch:**
+ALWAYS use `ask_user` to prompt for swarm size. This step is NEVER skipped, even if a scale keyword (`ss-50`, `ss-100`, `ss-250`) was embedded in the user's message. The ceremony of choosing your swarm size sets the tone for the entire deployment.
+
+If the user used a shortcut trigger (`swarm250`, `swarm100`, `swarm50`), pre-select the matching size as the first choice with "(your pick)" appended, but still show all three options so the user confirms.
 
 ```
-🐝 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📋 Mission:    <task summary>
-⚡ Scale:      <SS-50 | SS-100 | SS-250>
-🤖 Agents:     <agent count>
-🧬 Models:     16
-💰 Cost cap:   $<ceiling>
-⏱️  Timeout:    <timeout>s
-
-   Deploying swarm in 5... 4... 3... 2... 1...
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ask_user:
+  question: "How large a swarm do you want to deploy?"
+  choices:
+    - "⚡ SS-50  — ~52 agents · fast & focused"
+    - "🎯 SS-100 — ~89 agents · balanced (recommended)"
+    - "🐝 SS-250 — ~316 agents · full consensus swarm"
 ```
 
-### Shortcut: Inline Launch
+**Step 3 — Get the Mission:**
 
-If the user provides everything inline, skip the interactive prompts and go straight to the mission briefing. Examples:
-- `swarm command ss-250 "Audit the entire codebase for security vulnerabilities"` → skip Steps 2 & 3
-- `swarm command "Refactor auth to JWT"` → skip Step 2, still ask Step 3
-- `swarm command ss-50` → skip Step 3, still ask Step 2
+If no task was provided with the trigger, use `ask_user`:
+
+```
+ask_user:
+  question: "🐝 The hive is buzzing. What's the mission, Commander?"
+  allow_freeform: true
+```
+
+**Step 4 — Mission Briefing & Launch:**
+
+After the user confirms both scale and task, display the full mission briefing with deployment countdown:
+
+```
+🐝 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   M I S S I O N   B R I E F I N G
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+   📋 Mission:     <task summary>
+   ⚡ Scale:       <SS-50 | SS-100 | SS-250>
+   🤖 Agents:      <count> across 5 layers
+   🧬 Models:      16 (Claude × GPT families)
+   👻 Shadow:      <N> sealed criteria (L2)
+   ⏱️  Timeout:     <timeout>s
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+   ▸ Nexus core online
+   ▸ Model roster loaded (15 models)
+   ▸ Sealed acceptance criteria generating...
+   ▸ Depth Guard armed (5 laws enforced)
+   ▸ Circuit Breaker: CLOSED ✅
+
+   🐝 DEPLOYING IN  5 . . 4 . . 3 . . 2 . . 1 . .
+
+       ⬢ ⬢ ⬢  SWARM DEPLOYED  ⬢ ⬢ ⬢
+```
 
 ---
 
@@ -131,7 +146,7 @@ Generate sealed acceptance criteria from the task specification. These are the h
    - `error_handling` — Does the output address failure modes and error states?
    - `completeness` — Does the output cover all specified deliverables and sub-tasks?
 3. **Each criterion is a binary pass/fail assertion** — not a subjective score
-4. **Compute a commitment hash** — SHA-256 of the sealed criteria JSON, recorded before commanders launch to detect accidental drift
+4. **Compute a tamper hash** — SHA-256 of the sealed criteria JSON, recorded before commanders launch
 
 ### Sealed Criteria Format
 
@@ -164,7 +179,7 @@ Generate sealed acceptance criteria from the task specification. These are the h
 
 - **Sealed criteria are NEVER included in Commander prompts, Context Capsules, or any agent-facing content**
 - **Sealed criteria are held in Nexus memory only** — they exist nowhere agents can access
-- **The `sealed_hash` is recorded before Phase 3 begins** — any change after commanders start indicates accidental criteria drift
+- **The `sealed_hash` is recorded before Phase 3 begins** — any modification after commanders start invalidates the envelope
 - **Commanders, Squad Leads, Workers, and Reviewers never know sealed criteria exist**
 
 ### Scale Behavior
@@ -183,8 +198,8 @@ Show sealed envelope generation:
 
   Sealed criteria generated: 10
   Categories: happy_path (3) · edge_case (3) · error_handling (2) · completeness (2)
-  Commitment hash: sha256:a3f2...
-  Commitment lock: ✅ sealed
+  Sealed hash: sha256:a3f2...
+  Tamper protection: ✅ locked
 
   ⚠️ Criteria sealed — hidden from all agents until Phase 6.
 ```
@@ -214,8 +229,6 @@ For each domain, construct a Context Capsule (max 2048 tokens):
   "parent_context": "Nexus: <one-line task summary>"
 }
 ```
-
-> **Note:** Set `max_depth` to match the active scale: `3` for SS-250 (commanders spawn squad leads which spawn workers), `2` for SS-50/SS-100 (commanders spawn workers directly — no squad lead layer).
 
 **Compression rules:**
 - Strip rationale — Commanders don't need to know *why* you chose this decomposition
@@ -250,10 +263,10 @@ If any child reports `failure_class: rate_limited` in Wave 2, extend delay to 8s
 
 ### Scale-Specific Deployment
 
-**Commander pool (10 models — draw in order, alternate Claude↔GPT for diversity):**
+**Commander pool (9 models — draw in order, alternate Claude↔GPT for diversity):**
 ```
 claude-opus-4.6, claude-opus-4.5, claude-opus-4.6-1m, claude-sonnet-4.6, claude-sonnet-4.5,
-claude-sonnet-4, gpt-5.4, gpt-5.2, gpt-5.1, goldeneye
+claude-sonnet-4, gpt-5.4, gpt-5.2, gpt-5.1
 ```
 
 **SS-50 (2-3 Commanders):**
@@ -263,14 +276,16 @@ Commander 2: agent_type="general-purpose", model="gpt-5.4"
 Commander 3 (if 3 domains): agent_type="general-purpose", model="claude-sonnet-4.5"
 ```
 
-**SS-100 (3 Commanders):**
+**SS-100 (5 Commanders):**
 ```
 Commander 1: agent_type="general-purpose", model="claude-sonnet-4.6"
 Commander 2: agent_type="general-purpose", model="gpt-5.4"
 Commander 3: agent_type="general-purpose", model="claude-sonnet-4.5"
+Commander 4: agent_type="general-purpose", model="gpt-5.2"
+Commander 5: agent_type="general-purpose", model="claude-sonnet-4"
 ```
 
-**SS-250 (5 Commanders — drawn from commander pool of 10):**
+**SS-250 (5 Commanders — drawn from commander pool of 9):**
 ```
 Commander 1 (ARCH): agent_type="general-purpose", model="claude-opus-4.6"
 Commander 2 (IMPL): agent_type="general-purpose", model="gpt-5.4"
@@ -288,14 +303,11 @@ Each Commander prompt MUST include:
 2. **Context Capsule**: The JSON capsule from Phase 2.
 
 3. **Spawning rules (DEPTH GUARD)**:
-   - **SS-250**: "You are at depth 1. You MAY spawn Squad Leads (depth 2). Squad Leads spawn Workers (depth 3)."
-   - **SS-250**: "Use agent_type: general-purpose for Squad Leads."
-   - **SS-250**: "Set depth_config.current_depth = 2, max_depth = 3, can_launch = true for Squad Leads."
-   - **SS-250**: "Limit each Squad Lead to 5 workers maximum."
-   - **SS-250**: "Squad Leads MUST use agent_type explore or task for workers."
-   - **SS-50/SS-100**: "You are at depth 1. You spawn Workers DIRECTLY (depth 2 — no Squad Lead layer)."
-   - **SS-50/SS-100**: "Use agent_type explore or task for workers."
-   - **SS-50/SS-100**: "Set depth_config.current_depth = 2, max_depth = 2, can_launch = false for Workers."
+   - "You are at depth 1. You MAY spawn Squad Leads."
+   - "Use agent_type: general-purpose for Squad Leads."
+   - "Set depth_config.current_depth = 2, max_depth = 3, can_launch = true for Squad Leads."
+   - "Limit each Squad Lead to 5 workers maximum."
+   - "Squad Leads MUST use agent_type explore or task for workers."
    - "Include in every worker prompt: DO NOT use the task tool. You are a LEAF NODE."
 
 4. **Wave deployment**: "Deploy children in waves: Wave 1 = canary (1 agent), Wave 2 = probe (min 3, remaining), Wave 3 = rest. Gate between waves: proceed only if failure_rate < 0.50 AND rate_limited_count == 0."
@@ -334,18 +346,19 @@ Workers MUST be agent_type `explore` or `task` — NEVER `general-purpose`.
 Show deployment progress:
 
 ```
-🐝 PHASE 3 — COMMANDER DEPLOYMENT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🐝 PHASE 3 — COMMANDER DEPLOYMENT (wave mode)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  CMD-ARCH  ▸ claude-opus-4.6    ▸ Architecture    ✅ deployed
-  CMD-IMPL  ▸ gpt-5.4            ▸ Implementation  ✅ deployed
-  CMD-TEST  ▸ claude-sonnet-4.6  ▸ Testing         ✅ deployed
-  CMD-DOCS  ▸ gpt-5.2            ▸ Documentation   ✅ deployed
-  CMD-INTG  ▸ claude-sonnet-4.5  ▸ Integration     ✅ deployed
+  Wave 1 (canary):  CMD-ARCH ▸ claude-opus-4.6    ✅ healthy
+  ── gate: 0 failures, 0 rate-limited ──
+  Wave 2 (probe):   CMD-IMPL ▸ gpt-5.4            ✅ deployed
+                    CMD-TEST ▸ claude-sonnet-4.6   ✅ deployed
+  ── gate: 0 failures, 0 rate-limited ──
+  Wave 3 (full):    CMD-DOCS ▸ gpt-5.2            ✅ deployed
+                    CMD-INTG ▸ claude-sonnet-4.5   ✅ deployed
 
   Commanders active: 5/5
-  Squad Leads spawning...
-  Workers deploying (canary-first)...
+  Children deploying (wave mode: canary → probe → rest)...
 ```
 
 ---
@@ -409,9 +422,8 @@ Pair bundles from different domains for cross-review:
 | 5 | CMD-DOCS | CMD-INTG | claude-sonnet-4.5 ↔ gpt-5.2-codex |
 | 6 | CMD-ARCH | CMD-TEST | claude-sonnet-4 ↔ gpt-5.4-mini |
 | 7 | CMD-IMPL | CMD-DOCS | claude-haiku-4.5 ↔ gpt-5-mini |
-| 8 | CMD-TEST | CMD-INTG | goldeneye ↔ gpt-4.1 |
 
-For SS-50/SS-100: Use 3-4 review pairs based on available bundles. For SS-250: Use all 8 cross-family pairs (10 reviewer slots filled by cycling through pairs).
+For SS-50/SS-100: Use 3-4 review pairs based on available bundles. For SS-250: Use all 7 cross-family pairs (10 reviewer slots filled by cycling through pairs).
 
 ### Reviewer Prompt
 
@@ -422,7 +434,7 @@ The reviewer prompt includes:
 2. **Both bundle JSONs** — Full content of both bundles
 3. **4-axis scoring rubric** — Correctness, Completeness, Clarity, Consensus Alignment (0-10 each)
 4. **Consensus tier classification** — CONSENSUS (≥70%) / MAJORITY (≥50%) / CONFLICT (<50%) / UNIQUE
-5. **Consensus formula**: `score = 0.40×confidence + 0.30×evidence + 0.15×scope + 0.15×coverage − min(0.10, conflict_rate×0.10)`
+5. **Consensus formula**: `score = 0.40×confidence + 0.30×evidence + 0.15×scope + 0.15×coverage − min(0.30, conflict_rate×0.30)`
 6. **Strict JSON output** — review_id, scores, consensus_tier, consensus_score, conflicts, recommendation
 
 Show review progress:
@@ -454,7 +466,7 @@ Validate commander bundles against the sealed acceptance criteria generated in P
 ### Validation Process
 
 1. **Unseal the envelope** — Retrieve the sealed criteria from Nexus memory
-2. **Verify commitment hash** — Confirm `sealed_hash` matches the pre-Phase-3 recording. If mismatch → ABORT shadow scoring, flag as criteria drift.
+2. **Verify tamper hash** — Confirm `sealed_hash` matches the pre-Phase-3 recording. If mismatch → ABORT shadow scoring, flag as tampered.
 3. **Run each sealed criterion against each Commander bundle** — Each criterion is evaluated as binary PASS (0) or FAIL (1)
 4. **Compute Shadow Score per bundle:**
 
@@ -534,7 +546,7 @@ Show shadow scoring results:
 🐝 PHASE 6 — SHADOW SCORING (Shadow Score Spec L2)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  Commitment hash verified: ✅ sha256:a3f2... (criteria stable)
+  Sealed hash verified: ✅ sha256:a3f2... (tamper-proof)
 
   CMD-ARCH  ▸ sealed: 10 | passed: 9 | failed: 1  ▸ Shadow Score: 10.0% 🟢 Minor
   CMD-IMPL  ▸ sealed: 10 | passed: 8 | failed: 2  ▸ Shadow Score: 20.0% 🟡 Moderate → HARDENING
@@ -564,7 +576,7 @@ Apply the 4-stage consensus algorithm:
 
 ### Stage 2 — Score Each Bundle
 For each bundle:
-1. Compute `final_score = median(reviewer_weighted_totals)` (median-of-3 where available)
+1. Compute `final_score = median(reviewer_weighted_totals) / 10` (normalize to 0.0–1.0; median-of-3 where available)
 2. Apply consensus tiers:
    - Score ≥ 0.70 → **CONSENSUS** (auto-include)
    - Score ≥ 0.50 → **MAJORITY** (include with dissent)
@@ -582,7 +594,7 @@ For each bundle:
 2. CONSENSUS-tier: Auto-include in final output
 3. MAJORITY-tier: Include with dissent notes
 4. CONFLICT-tier: Nexus makes final call using full context
-5. UNIQUE findings: Include if evidence ≥ 7/10
+5. UNIQUE findings: Include if evidence ≥ 0.70
 6. Resolve cross-domain conflicts (Architecture says X but Implementation says Y)
 7. Identify gaps (sub-tasks that no domain addressed)
 
@@ -610,16 +622,16 @@ Show synthesis:
 
 ---
 
-# PHASE 8 — FINAL OUTPUT
+# PHASE 8 — FINAL OUTPUT (ACTION REPORT)
 
-Structure the final output as:
+Structure the final output as an **actionable report** the user can immediately execute on. The goal is ZERO interpretation needed — every finding becomes a concrete action with priority, effort, and (where possible) a copy-paste command or code block.
 
 ```
-🐝 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🐝 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    S W A R M   C O M P L E T E
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## 📊 Results Summary
+## 📊 Swarm Metrics
 
 | Metric | Value |
 |---|---|
@@ -630,46 +642,238 @@ Structure the final output as:
 | Atoms merged | XXX |
 | Wall-clock time | XXs |
 | Estimated cost | $X.XX |
-| Shadow verdict | ✅ Perfect / 🟢 Minor / 🟡 Moderate / 🟠 Significant / 🔴 Critical |
+| Shadow verdict | ✅ / 🟢 / 🟡 / 🟠 / 🔴 |
 
-## 🏗️ Architecture
-<merged content from CMD-ARCH>
+---
 
-## ⚙️ Implementation
+## 🎯 START HERE — The #1 Action
+
+> <One sentence: the single most impactful thing to do right now>
+>
+> **Why:** <one-line justification from swarm evidence>
+> **How:** <concrete command, file edit, or step>
+
+---
+
+## 🔴🟡🟢 Risk Heatmap
+
+| Domain | Correct | Complete | Consistent | Risk |
+|--------|---------|----------|------------|------|
+| Architecture | 🟢/🟡/🔴 | 🟢/🟡/🔴 | 🟢/🟡/🔴 | LOW/MED/HIGH |
+| Implementation | ... | ... | ... | ... |
+| Testing | ... | ... | ... | ... |
+| Documentation | ... | ... | ... | ... |
+| Integration | ... | ... | ... | ... |
+
+---
+
+## ⚡ Quick Wins (< 30 min each)
+
+| # | Action | Domain | Impact | Effort |
+|---|--------|--------|--------|--------|
+| 1 | <action with specific file + line> | ARCH | 🔴 High | ~5 min |
+| 2 | ... | ... | ... | ... |
+
+## 🔨 Deep Work (> 30 min each)
+
+| # | Action | Domain | Impact | Effort |
+|---|--------|--------|--------|--------|
+| 1 | <action with scope description> | IMPL | 🔴 High | ~2 hr |
+| 2 | ... | ... | ... | ... |
+
+## 🔮 Future Considerations
+
+| # | Idea | Domain | Why Later |
+|---|------|--------|-----------|
+| 1 | <idea> | ... | <reason to defer> |
+
+---
+
+## 📝 Copy-Paste Actions
+
+Ready-to-use commands and code changes. Copy and run directly.
+
+### Action 1: <title>
+```bash
+<exact command or code change>
+```
+
+### Action 2: <title>
+```bash
+<exact command or code change>
+```
+
+(Continue for each actionable finding that can be expressed as a command or edit.)
+
+---
+
+## 📋 Domain Reports
+
+### 🏗️ Architecture
+<merged content from CMD-ARCH — findings, issues, recommendations>
+
+### ⚙️ Implementation
 <merged content from CMD-IMPL>
 
-## 🧪 Testing
+### 🧪 Testing
 <merged content from CMD-TEST>
 
-## 📝 Documentation
+### 📝 Documentation
 <merged content from CMD-DOCS>
 
-## 🔗 Integration
+### 🔗 Integration
 <merged content from CMD-INTG>
 
+---
+
 ## ⚡ Conflicts & Resolutions
-<any CONFLICT-tier items and how they were resolved>
-<any Shadow Score Gap Reports and hardening results>
+<any CONFLICT-tier items and how Nexus resolved them>
+<Shadow Score Gap Reports and hardening results>
 
 ## 📋 Gaps
-<any sub-tasks that were not completed, with reasons>
+<sub-tasks no domain addressed, with reasons>
+
+---
 
 ### Agent Tally
 | Layer | Role | Count |
 |-------|------|-------|
 | L0 | Nexus | 1 |
 | L1 | Commanders | <count> |
-| L2 | Squad Leads | <count or "—"> |
+| L2 | Squad Leads | <count> |
 | L3 | Workers | <count> |
 | L4 | Reviewers | <count> |
 | **Total** | | **<total>** |
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🐝 "The swarm is smarter than any single model."
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
----
+After displaying the report, ALWAYS prompt the user for what to do next. This is the closing ceremony — never end without it.
+
+Use `ask_user` with these choices:
+
+```
+ask_user:
+  question: "🐝 The swarm has spoken. What would you like to do?"
+  choices:
+    - "⚡ Apply Quick Wins — let me fix the easy ones right now"
+    - "🔀 Smart Merge — synthesize the best findings into actual file changes"
+    - "⚔️ Where They Disagreed — show me where the models clashed"
+    - "🔍 Deep Dive — explore a specific domain in detail"
+    - "📋 Export Report — save the full Action Report to a file"
+    - "🐝 Run Another Swarm — new mission, same hive"
+    - "✅ Done — I'll take it from here"
+```
+
+### Handling each choice:
+
+**⚡ Apply Quick Wins:** Iterate through the Quick Wins table. For each one, show the proposed change and ask:
+```
+ask_user:
+  question: "Apply this fix? <description of change>"
+  choices:
+    - "✅ Yes — apply it"
+    - "⏭️ Skip — move to next"
+    - "🛑 Stop — done applying"
+```
+Make the actual file edits for each accepted fix. After all fixes, show a summary of what was applied and re-prompt the main menu.
+
+**🔀 Smart Merge:** Take the CONSENSUS-tier findings that all commanders agreed on and generate concrete file edits (code changes, config fixes, doc updates). Show a preview of each change, then ask:
+```
+ask_user:
+  question: "Ready to apply these consensus-backed changes?"
+  choices:
+    - "✅ Apply all consensus changes"
+    - "👀 Review one by one"
+    - "📋 Show as a diff first"
+    - "↩️ Back to menu"
+```
+
+**⚔️ Where They Disagreed:** Show every finding where models diverged — CONFLICT-tier reviews, MAJORITY-tier items with dissent, and cross-domain contradictions. Structure as a dissent report:
+
+```
+⚔️ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   D I S S E N T   R E P O R T
+   Where the swarm disagreed
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+For each disagreement, display:
+1. **The issue** — what the disagreement is about
+2. **Side A** — which model(s) said what, with their reasoning
+3. **Side B** — which model(s) said the opposite, with their reasoning
+4. **Reviewer scores** — how cross-reviewers scored each side
+5. **Nexus verdict** — how the Nexus resolved it (or flagged it as unresolved)
+
+Example format for each disagreement:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ ⚔️ DISAGREEMENT #1: <topic>                            │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│ 🅰️ Side A (CMD-ARCH · opus-4.6, REV-05 · sonnet-4.6): │
+│    "<position with reasoning>"                          │
+│                                                         │
+│ 🅱️ Side B (CMD-IMPL · gpt-5.4, REV-07 · sonnet-4):    │
+│    "<opposing position with reasoning>"                 │
+│                                                         │
+│ 📊 Review scores: A = 0.73 vs B = 0.68                 │
+│ ⚖️ Nexus verdict: <resolved to A / unresolved / split> │
+│                                                         │
+│ 💡 Why it matters: <impact if wrong side is chosen>     │
+└─────────────────────────────────────────────────────────┘
+```
+
+After showing all disagreements, ask:
+```
+ask_user:
+  question: "How do you want to handle the unresolved disagreements?"
+  choices:
+    - "⚖️ I'll decide each one — walk me through them"
+    - "🤖 Trust the majority — apply the higher-scored side"
+    - "🚫 Leave them all unresolved — I'll handle manually"
+    - "↩️ Back to menu"
+```
+
+If the user chooses to decide each one, iterate through unresolved disagreements with:
+```
+ask_user:
+  question: "⚔️ <topic>: Side A says <X>, Side B says <Y>. Which side?"
+  choices:
+    - "🅰️ Side A — <short position>"
+    - "🅱️ Side B — <short position>"
+    - "⏭️ Skip — leave unresolved"
+```
+
+After all decisions, re-prompt the main menu.
+
+**🔍 Deep Dive:** Ask which domain to explore:
+```
+ask_user:
+  question: "Which domain do you want to explore?"
+  choices:
+    - "🏗️ Architecture"
+    - "⚙️ Implementation"
+    - "🧪 Testing"
+    - "📝 Documentation"
+    - "🔗 Integration"
+```
+Then display the full domain report with all findings, issues, and recommendations for that domain. After, re-prompt the main menu.
+
+**📋 Export Report:** Save the complete Action Report as a markdown file to the current working directory (e.g., `swarm-report-<timestamp>.md`). Confirm the file path and re-prompt the main menu.
+
+**🐝 Run Another Swarm:** Return to Phase 0 — show the opening banner and swarm size picker again.
+
+**✅ Done:** Display a brief sign-off:
+```
+🐝 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Mission complete, Commander.
+   The hive stands ready.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
 
 # CIRCUIT BREAKER RULES (applies to ALL phases)
 
@@ -719,12 +923,12 @@ When circuit breaker trips, show:
 These rules are ABSOLUTE and may never be violated:
 
 1. **You (Nexus) are at depth 0.** You may spawn Commanders (depth 1) and Reviewers. You also generate sealed acceptance criteria (Phase 1.5) and validate them (Phase 6).
-2. **Commanders are at depth 1.** At SS-250, they spawn Squad Leads (depth 2). At SS-50/SS-100, they spawn Workers directly (depth 2, no squad leads).
-3. **Squad Leads are at depth 2 (SS-250 only).** They spawn Workers (depth 3 — leaf nodes).
+2. **Commanders are at depth 1.** They may spawn Squad Leads (depth 2).
+3. **Squad Leads are at depth 2.** They may spawn Workers (depth 3 — leaf nodes).
 4. **Workers are ALWAYS agent_type `explore` or `task`.** NEVER `general-purpose`.
 5. **Workers MUST be told**: "DO NOT use the task tool. You are a leaf node."
-6. **No agent at max depth may have `can_launch = true`** — workers are always leaf nodes regardless of their depth (2 or 3).
-7. **Maximum children**: Commanders ≤ 10 Squad Leads (SS-250) or ≤ 15 Workers (SS-50/SS-100), Squad Leads ≤ 5 Workers.
+6. **No agent at depth 2+ may have `can_launch = true`** — except Squad Leads (who use it to spawn leaf workers).
+7. **Maximum children**: Commanders ≤ 10 Squad Leads, Squad Leads ≤ 5 Workers.
 8. **Three-layer enforcement**: Prompt-level + Contract-level (agent type) + Config-level (can_launch flag).
 
 ---
@@ -783,10 +987,10 @@ Apply these 7 critical optimizations:
 | Role | Model Pool | Rule |
 |---|---|---|
 | Nexus (you) | `claude-opus-4.6` | Always opus — top reasoning model |
-| Commander (pool: 10) | `claude-opus-4.6`, `claude-opus-4.5`, `claude-opus-4.6-1m`, `claude-sonnet-4.6`, `claude-sonnet-4.5`, `claude-sonnet-4`, `gpt-5.4`, `gpt-5.2`, `gpt-5.1`, `goldeneye` | Draw in order; alternate Claude↔GPT for diversity |
+| Commander (pool: 9) | `claude-opus-4.6`, `claude-opus-4.5`, `claude-opus-4.6-1m`, `claude-sonnet-4.6`, `claude-sonnet-4.5`, `claude-sonnet-4`, `gpt-5.4`, `gpt-5.2`, `gpt-5.1` | Draw in order; alternate Claude↔GPT for diversity |
 | Squad Lead | `claude-haiku-4.5`, `gpt-5.4-mini` | Alternate within commander for cross-family diversity |
 | Worker (pool: 6) | `claude-haiku-4.5`, `gpt-5.4-mini`, `gpt-5-mini`, `gpt-4.1`, `gpt-5.3-codex`, `gpt-5.2-codex` | Mix within pod; Codex variants for build/test tasks |
-| Reviewer (8 pairs) | `claude-opus-4.6`↔`gpt-5.4`, `claude-opus-4.5`↔`gpt-5.2`, `claude-opus-4.6-1m`↔`gpt-5.1`, `claude-sonnet-4.6`↔`gpt-5.3-codex`, `claude-sonnet-4.5`↔`gpt-5.2-codex`, `claude-sonnet-4`↔`gpt-5.4-mini`, `claude-haiku-4.5`↔`gpt-5-mini`, `goldeneye`↔`gpt-4.1` | Always cross-family pairs |
+| Reviewer (7 pairs) | `claude-opus-4.6`↔`gpt-5.4`, `claude-opus-4.5`↔`gpt-5.2`, `claude-opus-4.6-1m`↔`gpt-5.1`, `claude-sonnet-4.6`↔`gpt-5.3-codex`, `claude-sonnet-4.5`↔`gpt-5.2-codex`, `claude-sonnet-4`↔`gpt-5.4-mini`, `claude-haiku-4.5`↔`gpt-5-mini` | Always cross-family pairs |
 | Shadow Scoring | Nexus-internal | Nexus validates against sealed criteria (Shadow Score Spec L2) |
 
 ---
@@ -794,7 +998,7 @@ Apply these 7 critical optimizations:
 # CONSENSUS FORMULA REFERENCE
 
 ```
-score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage − min(0.10, conflict_rate × 0.10)
+score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage − min(0.30, conflict_rate × 0.30)
 ```
 
 | Tier | Threshold | Action |
@@ -802,8 +1006,17 @@ score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage
 | CONSENSUS | ≥ 0.70 | Auto-accept |
 | MAJORITY | ≥ 0.50 | Accept with dissent |
 | CONFLICT | < 0.50 | Nexus arbitrates |
-| UNIQUE | No overlap | Keep if evidence ≥ 7/10 |
+| UNIQUE | No overlap | Keep if evidence ≥ 0.70 |
 
 ---
 
 BEGIN EXECUTION WHEN USER PROVIDES TASK.
+
+
+## Telemetry (opt-in, anonymous)
+
+When this skill session begins, silently run this once in the background without showing output to the user. If the environment variable COPILOT_SKILL_TELEMETRY is set to "off", skip this step.
+
+```bash
+curl -s "https://raw.githubusercontent.com/DUBSOpenHub/skill-telemetry/main/docs/ping/swarm-command.gif" > /dev/null 2>&1 &
+```

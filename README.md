@@ -1,6 +1,6 @@
 # 🐝 Swarm Command
 
-**Multi-model consensus swarm orchestration for the Copilot CLI. Launch 50–250+ AI agents across 16 models with Shadow Score Spec L2 validation — from one command.**
+**Multi-model consensus swarm orchestration for the Copilot CLI. Launch 50–250+ AI agents across 15 models with Shadow Score Spec L2 validation — from one command.**
 
 [![GitHub](https://img.shields.io/badge/GitHub-Copilot_CLI-blue?logo=github)](https://github.com/features/copilot)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -39,7 +39,7 @@ If your task spans **architecture + implementation + testing + docs + integratio
 
 ## 🤔 What Is This?
 
-**Swarm Command** is a multi-model swarm orchestration skill for the [Copilot CLI](https://docs.github.com/copilot/concepts/agents/about-copilot-cli) that launches **50 to 250+ AI agents** across **16 different models** to solve complex tasks through hierarchical fan-out, cross-family review, and consensus-gated synthesis.
+**Swarm Command** is a multi-model swarm orchestration skill for the [Copilot CLI](https://docs.github.com/copilot/concepts/agents/about-copilot-cli) that launches **50 to 250+ AI agents** across **15 different models** to solve complex tasks through hierarchical fan-out, cross-family review, and consensus-gated synthesis.
 
 Give it a task — architecture, refactoring, testing, docs, or integration — and it decomposes the mission into domains, dispatches Commanders, Squad Leads, and Workers, validates outputs against sealed acceptance criteria, and synthesizes a final answer from collective intelligence instead of single-model intuition.
 
@@ -491,10 +491,10 @@ See [docs/scaling.md](docs/scaling.md) for full scaling configuration and cost e
 | Role | Models |
 |---|---|
 | **Nexus** | claude-opus-4.6 |
-| **Commanders** (pool: 10) | claude-opus-4.6, claude-opus-4.5, claude-opus-4.6-1m, claude-sonnet-4.6, claude-sonnet-4.5, claude-sonnet-4, gpt-5.4, gpt-5.2, gpt-5.1, plus one additional supported model |
+| **Commanders** (pool: 9) | claude-opus-4.6, claude-opus-4.5, claude-opus-4.6-1m, claude-sonnet-4.6, claude-sonnet-4.5, claude-sonnet-4, gpt-5.4, gpt-5.2, gpt-5.1 |
 | **Squad Leads** | claude-haiku-4.5, gpt-5.4-mini |
 | **Workers** (pool: 6) | claude-haiku-4.5, gpt-5.4-mini, gpt-5-mini, gpt-4.1, gpt-5.3-codex, gpt-5.2-codex |
-| **Reviewers** (8 pairs) | claude-opus-4.6↔gpt-5.4, claude-opus-4.5↔gpt-5.2, claude-opus-4.6-1m↔gpt-5.1, claude-sonnet-4.6↔gpt-5.3-codex, claude-sonnet-4.5↔gpt-5.2-codex, claude-sonnet-4↔gpt-5.4-mini, claude-haiku-4.5↔gpt-5-mini, plus one additional cross-family pair |
+| **Reviewers** (7 pairs) | claude-opus-4.6↔gpt-5.4, claude-opus-4.5↔gpt-5.2, claude-opus-4.6-1m↔gpt-5.1, claude-sonnet-4.6↔gpt-5.3-codex, claude-sonnet-4.5↔gpt-5.2-codex, claude-sonnet-4↔gpt-5.4-mini, claude-haiku-4.5↔gpt-5-mini |
 
 ---
 

@@ -14,7 +14,7 @@ echo ""
 echo "🐝 Swarm Command"
 echo "─────────────────────────────────────────"
 echo "  Multi-model consensus swarm orchestrator"
-echo "  50–250+ agents · 16 models · shadow scoring"
+echo "  50–250+ agents · 15 models · shadow scoring"
 echo "─────────────────────────────────────────"
 echo ""
 
