@@ -44,10 +44,10 @@ jobs:
           for i, block in enumerate(blocks, 1):
               try:
                   json.loads(block)
-                   print(f'✅ JSON block {i} valid')
-               except json.JSONDecodeError as e:
-                   print(f'⚠️  JSON block {i} skipped (contains placeholders): {e}')
-           "
+                  print(f'✅ JSON block {i} valid')
+              except json.JSONDecodeError as e:
+                  print(f'⚠️  JSON block {i} skipped (contains placeholders): {e}')
+          "
 
       - name: Validate scale totals across markdown
         run: |
@@ -63,7 +63,12 @@ jobs:
               scale.upper(): int(re.search(r"\d+", str(values["total"])).group())
               for scale, values in scales.items()
           }
+          # Also accept range end values (e.g., 52 from "~36-52")
           expected_values = set(expected.values())
+          for scale, values in scales.items():
+              all_nums = re.findall(r"\d+", str(values["total"]))
+              for n in all_nums:
+                  expected_values.add(int(n))
           md_files = sorted(Path(".").rglob("*.md"))
           issues = []
           hits = []
@@ -73,17 +78,17 @@ jobs:
               scale: re.compile(
                   rf"(?ix)\b{re.escape(scale)}\b[^\n]{{0,80}}?"
                   r"(?:"
-                  r"\(\s*([~≈]?\s*\d{1,4})\s*agents?\b[^\n)]*\)"
+                  r"\(\s*([~≈]?\s*\d{1,4}(?:-\d{1,4})?)\s*agents?\b[^\n)]*\)"
                   r"|"
-                  r"\|\s*([~≈]\s*\d{1,4})\s*\|"
+                  r"\|\s*([~≈]\s*\d{1,4}(?:-\d{1,4})?)\s*\|"
                   r"|"
-                  r"([~≈]\s*\d{1,4})\s+agents\b"
+                  r"([~≈]\s*\d{1,4}(?:-\d{1,4})?)\s+agents\b"
                   r")"
               )
               for scale in expected
           }
-          approx_agents_pattern = re.compile(r"(?i)(?:~|≈)\s*(\d{1,4})\s+agents\b")
-          total_agents_pattern = re.compile(r"(?i)\btotal\b[^\n]{0,20}?([~≈]?\s*\d{1,4})\s+agents\b")
+          approx_agents_pattern = re.compile(r"(?i)(?:~|≈)\s*(\d{1,4}(?:-\d{1,4})?)\s+agents\b")
+          total_agents_pattern = re.compile(r"(?i)\btotal\b[^\n]{0,20}?([~≈]?\s*\d{1,4}(?:-\d{1,4})?)\s+agents\b")
 
           for path in md_files:
               for line_number, line in enumerate(path.read_text().splitlines(), 1):

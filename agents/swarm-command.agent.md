@@ -60,7 +60,7 @@ choices:
 📋 Mission:    <task summary>
 ⚡ Scale:      <SS-50 | SS-100 | SS-250>
 🤖 Agents:     <agent count>
-🧬 Models:     16
+🧬 Models:     15
 💰 Cost cap:   $<ceiling>
 ⏱️  Timeout:    <timeout>s
 
@@ -105,7 +105,9 @@ Build Context Capsules (max 2048 tokens each) with:
 
 Launch Commanders in PARALLEL using the `task` tool:
 - `agent_type: "general-purpose"`
-- Models: Alternate between Claude and GPT families for diversity
+- **Commander pool (9 models):** claude-opus-4.6, claude-opus-4.5, claude-opus-4.6-1m, claude-sonnet-4.6, claude-sonnet-4.5, claude-sonnet-4, gpt-5.4, gpt-5.2, gpt-5.1
+- **Worker pool (6 models):** claude-haiku-4.5, gpt-5.4-mini, gpt-5-mini, gpt-4.1, gpt-5.3-codex, gpt-5.2-codex
+- Alternate between Claude and GPT families for diversity
 - Each Commander prompt includes:
   - Context Capsule
   - Spawning rules with Depth Guard
@@ -113,10 +115,12 @@ Launch Commanders in PARALLEL using the `task` tool:
   - Strict JSON Bundle output schema
 
 Each Commander will:
-1. Decompose its domain into sub-tasks (one per Squad Lead)
+1. Decompose its domain into sub-tasks
 2. Deploy canary worker first
-3. If canary passes, deploy remaining Squad Leads in parallel
-4. Each Squad Lead spawns up to 5 Workers (explore/task agents, LEAF NODES)
+3. If canary passes, deploy remaining agents in parallel:
+   - **SS-50/SS-100:** Commander spawns Workers directly. No Squad Lead layer. max_depth=2.
+   - **SS-250:** Commander spawns Squad Leads, who spawn Workers. max_depth=3.
+4. (SS-250 only) Each Squad Lead spawns up to 5 Workers (explore/task agents, LEAF NODES)
 5. Collect and merge all Result Atoms
 6. Return a Bundle JSON to you
 
@@ -134,7 +138,7 @@ As soon as ANY 2 Commanders return, launch cross-reviewers for that pair:
 - DEPTH LOCK in prompt (reviewers don't spawn)
 - 4-axis scoring: Correctness, Completeness, Clarity, Consensus Alignment (0-10 each)
 - Consensus tiers: CONSENSUS (≥70%) / MAJORITY (≥50%) / CONFLICT (<50%)
-- Cross-family model pairs for reviewer diversity
+- **Reviewer pairs (7):** claude-opus-4.6↔gpt-5.4, claude-opus-4.5↔gpt-5.2, claude-opus-4.6-1m↔gpt-5.1, claude-sonnet-4.6↔gpt-5.3-codex, claude-sonnet-4.5↔gpt-5.2-codex, claude-sonnet-4↔gpt-5.4-mini, claude-haiku-4.5↔gpt-5-mini
 
 ## Phase 6 — Shadow Scoring (Shadow Score Spec L2)
 

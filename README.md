@@ -405,6 +405,23 @@ No. Swarm Command runs through your active Copilot subscription. No separate ser
 ### When should I use SS-50, SS-100, or SS-250?
 Use **SS-50** for bounded, fast tasks. Use **SS-100** for most real software work. Use **SS-250** when the task is repo-wide, high-stakes, or needs maximum coverage and consensus.
 
+### Personality Modes
+
+Append a personality mode after the scale to adjust how the swarm operates:
+
+```bash
+swarm command ss-100 thorough "audit auth module"
+swarm command ss-250 fast "quick scan of README"
+```
+
+| Mode | Workers | Timeout | Models | Retry | Best For |
+|---|---|---|---|---|---|
+| `balanced` (default) | 5 per squad | 1.0× | mixed | 1 | Most tasks |
+| `thorough` | 5 per squad | 1.5× | opus/sonnet | 2 | High-stakes, complex analysis |
+| `fast` | 3 per squad | 0.6× | haiku only | 0 | Quick iteration, cost-sensitive |
+| `creative` | 4 per squad | 1.0× | max diversity | 1 | Brainstorming, novel problems |
+| `cautious` | 5 per squad | 1.2× | sonnet | 2 | Ambiguous tasks, high conflict risk |
+
 ### Why mix Claude and GPT models?
 Because diversity helps. Different model families catch different failure modes. Swarm Command intentionally mixes them so agreement means more than self-consistency.
 
@@ -460,9 +477,9 @@ See what a completed swarm run looks like → **[Example Output](docs/example-ou
 - Domains completed: 5/5
 - Consensus tier: CONSENSUS (4) · MAJORITY (1)
 - Overall confidence: 0.77
-- Agents deployed: 123
-- Wall-clock time: 4m 32s
-- Shadow Score: 80% GREEN (10 pass · 3 warn · 2 fail)
+- Agents deployed: 89
+- Wall-clock time: 72s
+- Shadow Score: 20.0% 🟡 Moderate (8 pass · 2 fail)
 ```
 
 ---
@@ -502,7 +519,7 @@ A 4-stage consensus pipeline merges the best work from hundreds of agents:
 
 **Consensus formula:**
 ```text
-score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage − min(0.10, conflict_rate × 0.10)
+score = 0.40 × confidence + 0.30 × evidence + 0.15 × scope + 0.15 × coverage − min(0.30, conflict_rate × 0.30)
 ```
 
 | Tier | Condition | Action |
