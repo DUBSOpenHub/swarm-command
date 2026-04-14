@@ -33,7 +33,7 @@ graph TB
     end
 
     subgraph L4["🔍 L4 — REVIEWERS (10 agents)"]
-        REV["Cross-Review Mesh<br/>5 Claude↔GPT pairs<br/>general-purpose"]
+        REV["Cross-Review Mesh<br/>7 Claude↔GPT pairs<br/>general-purpose"]
     end
 
     subgraph SHADOW["👻 SHADOW SCORING (Nexus-internal, Shadow Score Spec L2)"]

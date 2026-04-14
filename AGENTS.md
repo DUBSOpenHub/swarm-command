@@ -73,7 +73,7 @@ The `templates/` and `protocols/` directories contain **reference documentation*
 - **Consensus threshold**: 70% for auto-accept, 50% for majority, below 50% for Nexus arbitration
 - **Shadow scoring**: [Shadow Score Spec](https://github.com/DUBSOpenHub/shadow-score-spec) L2 — sealed acceptance criteria generated before execution, validated after, hardened on failure
 - **Cost ceiling**: $20 hard cap with automatic kill-switch
-- **Timeout cascade**: 90s → 60s → 40s → 30s per layer (children always finish before parents)
+- **Timeout cascade**: SS-50: 60/40/30s · SS-100: 75/50/35/25s · SS-250: 90/60/40/30s (children always finish before parents)
 
 ## Agent Prompt Rules
 

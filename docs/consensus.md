@@ -267,7 +267,7 @@ Missing: logging, data-validation, API-design, UI-impact, cost, legal (6 not cov
 
 ### Conflict Rate
 
-**Operational Definition**: `conflict_rate` quantifies unresolved disagreement as a fraction of total atoms. In **Stage 2**, the Squad Lead classifies each sub-task group into CONSENSUS, MAJORITY, or CONFLICT. Atoms in the CONFLICT tier (no majority agreement) are tagged with a conflict flag and forwarded unresolved. In **Stage 3**, the Commander counts atoms still carrying the CONFLICT flag after its own trimmed-mean resolution attempt: `conflict_rate = unresolved_conflicts / total_atoms`. Unlike the positive terms, conflict_rate is applied as a **penalty**: `−min(0.10, conflict_rate × 0.10)`. In **Stage 4**, CONFLICT-tier items are escalated to the Nexus for final arbitration, which may re-dispatch to a single reviewer for tiebreaking.
+**Operational Definition**: `conflict_rate` quantifies unresolved disagreement as a fraction of total atoms. In **Stage 2**, the Squad Lead classifies each sub-task group into CONSENSUS, MAJORITY, or CONFLICT. Atoms in the CONFLICT tier (no majority agreement) are tagged with a conflict flag and forwarded unresolved. In **Stage 3**, the Commander counts atoms still carrying the CONFLICT flag after its own trimmed-mean resolution attempt: `conflict_rate = unresolved_conflicts / total_atoms`. Unlike the positive terms, conflict_rate is applied as a **penalty**: `−min(0.30, conflict_rate × 0.30)`. In **Stage 4**, CONFLICT-tier items are escalated to the Nexus for final arbitration, which may re-dispatch to a single reviewer for tiebreaking.
 
 **Input Data**: The CONFLICT flag set during Stage 2 local merge, the count of atoms that remain unresolved after Commander merge, and the total atom count in the Commander's domain.
 
@@ -281,8 +281,8 @@ Commander resolves 1 via trimmed mean, 2 remain unresolved.
 
   conflict_rate = 2 / 15 = 0.133
 
-Penalty = min(0.10, 0.133 × 0.10)
-        = min(0.10, 0.0133)
+Penalty = min(0.30, 0.133 × 0.30)
+        = min(0.30, 0.0399)
         = 0.0133
 
 Score impact: −0.0133 (subtracted from the positive terms)
@@ -290,10 +290,10 @@ Score impact: −0.0133 (subtracted from the positive terms)
 
 **Edge Cases**:
 - **0.0**: Zero unresolved conflicts — all atoms reached CONSENSUS or MAJORITY. No penalty applied. This is the ideal state.
-- **1.0**: Every atom is unresolved (catastrophic disagreement). The penalty is capped: `min(0.10, 1.0 × 0.10) = 0.10`. Even total conflict only subtracts 0.10 from the score.
-- **Cap behavior**: The `min(0.10, …)` cap is critical — it prevents a single domain's conflict from dominating the final score. Even with `conflict_rate = 1.0`, the maximum penalty is 0.10 points.
+- **1.0**: Every atom is unresolved (catastrophic disagreement). The penalty is capped: `min(0.30, 1.0 × 0.30) = 0.30`. Even total conflict only subtracts 0.30 from the score.
+- **Cap behavior**: The `min(0.30, …)` cap is critical — it prevents a single domain's conflict from dominating the final score. Even with `conflict_rate = 1.0`, the maximum penalty is 0.30 points.
 
-**Impact on Final Score**: Penalty capped at **−0.10**. The penalty scales linearly (`conflict_rate × 0.10`) up to the cap. In practice, a conflict_rate above 0.50 (penalty = 0.05) triggers CONFLICT-tier classification (score < 0.50), which escalates the bundle to Nexus arbitration rather than auto-acceptance.
+**Impact on Final Score**: Penalty capped at **−0.30**. The penalty scales linearly (`conflict_rate × 0.30`) up to the cap. In practice, a conflict_rate above 0.50 (penalty = 0.15) triggers CONFLICT-tier classification (score < 0.50), which escalates the bundle to Nexus arbitration rather than auto-acceptance.
 
 ---
 
@@ -350,9 +350,9 @@ conflict_rate = (unresolved conflicts) / (total atoms)
               = 2 / 10
               = 0.20
 
-penalty = min(0.10, conflict_rate × 0.10)
-        = min(0.10, 0.20 × 0.10)
-        = min(0.10, 0.02)
+penalty = min(0.30, conflict_rate × 0.30)
+        = min(0.30, 0.20 × 0.30)
+        = min(0.30, 0.06)
         = 0.02
 ```
 

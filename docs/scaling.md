@@ -55,7 +55,7 @@ Default: **SS-100**. Use `swarm command ss-250` for full deployment or `swarm co
 
 ```text
 L0: 1 Nexus (claude-opus-4.6)
-L1: 2-3 Commanders (commander pool — 10 models)
+L1: 2-3 Commanders (commander pool — 9 models)
 L2: 30-45 Workers (worker pool — 6 models)  — 15 per commander, spawned directly
     3 Reviewers (cross-family pairs, spawned by Nexus)
 ──────────────────────────
@@ -93,7 +93,7 @@ Time:  ~30s wall-clock
 
 ```text
 L0: 1 Nexus (claude-opus-4.6)
-L1: 5 Commanders (commander pool — 10 models)
+L1: 5 Commanders (commander pool — 9 models)
 L2: 75 Workers (worker pool — 6 models)  — 15 per commander, spawned directly
     8 Reviewers (cross-family pairs, spawned by Nexus)
     Shadow Scoring (Nexus-internal, sealed criteria)
@@ -111,7 +111,7 @@ Time:  ~45s wall-clock
 | Domains covered | All 5 |
 | Squad Leads per Commander | — |
 | Workers per Commander | 15 |
-| Reviewers | 8 reviewers (3-4 cross-family review pairs) |
+| Reviewers | 8 reviewers (drawn from 7 cross-family review pairs) |
 | Shadow scoring | 8 sealed criteria, hardening at >15% |
 | Cost ceiling | $10.00 |
 | Timeout cascade | 75/50/35/25s |
@@ -132,7 +132,7 @@ Time:  ~45s wall-clock
 
 ```text
 L0: 1 Nexus (claude-opus-4.6)
-L1: 5 Commanders (commander pool — 10 models)
+L1: 5 Commanders (commander pool — 9 models)
 L2: 50 Squad Leads (claude-haiku-4.5 | gpt-5.4-mini)  — 10 per commander
 L3: 250 Workers (worker pool — 6 models)               — 5 per squad lead
 L4: 10 Reviewers (7 cross-family pairs, cycled to fill 10 slots)

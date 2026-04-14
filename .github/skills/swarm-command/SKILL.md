@@ -241,7 +241,10 @@ For each domain, construct a Context Capsule (max 2048 tokens):
 
 > **Naming**: Swarm Command is the skill name. SwarmSpeed is the internal execution protocol. Templates use SwarmSpeed role titles (e.g., "SwarmSpeed Commander") as the protocol identity agents operate under.
 
-Launch Commanders in PARALLEL using the `task` tool:
+Launch Commanders using the `task` tool:
+
+- **SS-50/SS-100**: Launch all commanders in parallel (small count, no wave needed).
+- **SS-250**: Use wave deployment per `config.yml` — Wave 1: 2 commanders (canary + 1), Wave 2: remaining 3 commanders. Gate between waves: proceed if `failure_rate < 0.50 AND rate_limited_count == 0`.
 
 ### Scale-Specific Deployment
 
@@ -575,6 +578,9 @@ Apply the 4-stage consensus algorithm:
 - Shadow Score Gap Reports (per bundle)
 
 ### Stage 2 — Score Each Bundle
+
+> **Scoring note**: The consensus formula (`0.40×confidence + 0.30×evidence + ...`) defines the *bundle-level* quality metric computed from atom data. Reviewer `weighted_total` scores (mean of Correctness, Completeness, Clarity, Consensus Alignment) provide an independent *cross-domain* quality signal. Phase 7 uses reviewer scores as the primary ranking mechanism, with the consensus formula informing tier classification and conflict detection.
+
 For each bundle:
 1. Compute `final_score = median(reviewer_weighted_totals) / 10` (normalize to 0.0–1.0; median-of-3 where available)
 2. Apply consensus tiers:

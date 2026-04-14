@@ -17,29 +17,42 @@ This document shows a realistic example of what a completed SS-100 swarm run pro
 
 ┌─ MISSION PARAMETERS ────────────────────────────────────────────────────────┐
 │                                                                              │
-│  Configuration:  SS-100 (89 agents, 5 domains, max depth 3)                 │
+│  Configuration:  SS-100 (89 agents, 5 domains, max depth 2)                 │
 │  Session ID:     swarm-2024-04-08-22-34-a7f3                                │
 │  Task:           Refactor the authentication module to use JWT tokens       │
 │  Repository:     ~/projects/webapp-auth                                     │
 │  Branch:         feature/jwt-migration                                      │
 │                                                                              │
 │  Agent Allocation:                                                           │
-│    • Architecture Domain (CMD-ARCH):    20 workers                           │
-│    • Implementation Domain (CMD-IMPL):  25 workers                           │
-│    • Testing Domain (CMD-TEST):         20 workers                           │
-│    • Documentation Domain (CMD-DOCS):   18 workers                           │
-│    • Integration Domain (CMD-INTG):     17 workers                           │
+│    • Architecture Domain (CMD-ARCH):    15 direct workers                    │
+│    • Implementation Domain (CMD-IMPL):  15 direct workers                    │
+│    • Testing Domain (CMD-TEST):         15 direct workers                    │
+│    • Documentation Domain (CMD-DOCS):   15 direct workers                    │
+│    • Integration Domain (CMD-INTG):     15 direct workers                    │
 │                                                                              │
 │  Model Config:                                                               │
-│    • Nexus (L0):           claude-sonnet-4                                   │
-│    • Commanders (L1):      claude-sonnet-4                                   │
-│    • Squad Leads (L2):     claude-haiku-4                                    │
-│    • Workers (L3):         claude-haiku-4                                    │
+│    • Nexus (L0):           claude-opus-4.6                                   │
+│    • Commanders (L1):      commander pool (opus/sonnet/gpt-5.x)              │
+│    • Workers (L2):         worker pool (haiku/gpt-mini/codex)                │
+│    • Reviewers:            8 slots from 7 configured reviewer pairs          │
 │                                                                              │
 └──────────────────────────────────────────────────────────────────────────────┘
 
 ────────────────────────────────────────────────────────────────────────────────
 ```
+
+Configured pools for the current system:
+
+- **Commander pool:** `claude-opus-4.6`, `claude-opus-4.5`, `claude-opus-4.6-1m`, `claude-sonnet-4.6`, `claude-sonnet-4.5`, `claude-sonnet-4`, `gpt-5.4`, `gpt-5.2`, `gpt-5.1`
+- **Worker pool:** `claude-haiku-4.5`, `gpt-5.4-mini`, `gpt-5-mini`, `gpt-4.1`, `gpt-5.3-codex`, `gpt-5.2-codex`
+- **Configured reviewer pairs (7):**
+  1. `claude-opus-4.6` ↔ `gpt-5.4`
+  2. `claude-opus-4.5` ↔ `gpt-5.2`
+  3. `claude-opus-4.6-1m` ↔ `gpt-5.1`
+  4. `claude-sonnet-4.6` ↔ `gpt-5.3-codex`
+  5. `claude-sonnet-4.5` ↔ `gpt-5.2-codex`
+  6. `claude-sonnet-4` ↔ `gpt-5.4-mini`
+  7. `claude-haiku-4.5` ↔ `gpt-5-mini`
 
 ---
 
@@ -47,103 +60,129 @@ This document shows a realistic example of what a completed SS-100 swarm run pro
 
 ```
 ═══════════════════════════════════════════════════════════════════════════════
-Phase 0: Mission Briefing
+🐝 PHASE 0 — MISSION INTAKE
 ═══════════════════════════════════════════════════════════════════════════════
 ✓ Mission parameters validated
 ✓ Repository scanned (142 files, 18,347 LOC)
-✓ Context capsule prepared (3.2 MB compressed)
-                                                           [Elapsed: 2.1s]
+✓ Intake packet normalized for 5-domain decomposition
+                                                           [Elapsed: 1.8s]
 
 ─────────────────────────────────────────────────────────────────────────────
 
 ═══════════════════════════════════════════════════════════════════════════════
-Phase 1: Nexus Initialization
+🐝 PHASE 1 — TASK DECOMPOSITION
 ═══════════════════════════════════════════════════════════════════════════════
 ✓ Nexus agent spawned (session: nexus-a7f3)
 ✓ Mission decomposed into 58 sub-tasks across 5 domains
 ✓ Domain allocation strategy computed
 ✓ Aspect taxonomy generated (15 aspects identified)
-                                                           [Elapsed: 8.4s]
+                                                           [Elapsed: 4.2s]
+
+┌─ NEXUS INSIGHT ────────────────────────────────────────────────────────────┐
+│ Documentation scope is broad but low-risk; reviewer coverage can flex      │
+│ toward architecture + implementation if conflicts emerge.                  │
+└──────────────────────────────────────────────────────────────────────────────┘
 
 ─────────────────────────────────────────────────────────────────────────────
 
 ═══════════════════════════════════════════════════════════════════════════════
-Phase 2: Commander Spawn (5 domains)
+🐝 PHASE 1.5 — SEALED CRITERIA GENERATION
+═══════════════════════════════════════════════════════════════════════════════
+✓ 8 sealed criteria generated for SS-100 shadow scoring
+✓ Criteria hash sealed for Nexus-only validation
+                                                           [Elapsed: 1.1s]
+
+─────────────────────────────────────────────────────────────────────────────
+
+═══════════════════════════════════════════════════════════════════════════════
+🐝 PHASE 2 — CONTEXT CAPSULE CONSTRUCTION
+═══════════════════════════════════════════════════════════════════════════════
+✓ Context capsule prepared (3.2 MB compressed)
+✓ Shared repository map attached to all 5 commanders
+✓ Depth lock confirmed: Commanders may spawn workers directly (max depth 2)
+                                                           [Elapsed: 3.4s]
+
+─────────────────────────────────────────────────────────────────────────────
+
+═══════════════════════════════════════════════════════════════════════════════
+🐝 PHASE 3 — COMMANDER DEPLOYMENT
 ═══════════════════════════════════════════════════════════════════════════════
 ✓ CMD-ARCH spawned  (Architecture)      → 12 sub-tasks assigned
 ✓ CMD-IMPL spawned  (Implementation)    → 18 sub-tasks assigned
 ✓ CMD-TEST spawned  (Testing)           → 14 sub-tasks assigned
 ✓ CMD-DOCS spawned  (Documentation)     → 8 sub-tasks assigned
 ✓ CMD-INTG spawned  (Integration)       → 6 sub-tasks assigned
-                                                           [Elapsed: 3.2s]
+✓ 75 direct workers reserved (15 per commander; no intermediate layer)
+                                                           [Elapsed: 2.6s]
+
+┌─ NEXUS INSIGHT ────────────────────────────────────────────────────────────┐
+│ SS-100 is running in direct-spawn mode: commanders fan out straight to      │
+│ workers, reducing merge latency and keeping wall-clock under the 75s cap.   │
+└──────────────────────────────────────────────────────────────────────────────┘
 
 ─────────────────────────────────────────────────────────────────────────────
 
 ═══════════════════════════════════════════════════════════════════════════════
-Phase 3: Squad Lead Spawn
+🐝 PHASE 4 — EXECUTION
 ═══════════════════════════════════════════════════════════════════════════════
-⚙️  Spawning 20 Squad Leads across 5 domains...
-✓ Architecture:    4 Squad Leads (SQ-ARCH-01 through SQ-ARCH-04)
-✓ Implementation:  5 Squad Leads (SQ-IMPL-01 through SQ-IMPL-05)
-✓ Testing:         4 Squad Leads (SQ-TEST-01 through SQ-TEST-04)
-✓ Documentation:   4 Squad Leads (SQ-DOCS-01 through SQ-DOCS-04)
-✓ Integration:     3 Squad Leads (SQ-INTG-01 through SQ-INTG-03)
-                                                           [Elapsed: 4.7s]
+⚙️  Launching 75 workers across 5 commanders...
+✓ Architecture:    15 workers spawned directly by CMD-ARCH
+✓ Implementation:  15 workers spawned directly by CMD-IMPL
+✓ Testing:         15 workers spawned directly by CMD-TEST
+✓ Documentation:   15 workers spawned directly by CMD-DOCS
+✓ Integration:     15 workers spawned directly by CMD-INTG
+
+[████████████████████████████████████████████████████████████] 75/75
+
+✓ 74 workers completed successfully
+⚠️  1 worker timed out (W-IMPL-14) → recovered by commander retry
+• 214 Result Atoms generated
+• 187 evidence files referenced
+                                                           [Elapsed: 18.9s]
+
+┌─ NEXUS INSIGHT ────────────────────────────────────────────────────────────┐
+│ First two commander bundles landed early, so cross-review started before    │
+│ the final domains completed — pipeline overlap shaved several seconds.      │
+└──────────────────────────────────────────────────────────────────────────────┘
 
 ─────────────────────────────────────────────────────────────────────────────
 
 ═══════════════════════════════════════════════════════════════════════════════
-Phase 4: Worker Spawn (100 workers)
+🐝 PHASE 5 — CROSS-REVIEW (pipeline overlap)
 ═══════════════════════════════════════════════════════════════════════════════
-⚙️  Spawning 100 workers across 20 Squad Leads...
-✓ Architecture:    20 workers spawned
-✓ Implementation:  25 workers spawned
-✓ Testing:         20 workers spawned
-✓ Documentation:   18 workers spawned
-✓ Integration:     17 workers spawned
-                                                           [Elapsed: 6.1s]
+⚙️  Launching 8 reviewers across 4 cross-family pairs...
+✓ Pair 1: claude-opus-4.6 ↔ gpt-5.4
+✓ Pair 2: claude-opus-4.5 ↔ gpt-5.2
+✓ Pair 3: claude-opus-4.6-1m ↔ gpt-5.1
+✓ Pair 4: claude-sonnet-4.6 ↔ gpt-5.3-codex
+
+• 5 commander bundles reviewed
+• 3 disagreements flagged for Nexus arbitration
+                                                           [Elapsed: 6.8s]
+
+┌─ NEXUS INSIGHT ────────────────────────────────────────────────────────────┐
+│ Documentation was the only bundle to land below CONSENSUS tier; reviewer    │
+│ notes cluster around OpenAPI-vs-JSDoc format drift rather than correctness. │
+└──────────────────────────────────────────────────────────────────────────────┘
 
 ─────────────────────────────────────────────────────────────────────────────
 
 ═══════════════════════════════════════════════════════════════════════════════
-Phase 5: Worker Execution
+🐝 PHASE 6 — SHADOW SCORING (Shadow Score Spec L2)
 ═══════════════════════════════════════════════════════════════════════════════
-⏳ Workers investigating codebase and generating Result Atoms...
+⚙️  Nexus validating 5 commander bundles against 8 sealed criteria...
 
-[████████████████████████████████████████████████████████████] 100/100
-
-✓ 97 workers completed successfully
-⚠️  2 workers timed out (W-IMPL-14, W-TEST-09) → recovered by squad leads
-⚠️  1 worker failed (W-DOCS-07) → task redistributed
-• 342 Result Atoms generated
-• 287 evidence files referenced
-                                                           [Elapsed: 142.8s]
+✓ Shadow Score validation: 13% Minor (2 sealed criteria failed)
+✓ Hardening not required (below 15% threshold)
+✓ Gap candidates promoted for final report
+                                                           [Elapsed: 2.7s]
 
 ─────────────────────────────────────────────────────────────────────────────
 
 ═══════════════════════════════════════════════════════════════════════════════
-Phase 6: Squad Lead Merge (L2 Consensus)
+🐝 PHASE 7 — CONSENSUS SYNTHESIS
 ═══════════════════════════════════════════════════════════════════════════════
-⚙️  20 Squad Leads performing local consensus...
-
-✓ SQ-ARCH-01: 17 atoms → 12 merged (5 CONSENSUS, 6 MAJORITY, 1 CONFLICT)
-✓ SQ-ARCH-02: 21 atoms → 14 merged (8 CONSENSUS, 5 MAJORITY, 1 CONFLICT)
-✓ SQ-ARCH-03: 18 atoms → 13 merged (7 CONSENSUS, 5 MAJORITY, 1 CONFLICT)
-✓ SQ-ARCH-04: 16 atoms → 11 merged (6 CONSENSUS, 4 MAJORITY, 1 CONFLICT)
-✓ SQ-IMPL-01: 22 atoms → 16 merged (9 CONSENSUS, 6 MAJORITY, 1 CONFLICT)
-  ... (15 more squads)
-
-• 342 atoms → 187 merged atom-sets
-• Deduplication boost applied: 23 content-hash matches
-• 18 conflicts preserved for Commander review
-                                                           [Elapsed: 28.4s]
-
-─────────────────────────────────────────────────────────────────────────────
-
-═══════════════════════════════════════════════════════════════════════════════
-Phase 7: Commander Domain Merge (L1 Consensus)
-═══════════════════════════════════════════════════════════════════════════════
-⚙️  5 Commanders applying consensus formula and cross-squad merge...
+⚙️  Nexus performing cross-domain synthesis...
 
 ✓ CMD-ARCH: 50 atoms → 42 final (consensus score: 0.87, CONSENSUS tier)
 ✓ CMD-IMPL: 71 atoms → 48 final (consensus score: 0.81, CONSENSUS tier)
@@ -151,24 +190,19 @@ Phase 7: Commander Domain Merge (L1 Consensus)
 ✓ CMD-DOCS: 52 atoms → 35 final (consensus score: 0.68, MAJORITY tier)
 ✓ CMD-INTG: 48 atoms → 37 final (consensus score: 0.79, CONSENSUS tier)
 
-• 187 atoms → 200 domain-merged atoms
-• 12 conflicts resolved via trimmed mean
+• 214 atoms → 200 synthesized findings
 • 3 conflicts escalated to Nexus (token expiry policy, hashing algorithm, token storage location)
-                                                           [Elapsed: 34.2s]
+                                                           [Elapsed: 1.6s]
 
 ─────────────────────────────────────────────────────────────────────────────
 
 ═══════════════════════════════════════════════════════════════════════════════
-Phase 8: Nexus Synthesis (L0 Final Merge)
+🐝 PHASE 8 — FINAL OUTPUT (ACTION REPORT)
 ═══════════════════════════════════════════════════════════════════════════════
-⚙️  Nexus performing cross-domain synthesis + shadow scoring...
-
 ✓ Cross-domain conflicts resolved (3/3)
-✓ Shadow Score validation: 13% Minor (2 sealed criteria failed)
 ✓ Gap Report generated: 5 gaps identified (2 🔴 blocking)
 ✓ Final report synthesized with attribution and confidence intervals
-
-                                                           [Elapsed: 18.7s]
+                                                           [Elapsed: 0.9s]
 
 ─────────────────────────────────────────────────────────────────────────────
 ```
@@ -180,40 +214,46 @@ Phase 8: Nexus Synthesis (L0 Final Merge)
 ```
 ┌─ DOMAIN RESULTS ────────────────────────────────────────────────────────────┐
 │                                                                              │
-│  Domain             Tier        Confidence   Agents   Time (s)              │
+│  Domain             Tier        Confidence   Findings   Time (s)            │
 │  ──────────────────────────────────────────────────────────────────────     │
-│  Architecture       CONSENSUS   0.87         42       156.3                 │
-│  Implementation     CONSENSUS   0.81         48       168.9                 │
-│  Testing            CONSENSUS   0.72         38       147.2                 │
-│  Documentation      MAJORITY    0.68         35       132.1                 │
-│  Integration        CONSENSUS   0.79         37       151.4                 │
+│  Architecture       CONSENSUS   0.87         42         20.4                │
+│  Implementation     CONSENSUS   0.81         48         22.7                │
+│  Testing            CONSENSUS   0.72         38         19.8                │
+│  Documentation      MAJORITY    0.68         35         18.2                │
+│  Integration        CONSENSUS   0.79         37         21.1                │
 │                                                                              │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  Overall Confidence: 0.77 (High)                                            │
-│  Total Execution Time: 4m 32s                                               │
-│  Cost Estimate: ~$2.47 (342k input tokens, 89k output tokens)               │
+│  Total Execution Time: 44.0s                                                │
+│  Cost Estimate: ~$3.84 (318k input tokens, 82k output tokens)               │
 │                                                                              │
 └──────────────────────────────────────────────────────────────────────────────┘
 
+Nexus Insight:
+  • Detailed counts below refer to synthesized findings, not raw worker headcount.
+  • SS-100 ran 5 commanders + 75 direct workers + 8 reviewers under a 75s timeout.
+
 Phase Breakdown:
-[██▓▓▓▓░░] Phase 0-4: Setup     (24.5s,  9%)
-[████████] Phase 5:   Execution (142.8s, 52%)
-[████▓▓░░] Phase 6:   L2 Merge  (28.4s, 10%)
-[█████▓░░] Phase 7:   L1 Merge  (34.2s, 13%)
-[███▓░░░░] Phase 8:   Synthesis (18.7s,  7%)
-[███░░░░░] Overhead             (23.4s,  9%)
+[██████░░] Phase 0-3: Launch       (13.1s, 30%)
+[████████] Phase 4:   Execution    (18.9s, 43%)
+[███▓░░░░] Phase 5:   Cross-Review (6.8s, 15%)
+[█▓░░░░░░] Phase 6:   Shadow Score (2.7s,  6%)
+[█░░░░░░░] Phase 7-8: Synthesis    (2.5s,  6%)
 ```
 
 ---
 
 ## Domain Reports
 
+> Detailed tallies in this section are synthesized findings after commander merge. SS-100 still uses **15 direct workers per commander** with **commander-direct fan-out**.
+
 ### 🏗️ Architecture Domain (CMD-ARCH)
 
 **Consensus Tier:** ✅ CONSENSUS (score: 0.87)  
 **Confidence:** 0.87 (High)  
-**Agents:** 42 workers across 4 Squad Leads  
-**Evidence Files:** 38/42 atoms cited evidence (90%)
+**Workers:** 15 direct workers + 1 commander  
+**Merged Findings:** 42 synthesized findings  
+**Evidence Files:** 38/42 findings cited evidence (90%)
 
 #### Summary
 
@@ -221,31 +261,31 @@ The Architecture domain achieved high consensus on the JWT migration design. All
 
 #### Key Findings
 
-1. **JWT Token Structure** (38/42 agents agree, CONSENSUS)
+1. **JWT Token Structure** (38/42 supporting findings, CONSENSUS)
    - Standard JWT structure with header, payload, signature
    - Payload includes: `user_id`, `email`, `roles[]`, `issued_at`, `expires_at`
    - Signature algorithm: RS256 (asymmetric) for enhanced security
    - Token size: ~450 bytes (within HTTP header limits)
 
-2. **Authentication Flow** (40/42 agents agree, CONSENSUS)
+2. **Authentication Flow** (40/42 supporting findings, CONSENSUS)
    - Login → validate credentials → generate access token (1h expiry) + refresh token (7d expiry)
    - Access token in `Authorization: Bearer <token>` header
    - Refresh token in `HttpOnly` secure cookie
    - Token validation in Express middleware layer (`src/middleware/jwt-auth.ts`)
 
-3. **Key Management** (35/42 agents agree, CONSENSUS)
+3. **Key Management** (35/42 supporting findings, CONSENSUS)
    - RSA key pair (2048-bit) generated at service startup
    - Private key stored in environment variable or secrets manager (AWS Secrets Manager / Azure Key Vault)
    - Public key exposed at `/.well-known/jwks.json` endpoint for validation
    - Key rotation strategy: monthly rotation with 24h overlap period
 
-4. **Migration Strategy** (39/42 agents agree, CONSENSUS)
+4. **Migration Strategy** (39/42 supporting findings, CONSENSUS)
    - Dual-mode authentication: support both session cookies AND JWT tokens during 90-day migration
    - Detection logic: check for `Authorization` header first, fallback to session cookie
    - New logins issue JWT tokens; legacy sessions honored until expiry
    - Feature flag: `ENABLE_JWT_AUTH` (default: true in v2.0+)
 
-5. **Error Handling** (36/42 agents agree, CONSENSUS)
+5. **Error Handling** (36/42 supporting findings, CONSENSUS)
    - Token expired (401): client must refresh via `/auth/refresh` endpoint
    - Token malformed (401): reject immediately, log security event
    - Token signature invalid (401): reject + alert security team
@@ -260,7 +300,7 @@ The Architecture domain achieved high consensus on the JWT migration design. All
 - `package.json` (dependencies: express, cookie-parser, bcrypt)
 - `.env.example` (environment variable template)
 
-#### Agent Agreement
+#### Consensus Breakdown
 
 - **CONSENSUS**: 35 atoms (83%)
 - **MAJORITY**: 5 atoms (12%)
@@ -272,8 +312,9 @@ The Architecture domain achieved high consensus on the JWT migration design. All
 
 **Consensus Tier:** ✅ CONSENSUS (score: 0.81)  
 **Confidence:** 0.81 (High)  
-**Agents:** 48 workers across 5 Squad Leads  
-**Evidence Files:** 41/48 atoms cited evidence (85%)
+**Workers:** 15 direct workers + 1 commander  
+**Merged Findings:** 48 synthesized findings  
+**Evidence Files:** 41/48 findings cited evidence (85%)
 
 #### Summary
 
@@ -281,7 +322,7 @@ The Implementation domain converged on a clear file structure and dependency pla
 
 #### Key Findings
 
-1. **New Dependencies** (46/48 agents agree, CONSENSUS)
+1. **New Dependencies** (46/48 supporting findings, CONSENSUS)
    ```json
    "jsonwebtoken": "^9.0.2",     // JWT generation and validation
    "jwks-rsa": "^3.1.0",          // Public key rotation support
@@ -289,7 +330,7 @@ The Implementation domain converged on a clear file structure and dependency pla
    ```
    - Remove after migration complete: N/A (session code remains for legacy support)
 
-2. **File Structure** (44/48 agents agree, CONSENSUS)
+2. **File Structure** (44/48 supporting findings, CONSENSUS)
    ```
    src/auth/
      ├── jwt-service.ts           (NEW) — token generation, validation, refresh
@@ -306,7 +347,7 @@ The Implementation domain converged on a clear file structure and dependency pla
      └── keys/                    (NEW DIR) — RSA key pair storage (gitignored)
    ```
 
-3. **Core Implementation: JWT Service** (45/48 agents agree, CONSENSUS)
+3. **Core Implementation: JWT Service** (45/48 supporting findings, CONSENSUS)
    ```typescript
    // src/auth/jwt-service.ts (excerpt)
    export class JWTService {
@@ -330,7 +371,7 @@ The Implementation domain converged on a clear file structure and dependency pla
    }
    ```
 
-4. **Middleware Integration** (43/48 agents agree, CONSENSUS)
+4. **Middleware Integration** (43/48 supporting findings, CONSENSUS)
    ```typescript
    // src/middleware/auth-check.ts (excerpt)
    export const authenticateRequest = async (req, res, next) => {
@@ -356,7 +397,7 @@ The Implementation domain converged on a clear file structure and dependency pla
    };
    ```
 
-5. **Migration Checklist** (47/48 agents agree, CONSENSUS)
+5. **Migration Checklist** (47/48 supporting findings, CONSENSUS)
    - ✅ Install dependencies (`npm install jsonwebtoken jwks-rsa`)
    - ✅ Generate RSA key pair (`npm run generate-keys`)
    - ✅ Update `.env` with `JWT_PRIVATE_KEY_PATH`, `JWT_PUBLIC_KEY_PATH`
@@ -378,7 +419,7 @@ The Implementation domain converged on a clear file structure and dependency pla
 - `tsconfig.json` (TypeScript path aliases)
 - `.env.example` (config template)
 
-#### Agent Agreement
+#### Consensus Breakdown
 
 - **CONSENSUS**: 43 atoms (90%)
 - **MAJORITY**: 4 atoms (8%)
@@ -390,8 +431,9 @@ The Implementation domain converged on a clear file structure and dependency pla
 
 **Consensus Tier:** ✅ CONSENSUS (score: 0.72)  
 **Confidence:** 0.72 (Medium-High)  
-**Agents:** 38 workers across 4 Squad Leads  
-**Evidence Files:** 29/38 atoms cited evidence (76%)
+**Workers:** 15 direct workers + 1 commander  
+**Merged Findings:** 38 synthesized findings  
+**Evidence Files:** 29/38 findings cited evidence (76%)
 
 #### Summary
 
@@ -399,34 +441,34 @@ The Testing domain identified comprehensive test coverage needs across unit, int
 
 #### Key Findings
 
-1. **Unit Tests** (32/38 agents agree, CONSENSUS)
+1. **Unit Tests** (32/38 supporting findings, CONSENSUS)
    - JWT Service: token generation, validation, expiry, malformed tokens
    - Middleware: header extraction, Bearer prefix handling, missing token
    - Refresh Handler: valid refresh, expired refresh, token rotation
    - Coverage target: ≥95% for new JWT modules
 
-2. **Integration Tests** (35/38 agents agree, CONSENSUS)
+2. **Integration Tests** (35/38 supporting findings, CONSENSUS)
    - End-to-end login flow: credentials → access + refresh tokens
    - Protected route access: valid token → 200, invalid → 401
    - Token refresh: expired access + valid refresh → new access token
    - Dual-mode authentication: JWT vs. session fallback logic
    - Key rotation: old key still valid during overlap, fully invalid after
 
-3. **Security Tests** (30/38 agents agree, CONSENSUS)
+3. **Security Tests** (30/38 supporting findings, CONSENSUS)
    - Token tampering: modified signature → 401
    - Replay attack: expired token rejected even with valid signature
    - CSRF protection: HttpOnly cookie for refresh token
    - Algorithm confusion: HS256 token rejected (only RS256 accepted)
    - Key exposure: private key never in HTTP response or logs
 
-4. **Edge Cases** (28/38 agents agree, MAJORITY)
+4. **Edge Cases** (28/38 supporting findings, MAJORITY)
    - Token expiry within 1s boundary (clock skew handling)
    - Concurrent refresh requests (race condition)
    - Very long user role arrays (token size > 4KB)
    - Key rotation overlap: token signed with old key, validated with new key
    - Database unavailable during token validation
 
-5. **Test Matrix** (36/38 agents agree, CONSENSUS)
+5. **Test Matrix** (36/38 supporting findings, CONSENSUS)
    | Test Type | New Tests | Modified Tests | Priority |
    |-----------|-----------|----------------|----------|
    | Unit      | 24        | 8              | P0       |
@@ -444,7 +486,7 @@ The Testing domain identified comprehensive test coverage needs across unit, int
 - `jest.config.js` (test configuration)
 - `package.json` (test scripts and dependencies)
 
-#### Agent Agreement
+#### Consensus Breakdown
 
 - **CONSENSUS**: 30 atoms (79%)
 - **MAJORITY**: 7 atoms (18%)
@@ -456,8 +498,9 @@ The Testing domain identified comprehensive test coverage needs across unit, int
 
 **Consensus Tier:** ⚠️ MAJORITY (score: 0.68)  
 **Confidence:** 0.68 (Medium)  
-**Agents:** 35 workers across 4 Squad Leads  
-**Evidence Files:** 23/35 atoms cited evidence (66%)
+**Workers:** 15 direct workers + 1 commander  
+**Merged Findings:** 35 synthesized findings  
+**Evidence Files:** 23/35 findings cited evidence (66%)
 
 #### Summary
 
@@ -465,23 +508,23 @@ The Documentation domain reached majority consensus but had significant dissent 
 
 #### Key Findings
 
-1. **README Updates** (33/35 agents agree, CONSENSUS)
+1. **README Updates** (33/35 supporting findings, CONSENSUS)
    - New section: "Authentication with JWT" (before "API Endpoints")
    - Update "Getting Started": add key generation step
    - Update "Environment Variables": document JWT config vars
    - Update "Deployment": note key rotation schedule
 
-2. **API Documentation** (22/35 agents agree, MAJORITY) — **DISSENT NOTED**
-   - **Majority view (22 agents)**: Update OpenAPI spec (`docs/api.yaml`)
+2. **API Documentation** (22/35 supporting findings, MAJORITY) — **DISSENT NOTED**
+   - **Majority view (22 supporting findings)**: Update OpenAPI spec (`docs/api.yaml`)
      - Add `/auth/login` response with JWT token structure
      - Add `/auth/refresh` endpoint documentation
      - Document `Authorization: Bearer <token>` header for protected routes
-   - **Minority view (13 agents)**: Use JSDoc comments in code
+   - **Minority view (13 supporting findings)**: Use JSDoc comments in code
      - Add JSDoc annotations to JWT service methods
      - Generate docs with TypeDoc
    - **NEXUS DECISION**: Use OpenAPI (existing standard in this repo). JSDoc as supplementary.
 
-3. **Migration Guide** (34/35 agents agree, CONSENSUS)
+3. **Migration Guide** (34/35 supporting findings, CONSENSUS)
    - New file: `docs/migration/jwt-migration.md`
    - Sections:
      1. Overview (why JWT, what changes)
@@ -490,13 +533,13 @@ The Documentation domain reached majority consensus but had significant dissent 
      4. Rollback procedure (in case of issues)
      5. FAQ (common questions and answers)
 
-4. **Code Comments** (31/35 agents agree, CONSENSUS)
+4. **Code Comments** (31/35 supporting findings, CONSENSUS)
    - JSDoc comments for all exported JWT service methods
    - Inline comments for complex logic (e.g., dual-mode fallback)
    - Security notes for key handling code
    - Example usage in docstrings
 
-5. **Developer Onboarding** (29/35 agents agree, CONSENSUS)
+5. **Developer Onboarding** (29/35 supporting findings, CONSENSUS)
    - Update `CONTRIBUTING.md`: testing new auth features
    - Add architecture diagram: JWT flow vs. session flow
    - Video walkthrough (optional): 5-minute screencast of local setup
@@ -508,7 +551,7 @@ The Documentation domain reached majority consensus but had significant dissent 
 - `docs/architecture.md` (system architecture)
 - `CONTRIBUTING.md` (contributor guide)
 
-#### Agent Agreement
+#### Consensus Breakdown
 
 - **CONSENSUS**: 29 atoms (83%)
 - **MAJORITY**: 6 atoms (17%) — includes API doc format dissent
@@ -517,10 +560,10 @@ The Documentation domain reached majority consensus but had significant dissent 
 
 **Issue:** API documentation format (OpenAPI vs. JSDoc)
 
-**Majority Position (22/35 agents):**
+**Majority Position (22/35 supporting findings):**
 > "OpenAPI is the existing standard in this repo (`docs/api.yaml`). All endpoints are documented there. Adding JWT auth follows the same pattern. Clients can generate SDKs from the spec."
 
-**Minority Position (13/35 agents):**
+**Minority Position (13/35 supporting findings):**
 > "JSDoc comments are closer to the code and less likely to drift out of sync. TypeScript developers expect JSDoc. OpenAPI is more for external API consumers, not internal development."
 
 **Nexus Resolution:**
@@ -532,8 +575,9 @@ The Documentation domain reached majority consensus but had significant dissent 
 
 **Consensus Tier:** ✅ CONSENSUS (score: 0.79)  
 **Confidence:** 0.79 (High)  
-**Agents:** 37 workers across 3 Squad Leads  
-**Evidence Files:** 31/37 atoms cited evidence (84%)
+**Workers:** 15 direct workers + 1 commander  
+**Merged Findings:** 37 synthesized findings  
+**Evidence Files:** 31/37 findings cited evidence (84%)
 
 #### Summary
 
@@ -541,32 +585,32 @@ The Integration domain identified all external integration points that require u
 
 #### Key Findings
 
-1. **Frontend Integration** (35/37 agents agree, CONSENSUS)
+1. **Frontend Integration** (35/37 supporting findings, CONSENSUS)
    - Update `src/frontend/api-client.js`: add `Authorization` header to all requests
    - Store access token in memory (not localStorage, XSS risk)
    - Store refresh token in HttpOnly cookie (automatically sent by browser)
    - Add token refresh logic: intercept 401, call `/auth/refresh`, retry original request
    - Logout: clear in-memory token + call `/auth/logout` to invalidate refresh token
 
-2. **Mobile App Integration** (34/37 agents agree, CONSENSUS)
+2. **Mobile App Integration** (34/37 supporting findings, CONSENSUS)
    - **iOS**: Use Keychain for secure token storage
    - **Android**: Use EncryptedSharedPreferences
    - Refresh token strategy: background refresh 5 minutes before expiry
    - Handle token revocation: logout + redirect to login on 401
 
-3. **API Gateway Config** (36/37 agents agree, CONSENSUS)
+3. **API Gateway Config** (36/37 supporting findings, CONSENSUS)
    - Update NGINX / Kong config: pass `Authorization` header upstream
    - Add JWT validation at gateway level (optional, reduces backend load)
    - Configure CORS: allow `Authorization` header in preflight requests
    - Rate limiting: apply to `/auth/refresh` endpoint (prevent refresh token abuse)
 
-4. **Third-Party Integrations** (33/37 agents agree, CONSENSUS)
+4. **Third-Party Integrations** (33/37 supporting findings, CONSENSUS)
    - **Webhook receivers**: no change (they don't authenticate, we validate HMAC signatures)
    - **OAuth providers** (Google, GitHub): no change (they issue their own tokens, we exchange for our JWT)
    - **Partner APIs**: provide migration notice (60 days), update integration docs
    - **Legacy partners**: session-based auth remains available (backwards compat)
 
-5. **Rollout Strategy** (37/37 agents agree, CONSENSUS)
+5. **Rollout Strategy** (37/37 supporting findings, CONSENSUS)
    - **Phase 1** (Week 1-2): Internal services (frontend, mobile, admin dashboard)
    - **Phase 2** (Week 3-4): Partner API clients (with migration support)
    - **Phase 3** (Week 5-6): Monitor, optimize, fix edge cases
@@ -593,7 +637,7 @@ The Integration domain identified all external integration points that require u
 - `mobile/ios/AuthService.swift` (iOS auth implementation)
 - `mobile/android/AuthService.kt` (Android auth implementation)
 
-#### Agent Agreement
+#### Consensus Breakdown
 
 - **CONSENSUS**: 33 atoms (89%)
 - **MAJORITY**: 4 atoms (11%)
@@ -833,36 +877,36 @@ The Integration domain mentioned "store access token in memory (not localStorage
 ```
 ┌─ AGENT STATISTICS ───────────────────────────────────────────────────────┐
 │                                                                           │
-│  Total Agents Spawned:     126                                           │
+│  Total Agents Spawned:     89                                            │
 │                                                                           │
 │  By Layer:                                                                │
 │    • L0 (Nexus):           1                                              │
 │    • L1 (Commanders):      5                                              │
-│    • L2 (Squad Leads):     20                                             │
-│    • L3 (Workers):         100                                            │
+│    • L2 (Workers):         75                                             │
+│    • Reviewers:            8                                              │
 │                                                                           │
 │  Completion Status:                                                       │
-│    ✅ Completed:           120  (95.2%)                                   │
-│    ⏱️  Timed Out:          3    (2.4%)  → recovered by squad leads       │
-│    ❌ Failed:              1    (0.8%)  → task redistributed             │
-│    🔄 Retried:             2    (1.6%)  → succeeded on retry             │
+│    ✅ Completed:           88  (98.9%)                                   │
+│    ⏱️  Timed Out:          1    (1.1%)  → recovered by commander retry   │
+│    ❌ Failed:              0    (0.0%)                                   │
+│    🔄 Retried:             2    (2.2%)  → succeeded on retry             │
 │                                                                           │
 │  Execution Time:                                                          │
-│    • Total:                4m 32s                                         │
-│    • Per Agent (avg):      2.68s                                          │
-│    • Longest Worker:       18.3s (W-IMPL-23, deep codebase analysis)     │
-│    • Shortest Worker:      0.7s (W-DOCS-12, README update)               │
+│    • Total:                44.0s                                         │
+│    • Per Agent (avg):      1.58s                                          │
+│    • Longest Worker:       9.8s (W-IMPL-14, dependency trace)            │
+│    • Shortest Worker:      0.6s (W-DOCS-03, README delta scan)           │
 │                                                                           │
 │  Output Metrics:                                                          │
-│    • Result Atoms:         342                                            │
-│    • Merged Atoms:         200                                            │
-│    • Evidence Files:       287 unique files referenced                    │
-│    • Conflicts:            18 raised, 15 resolved, 3 escalated           │
+│    • Result Atoms:         214                                            │
+│    • Synthesized Findings: 200                                            │
+│    • Evidence Files:       187 unique files referenced                    │
+│    • Conflicts:            3 raised, 3 resolved                           │
 │                                                                           │
 │  Token Usage:                                                             │
-│    • Input Tokens:         342,891                                        │
-│    • Output Tokens:        89,247                                         │
-│    • Total Cost:           ~$2.47 USD                                     │
+│    • Input Tokens:         318,204                                        │
+│    • Output Tokens:        82,441                                         │
+│    • Total Cost:           ~$3.84 USD                                     │
 │                                                                           │
 └───────────────────────────────────────────────────────────────────────────┘
 
@@ -873,4 +917,16 @@ The Integration domain mentioned "store access token in memory (not localStorage
 Session Report: ~/.swarm-command/sessions/swarm-2024-04-08-22-34-a7f3/report.md
 Artifacts:      ~/.swarm-command/sessions/swarm-2024-04-08-22-34-a7f3/artifacts/
 Next Steps:     Review Gap Report, address 🔴 blocking items, proceed with implementation.
+
+┌─ POST-REPORT ACTION MENU ────────────────────────────────────────────────┐
+│  1. 🚀 Deploy changes                                                   │
+│  2. 🔀 Smart merge analysis                                             │
+│  3. 🔍 Deep dive into a domain                                          │
+│  4. 🔄 Re-run a domain                                                  │
+│  5. 📄 Export full report                                               │
+│  6. ✅ Done — no action needed                                          │
+│                                                                         │
+│  Nothing auto-executes. Destructive actions require explicit            │
+│  confirmation after preview.                                            │
+└──────────────────────────────────────────────────────────────────────────┘
 ```
