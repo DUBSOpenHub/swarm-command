@@ -146,7 +146,6 @@ swarm_command:
       - gpt-5.4
       - gpt-5.2
       - gpt-5.1
-      - goldeneye
     worker_pool:
       - claude-haiku-4.5
       - gpt-5.4-mini
@@ -162,6 +161,5 @@ swarm_command:
       - [claude-sonnet-4.5, gpt-5.2-codex]
       - [claude-sonnet-4, gpt-5.4-mini]
       - [claude-haiku-4.5, gpt-5-mini]
-      - [goldeneye, gpt-4.1]
 
 
